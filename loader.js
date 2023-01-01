@@ -35,7 +35,7 @@ export const resolve = async (specifier, context, nextResolve) => {
       cacheMap.get(specifier)
     );
     const moduleCachePath = await parseModule(specifier, modulePathToFetch);
-    return nextResolve(moduleCachePath);
+    return nextResolve(moduleCachePath.replace("#", ""));
   }
 };
 
@@ -45,8 +45,8 @@ const parseModule = async (specifier, modulePathToFetch) => {
     return specifier;
   }
 
-  const folder = join(cache, specifier);
-  const moduleCachePath = join(folder, `index.js`);
+  const folder = join(cache, specifier).replace("#", "");
+  const moduleCachePath = join(folder, `index.js`).replace("#", "");
   const code = await (await fetch(modulePathToFetch)).text();
   ensureDirSync(folder);
   writeFileSync(moduleCachePath, code);
@@ -54,7 +54,7 @@ const parseModule = async (specifier, modulePathToFetch) => {
   for (var i = 0; i < imports.length; i++) {
     const { n } = imports[i];
     if (n.startsWith(".")) {
-      const relativePath = join(cache, specifier, n);
+      const relativePath = join(cache, specifier, n).replace("#", "");
       const relativeURL = new URL(join(modulePathToFetch, "../", n)).toString();
       const code = await (await fetch(relativeURL)).text();
       ensureDirSync(dirname(relativePath));

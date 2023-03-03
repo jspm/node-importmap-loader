@@ -1,11 +1,19 @@
-import chalk from "chalk";
-import reactDOM from "react-dom";
-import react from "react";
-const log = console.log;
+import * as TeleportProjectGeneratorReact from "@teleporthq/teleport-project-generator-react";
+import * as TeleportTypes from "@teleporthq/teleport-types";
+import * as chalk from "chalk";
+import * as react from "react";
+import * as reactDom from "react-dom";
+import * as reactRouter from "react-router";
+import * as reactRouterDom from "react-router-dom";
 
-log(reactDOM);
-log(react);
-
-log(chalk.green("Hey hey...."));
-log(chalk.red("I am i red"));
-log(chalk.blue("I am in purple"));
+// Write main module code here, or as a separate file with a "src" attribute on the module script.
+console.log(
+  TeleportProjectGeneratorReact,
+  TeleportTypes,
+  chalk,
+  react,
+  reactDom,
+  reactRouter,
+  reactRouterDom
+);
+console.log(chalk.default.green("Hello......."));

@@ -1,6 +1,10 @@
 {
   "name": "jspm-node-import-map-loader",
   "type": "module",
+  "scripts": {
+    "test": "node --loader ./loader.js test.js",
+    "server": "node --loader ./loader.js test-server.js"
+  },
   "dependencies": {
     "@jspm/import-map": "^1.0.5",
     "fs-extra": "^11.1.0",

@@ -16,9 +16,7 @@ const extractPackageNameAndVersion =
 const importmap = new ImportMap({
   rootUrl: import.meta.url,
   map: existsSync(nodeImportMapPath)
-    ? JSON.parse(
-        readFileSync(join(root, "node.importmap"), { encoding: "utf8" })
-      )
+    ? JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" }))
     : {},
 });
 

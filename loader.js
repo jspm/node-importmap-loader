@@ -46,11 +46,11 @@ const parseModule = async (specifier, modulePathToFetch) => {
   }
 
   const moduleURL = new URL(modulePathToFetch);
-  const [, packageName, , filePath] = moduleURL.pathname.match(
+  const [, packageName, version , filePath] = moduleURL.pathname.match(
     extractPackageNameAndVersion
   );
-  console.log(packageName);
-  const cachePath = join(cache, packageName, filePath);
+  console.log(`${packageName}@${version}`);
+  const cachePath = join(cache, `${packageName}@${version}`, filePath);
   cacheMap.set(`file://${cachePath}`, modulePathToFetch);
   
   if (existsSync(cachePath)) {

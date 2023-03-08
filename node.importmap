@@ -1,5 +1,6 @@
 {
   "imports": {
+    "@teleporthq/teleport-project-generator-preact": "https://ga.jspm.io/npm:@teleporthq/teleport-project-generator-preact@0.20.0/dist/cjs/index.js",
     "@teleporthq/teleport-project-generator-react": "https://ga.jspm.io/npm:@teleporthq/teleport-project-generator-react@0.25.4/dist/cjs/index.js",
     "@teleporthq/teleport-types": "https://ga.jspm.io/npm:@teleporthq/teleport-types@0.25.2/dist/cjs/index.js",
     "chalk": "https://ga.jspm.io/npm:chalk@5.2.0/source/index.js",
@@ -32,27 +33,30 @@
       "@jridgewell/trace-mapping": "https://ga.jspm.io/npm:@jridgewell/trace-mapping@0.3.17/dist/trace-mapping.umd.js",
       "@mojotech/json-type-validation": "https://ga.jspm.io/npm:@mojotech/json-type-validation@3.1.0/dist/index.umd.js",
       "@starptech/prettyhtml-hast-to-html": "https://ga.jspm.io/npm:@starptech/prettyhtml-hast-to-html@0.10.0/index.js",
-      "@teleporthq/teleport-component-generator": "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-component-generator": "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator@0.20.3/dist/cjs/index.js",
+      "@teleporthq/teleport-component-generator-preact": "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator-preact@0.20.6/dist/cjs/index.js",
       "@teleporthq/teleport-component-generator-react": "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator-react@0.25.4/dist/cjs/index.js",
       "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.25.4/dist/cjs/index.js",
       "@teleporthq/teleport-plugin-css": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-css@0.25.4/dist/cjs/index.js",
-      "@teleporthq/teleport-plugin-css-modules": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-css-modules@0.25.4/dist/cjs/index.js",
-      "@teleporthq/teleport-plugin-import-statements": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-import-statements@0.25.4/dist/cjs/index.js",
-      "@teleporthq/teleport-plugin-jsx-head-config": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-head-config@0.25.4/dist/cjs/index.js",
-      "@teleporthq/teleport-plugin-jsx-inline-styles": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-inline-styles@0.25.4/dist/cjs/index.js",
-      "@teleporthq/teleport-plugin-jsx-proptypes": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-proptypes@0.25.4/dist/cjs/index.js",
-      "@teleporthq/teleport-plugin-react-app-routing": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-react-app-routing@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-css-modules": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-css-modules@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-import-statements": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-import-statements@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-jsx-head-config": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-head-config@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-jsx-inline-styles": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-inline-styles@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-jsx-proptypes": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-proptypes@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-preact-base-component": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-preact-base-component@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-react-app-routing": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-react-app-routing@0.20.6/dist/cjs/index.js",
       "@teleporthq/teleport-plugin-react-base-component": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-react-base-component@0.25.4/dist/cjs/index.js",
       "@teleporthq/teleport-plugin-react-jss": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-react-jss@0.25.4/dist/cjs/index.js",
       "@teleporthq/teleport-plugin-react-styled-components": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-react-styled-components@0.25.4/dist/cjs/index.js",
       "@teleporthq/teleport-plugin-react-styled-jsx": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-react-styled-jsx@0.25.4/dist/cjs/index.js",
       "@teleporthq/teleport-postprocessor-prettier-html": "https://ga.jspm.io/npm:@teleporthq/teleport-postprocessor-prettier-html@0.25.4/dist/cjs/index.js",
-      "@teleporthq/teleport-postprocessor-prettier-js": "https://ga.jspm.io/npm:@teleporthq/teleport-postprocessor-prettier-js@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-postprocessor-prettier-js": "https://ga.jspm.io/npm:@teleporthq/teleport-postprocessor-prettier-js@0.20.3/dist/cjs/index.js",
       "@teleporthq/teleport-postprocessor-prettier-jsx": "https://ga.jspm.io/npm:@teleporthq/teleport-postprocessor-prettier-jsx@0.25.4/dist/cjs/index.js",
-      "@teleporthq/teleport-project-generator": "https://ga.jspm.io/npm:@teleporthq/teleport-project-generator@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-project-generator": "https://ga.jspm.io/npm:@teleporthq/teleport-project-generator@0.20.6/dist/cjs/index.js",
       "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-types": "https://ga.jspm.io/npm:@teleporthq/teleport-types@0.20.3/dist/cjs/index.js",
       "@teleporthq/teleport-uidl-builders": "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-builders@0.25.2/dist/cjs/index.js",
-      "@teleporthq/teleport-uidl-resolver": "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-resolver@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-uidl-resolver": "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-resolver@0.20.3/dist/cjs/index.js",
       "@teleporthq/teleport-uidl-validator": "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-validator@0.25.4/dist/cjs/index.js",
       "accepts": "https://ga.jspm.io/npm:accepts@1.3.8/index.js",
       "array-flatten": "https://ga.jspm.io/npm:array-flatten@1.1.1/array-flatten.js",
@@ -184,6 +188,83 @@
       "vary": "https://ga.jspm.io/npm:vary@1.1.2/index.js",
       "xtend": "https://ga.jspm.io/npm:xtend@4.0.2/immutable.js",
       "zlib": "node:zlib"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator-preact@0.20.6/": {
+      "@teleporthq/teleport-plugin-css": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-css@0.20.6/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator-react@0.25.4/": {
+      "@teleporthq/teleport-component-generator": "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-css-modules": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-css-modules@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-import-statements": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-import-statements@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-jsx-inline-styles": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-inline-styles@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-jsx-proptypes": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-proptypes@0.25.4/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator@0.20.3/": {
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js",
+      "@teleporthq/teleport-uidl-validator": "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-validator@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator@0.25.4/": {
+      "@teleporthq/teleport-uidl-resolver": "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-resolver@0.25.4/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/": {
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-css-modules@0.20.6/": {
+      "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-css@0.20.6/": {
+      "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-import-statements@0.20.6/": {
+      "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-head-config@0.20.6/": {
+      "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-inline-styles@0.20.6/": {
+      "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-proptypes@0.20.6/": {
+      "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-preact-base-component@0.20.6/": {
+      "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-react-app-routing@0.20.6/": {
+      "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-postprocessor-prettier-js@0.20.3/": {
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-project-generator-react@0.25.4/": {
+      "@teleporthq/teleport-component-generator": "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-import-statements": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-import-statements@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-jsx-head-config": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-jsx-head-config@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-react-app-routing": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-react-app-routing@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-postprocessor-prettier-js": "https://ga.jspm.io/npm:@teleporthq/teleport-postprocessor-prettier-js@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-project-generator": "https://ga.jspm.io/npm:@teleporthq/teleport-project-generator@0.25.4/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-project-generator@0.20.6/": {
+      "@teleporthq/teleport-plugin-common": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-common@0.20.6/dist/cjs/index.js",
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js",
+      "@teleporthq/teleport-uidl-builders": "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-builders@0.20.3/dist/cjs/index.js",
+      "@teleporthq/teleport-uidl-validator": "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-validator@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-project-generator@0.25.4/": {
+      "@teleporthq/teleport-component-generator": "https://ga.jspm.io/npm:@teleporthq/teleport-component-generator@0.25.4/dist/cjs/index.js",
+      "@teleporthq/teleport-plugin-import-statements": "https://ga.jspm.io/npm:@teleporthq/teleport-plugin-import-statements@0.25.4/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-resolver@0.20.3/": {
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
+    },
+    "https://ga.jspm.io/npm:@teleporthq/teleport-uidl-validator@0.20.3/": {
+      "@teleporthq/teleport-shared": "https://ga.jspm.io/npm:@teleporthq/teleport-shared@0.20.3/dist/cjs/index.js"
     },
     "https://ga.jspm.io/npm:basic-auth@2.0.1/": {
       "safe-buffer": "https://ga.jspm.io/npm:safe-buffer@5.1.2/index.js"

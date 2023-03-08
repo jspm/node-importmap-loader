@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import chalk from 'chalk'
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
@@ -21,5 +22,5 @@ app.get("/map", (request, response) => {
 });
 
 app.listen(3000, () => {
-  console.log("Listen on the port 3000...");
+  console.log(chalk.green("Listen on the port 3000..."));
 });

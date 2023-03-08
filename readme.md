@@ -1,11 +1,11 @@
 Experimental node loader built on top of jspm utils to resovlve deps from remote in nodejs
 
 ```sh
-node --loader ./loader.js test.js 
+node --loader ./loader.js test.js
 ```
 
 ```bash
- loader git:(main) node --loader ./loader.js test.js                                                         
+ loader git:(main) node --loader ./loader.js test.js
 (node:12944) ExperimentalWarning: --experimental-loader is an experimental feature. This feature could change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 testing
@@ -33,4 +33,18 @@ testing
   unstable_renderSubtreeIntoContainer: [Function: renderSubtreeIntoContainer],
   version: '18.2.0'
 }
+```
+
+## Size
+
+One very significant upside of using deps using the `loader` and `import-map`. The dependencies from `test.js` loads
+
+```sh
+du -sh -I @jspm -I fs-extra -I node-fetch node_modules
+50M    node_modules
+```
+
+```sh
+du -sh .cache
+3.6M    .cache
 ```

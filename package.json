@@ -2,6 +2,7 @@
   "name": "jspm-node-import-map-loader",
   "type": "module",
   "scripts": {
+    "default": "npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node test.js",
     "test": "node --loader ./loader.js test.js",
     "server": "node --loader ./loader.js test-server.js"
   },

@@ -50,9 +50,13 @@ const parseModule = async (specifier, modulePathToFetch) => {
     extractPackageNameAndVersion
   );
   console.log(packageName);
-
   const cachePath = join(cache, packageName, filePath);
   cacheMap.set(`file://${cachePath}`, modulePathToFetch);
+  
+  if (existsSync(cachePath)) {
+    return cachePath
+  }
+  
   const code = await (await fetch(modulePathToFetch)).text();
   ensureFileSync(cachePath);
   writeFileSync(cachePath, code);

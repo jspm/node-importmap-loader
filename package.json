@@ -73,10 +73,6 @@
         "always",
         120
       ],
-      "references-empty": [
-        1,
-        "never"
-      ],
       "type-enum": [
         2,
         "always",

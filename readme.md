@@ -48,3 +48,34 @@ du -sh -I @jspm -I fs-extra -I node-fetch node_modules
 du -sh .cache
 3.6M    .cache
 ```
+
+---
+
+## Local Development
+
+Clone
+
+```sh
+git clone git@github.com:JayaKrishnaNamburu/docusaurus-node-polyfills.git
+```
+
+*For, Strictly local development:
+
+```sh
+./bin/setup.sh && bun install
+```
+
+1. Installs [nvm]()
+1. Installs [nodejs 18]()
+1. Installs latest [bun]()
+1. Installs deps
+
+*Local development issues will be ignored. Please use a container.
+
+---
+
+Or, via vscode [devcontainer](https://code.visualstudio.com/docs/remote/containers):
+
+1. Launch [vscode](https://code.visualstudio.com/)
+1. Install [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
+1. Launch the container by clicking the devcontainer button or via the command palette

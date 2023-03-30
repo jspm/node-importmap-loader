@@ -7,11 +7,11 @@ import { join } from "node:path";
 
 const app = express();
 app.use(morgan("tiny"));
-app.get("/", (request, response) => {
+app.get("/", (_, response) => {
   response.send("Hi there");
 });
 
-app.get("/map", (request, response) => {
+app.get("/map", (_, response) => {
   const nodeImportMapPath = join(
     fileURLToPath(new URL(".", import.meta.url)),
     "node.importmap"

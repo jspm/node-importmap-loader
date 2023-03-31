@@ -23,25 +23,18 @@ else
   exit 1
 fi
 
-HAS_BUN=$(command -v bun >/dev/null)
-BUN_MSG="Please install bun or ensure your version matches the bun version within the .env file"
+HAS_CHOMP=$(command -v chomp >/dev/null)
+CHOMP_MSG="Please install cHOMP or ensure your version matches the chomp version within the .env file"
 
-if $HAS_BUN; then
-  BUN_LOADED_VERSION=$(command bun --version)
-  if [ "$BUN_LOADED_VERSION" != "$BUN_VERSION" ]; then
-    read -r -p "bun versions are out of snyc. Run 'npm install -g bun@${BUN_VERSION}'? [Y/n]" response
-    response=${response,,}
-    if [ $response = "y" ] || [ -z $response ]; then
-      npm install -g bun@$BUN_VERSION
-      echo 'pnpm version updated globally'
-    else
-      echo $BUN_MSG
-      exit 1
-    fi;
+if $HAS_CHOMP; then
+  CHOMP_LOADED_VERSION=$(command chomp --version)
+  if [ "$CHOMP_LOADED_VERSION" != "$CHOMP_VERSION" ]; then
+    npm install -g chomp@$CHOMP_VERSION
+    echo 'chomp version updated globally'
   else
-    echo "bun version is up-to-date"
+    echo "chomp version is up-to-date"
   fi
 else
-  echo $BUN_MSG
+  echo $CHOMP_MSG
   exit 1
 fi

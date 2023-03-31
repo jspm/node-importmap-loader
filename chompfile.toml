@@ -1,0 +1,77 @@
+version = 0.1
+
+[[task]]
+name = 'build'
+run = 'tsup src/index.ts --format esm,cjs --dts'
+
+[[task]]
+name = 'clean'
+run = 'rimraf dist config'
+
+[[task]]
+name = 'commit'
+run = 'git-cz'
+
+[[task]]
+name = 'commit-msg'
+run = 'commitlint --edit $1'
+
+[[task]]
+name = 'default'
+run = 'npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node test.js'
+
+[[task]]
+name = 'lint'
+run = 'eslint src --ext .ts'
+
+[[task]]
+name = 'lint-fix'
+run = 'npm run lint --fix'
+
+[[task]]
+name = 'pre-commit'
+run = 'lint-staged'
+
+[[task]]
+name = 'prepare'
+run = 'husky install'
+
+[[task]]
+name = 'prepublishOnly'
+run = 'npm run test && npm run build'
+
+[[task]]
+name = 'release'
+run = 'release-it'
+
+[[task]]
+name = 'server'
+run = 'npm run server:build && npm run server:start'
+
+[[task]]
+name = 'server:build'
+run = "echo 'Building...' && npm run build && echo 'Build complete.'"
+
+[[task]]
+name = 'server:start'
+run = "echo 'Starting server...' && node --loader ./loader.js test-server.js && echo 'Server started.'"
+
+[[task]]
+name = 'test'
+run = 'concurrently --kill-others "npm run test:unit" "npm run test:e2e"'
+
+[[task]]
+name = 'test:e2e'
+run = 'npm run build && node --loader ./loader.js test.js'
+
+[[task]]
+name = 'test:unit'
+run = 'vitest run'
+
+[[task]]
+name = 'typecheck'
+run = 'tsc --noEmit'
+
+[[task]]
+name = 'update'
+run = 'codependence --update'

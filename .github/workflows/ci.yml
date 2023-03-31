@@ -23,13 +23,10 @@ jobs:
         with:
           node-version: 18
 
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
-      - run: bun install
-      - run: bun run build
-      - run: bun run lint
-      - run: bun run test
+      - run: npm install
+      - run: npm install -g chomp
+      - run: chomp build
+      - run: chomp lint
+      - run: chomp test
         env:
           CI: true

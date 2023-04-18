@@ -7,6 +7,7 @@ import { ensureFileSync } from "fs-extra";
 import { ConstructCachePath, Context, NextResolve } from './types'
 
 // matches the name and version of an npm package
+// https://stackoverflow.com/questions/64880479/a-regex-for-npm-or-any-other-package-both-for-name-and-any-version-number
 const EXTRACT_PACKAGE_NAME_AND_VERSION = /@[~^]?([\dvx*]+(?:[-.](?:[\dx*]+|alpha|beta))*)/;
 // hoist the cache map
 const cacheMap = new Map();

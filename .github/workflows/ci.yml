@@ -22,9 +22,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-
       - run: npm install
-      - run: npm install -g chomp
+      - name: Setup Chomp
+        uses: guybedford/chomp-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: chomp build
       - run: chomp lint
       - run: chomp test

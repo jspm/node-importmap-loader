@@ -28,7 +28,8 @@ export const constructPath = (dir: string, root = '.') => join(root, dir)
  * @returns object
  */
 export const constructLoaderConfig = (base = '.', url = import.meta.url) => {
-  const root = fileURLToPath(new URL(base, url))
+  const urlPath = new URL(base, url)
+  const root = fileURLToPath(urlPath)
   const cachePath = constructPath('.cache', root)
   const hasCacheFolder = existsSync(cachePath)
   if (!hasCacheFolder) mkdirSync(cachePath, { recursive: true })
@@ -45,12 +46,12 @@ export const constructLoaderConfig = (base = '.', url = import.meta.url) => {
  * @param path
  * @returns ImportMap
  */
-export const constructImportMap = (path = '') => {
+export const constructImportMap = (path = '', rootUrl = import.meta.url) => {
   const map = existsSync(path)
     ? JSON.parse(readFileSync(path, { encoding: "utf8" }))
     : {}
   return new ImportMap({
-    rootUrl: import.meta.url,
+    rootUrl,
     map,
   })
 }

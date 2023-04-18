@@ -1,7 +1,3 @@
 node_modules
 .cache
-.env
-loader.js
-loader.d.ts
-types.d.ts
-types.js
+dist

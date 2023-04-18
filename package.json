@@ -4,14 +4,15 @@
   "description": "A Node.js loader for JSPM import maps",
   "author": "Jaya Krishna Namburu <namburu1995@gmail.com>",
   "type": "module",
-  "main": "loader.js",
-  "module": "loader.js",
+  "main": "dist/loader.js",
+  "module": "dist/loader.js",
+  "types": "dist/loader.d.ts",
   "exports": {
-    ".": "./loader.js"
+    ".": "dist/loader.cjs"
   },
   "scripts": {
-    "build": "tsc",
-    "clean": "rimraf dist config",
+    "build": "tsup src/loader.ts --format esm,cjs --dts",
+    "clean": "rimraf dist",
     "commit": "git-cz",
     "commit-msg": "commitlint --edit $1",
     "default": "npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node tests/e2e/test.js",
@@ -23,9 +24,9 @@
     "release": "release-it",
     "server": "chomp server:build && chomp server:start",
     "server:build": "echo 'Building...' && chomp build && echo 'Build complete.'",
-    "server:start": "echo 'Starting server...' && node --loader ./loader.js tests/e2e/test-server.js && echo 'Server started.'",
+    "server:start": "echo 'Starting server...' && node --loader ./dist/loader.js tests/e2e/test-server.js && echo 'Server started.'",
     "test": "concurrently --kill-others \"chomp test:unit\" \"chomp test:e2e\"",
-    "test:e2e": "chomp build && node --loader ./loader.js tests/e2e/test.js",
+    "test:e2e": "chomp default && chomp build && node --loader ./dist/loader.js tests/e2e/test.js",
     "test:unit": "vitest run",
     "typecheck": "tsc --noEmit",
     "update": "codependence --update"

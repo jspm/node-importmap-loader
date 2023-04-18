@@ -2,7 +2,7 @@ version = 0.1
 
 [[task]]
 name = 'build'
-run = 'tsup src/index.ts --format esm,cjs --dts'
+run = 'tsup src/loader.ts --format esm,cjs --dts'
 
 [[task]]
 name = 'clean'

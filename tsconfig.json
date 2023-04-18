@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./",
-    "rootDir": ".",
+    "outDir": "./dist",
+    "rootDir": "src",
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
@@ -26,6 +26,6 @@
     "target": "esnext",
     "types": ["node"]
   },
-  "include": ["loader.ts"],
-  "exclude": ["tests/*.ts"],
+  "include": ["src"],
+  "exclude": ["tests/*.ts", "tests/e2d=2/*.js"],
 }

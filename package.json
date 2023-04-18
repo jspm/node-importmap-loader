@@ -28,8 +28,7 @@
     "test": "concurrently --kill-others \"chomp test:unit\" \"chomp test:e2e\"",
     "test:e2e": "chomp default && chomp build && node --loader ./dist/loader.js tests/e2e/test.js",
     "test:unit": "vitest run",
-    "typecheck": "tsc --noEmit",
-    "update": "codependence --update"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@jspm/import-map": "^1.0.5",

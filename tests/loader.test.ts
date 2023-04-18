@@ -1,7 +1,8 @@
 import { test, expect } from 'vitest'
 
-// import { parseModule, resolve } from "../loader"
+import { constructPath } from "../loader"
 
-test('init', () => {
-  expect(1).toBe(1)
+test('constructPath', () => {
+  const result = constructPath('foo')
+  expect(result).toBe('foo')
 });

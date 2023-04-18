@@ -75,3 +75,8 @@ run = 'tsc --noEmit'
 [[task]]
 name = 'update'
 run = 'codependence --update'
+
+[[task]]
+name = 'install:pkgs'
+run = 'npm install'
+dep = 'package.json'

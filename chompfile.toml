@@ -6,7 +6,7 @@ run = 'tsup src/loader.ts --format esm,cjs --dts'
 
 [[task]]
 name = 'clean'
-run = 'rimraf dist config'
+run = 'rimraf dist'
 
 [[task]]
 name = 'commit'
@@ -18,7 +18,7 @@ run = 'commitlint --edit $1'
 
 [[task]]
 name = 'default'
-run = 'npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node test.js'
+run = 'npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node tests/e2e/test.js'
 
 [[task]]
 name = 'lint'
@@ -26,7 +26,7 @@ run = 'eslint src --ext .ts'
 
 [[task]]
 name = 'lint-fix'
-run = 'npm run lint --fix'
+run = 'chomp lint --fix'
 
 [[task]]
 name = 'pre-commit'
@@ -38,7 +38,7 @@ run = 'husky install'
 
 [[task]]
 name = 'prepublishOnly'
-run = 'npm run test && npm run build'
+run = 'chomp test && chomp build'
 
 [[task]]
 name = 'release'
@@ -46,23 +46,23 @@ run = 'release-it'
 
 [[task]]
 name = 'server'
-run = 'npm run server:build && npm run server:start'
+run = 'chomp server:build && chomp server:start'
 
 [[task]]
 name = 'server:build'
-run = "echo 'Building...' && npm run build && echo 'Build complete.'"
+run = "echo 'Building...' && chomp build && echo 'Build complete.'"
 
 [[task]]
 name = 'server:start'
-run = "echo 'Starting server...' && node --loader ./loader.js test-server.js && echo 'Server started.'"
+run = "echo 'Starting server...' && node --loader ./dist/loader.js tests/e2e/test-server.js && echo 'Server started.'"
 
 [[task]]
 name = 'test'
-run = 'concurrently --kill-others "npm run test:unit" "npm run test:e2e"'
+run = 'concurrently --kill-others "chomp test:unit" "chomp test:e2e"'
 
 [[task]]
 name = 'test:e2e'
-run = 'npm run build && node --loader ./loader.js test.js'
+run = 'chomp default && chomp build && node --loader ./dist/loader.js tests/e2e/test.js'
 
 [[task]]
 name = 'test:unit'
@@ -71,12 +71,3 @@ run = 'vitest run'
 [[task]]
 name = 'typecheck'
 run = 'tsc --noEmit'
-
-[[task]]
-name = 'update'
-run = 'codependence --update'
-
-[[task]]
-name = 'install:pkgs'
-run = 'npm install'
-dep = 'package.json'

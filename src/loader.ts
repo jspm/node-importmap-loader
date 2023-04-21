@@ -6,23 +6,6 @@ import fetch from "node-fetch";
 import { ensureFileSync } from "fs-extra";
 import { ConstructCachePath, Context, NextResolve, UrlType } from './types'
 
-// matches the name and version of an npm package
-// https://stackoverflow.com/questions/64880479/a-regex-for-npm-or-any-other-package-both-for-name-and-any-version-number
-const EXTRACT_PACKAGE_NAME_AND_VERSION = /@[~^]?([\dvx*]+(?:[-.](?:[\dx*]+|alpha|beta))*)/g;
-
-const getNameAndVersion = (specifier: string) => {
-  const ats = specifier.match(/@/g);
-  const hasTooManyAts = ats?.length > 2;
-  if (hasTooManyAts) {
-    return {
-
-    };
-  }
-  if (has2Ats) {
-    const specifier.split("@");
-    return packageName;
-  }
-}
 // hoist the cache map
 const cacheMap = new Map();
 
@@ -41,7 +24,7 @@ export const constructPath = (dir: string, root = '.') => join(root, dir)
  * @param url string
  * @returns object
  */
-export const constructLoaderConfig = (base = '.', url: UrlType | string = import.meta.url) => {
+export const constructLoaderConfig = (base = '.', url: UrlType | string = import.meta.url || '') => {
   const urlPath = new URL(base, url)
   const root = fileURLToPath(urlPath)
   const cachePath = constructPath('.cache', root)
@@ -70,12 +53,34 @@ export const constructImportMap = (path = '', rootUrl = import.meta.url) => {
   })
 }
 
+/**
+ * getVersion
+ * @description a convenience function to get the version from a url
+ * @param urlParts
+ * @returns fn
+ */
 export const getVersion = (urlParts: string[]) => (index: number) => urlParts?.[index]?.split('/')?.[0] || '';
-export const getLastPart = (part: string, char: string) => part.split(char).reverse()[0];
 
+/**
+ * getLastPart
+ * @description a convenience function to get the last part of a string
+ * @param part
+ * @param char
+ * @returns string
+ */
+export const getLastPart = (part: string, char: string) => part.length && char && part.split(char).reverse()[0] || '';
+
+/**
+ * getPackageNameVersionFromUrl
+ * @description a convenience function to get the package name and version from a url
+ * @param url
+ * @param debug
+ * @returns object
+ */
 export const getPackageNameVersionFromUrl = (url: string, debug = false) => {
   const urlParts = url.split('@');
   const urlPartsCount = urlParts.length;
+  const file = getLastPart(url, '/');
   let name = '';
   let version = '';
   if (urlPartsCount > 3 && debug) console.error(`Too many @'s in ${url}. Is this a valid url?`);
@@ -88,28 +93,27 @@ export const getPackageNameVersionFromUrl = (url: string, debug = false) => {
     version = getVersion(urlParts)(1);
   }
   return {
+    file,
     name,
     version,
   };
 };
 
+/**
+ * constructCachePath
+ * @description a convenience function to construct the cache path
+ * @param cache string
+ * @param modulePath string
+ * @returns string
+ */
 export const constructCachePath = ({
   cache,
   modulePath,
   debug = false,
-  matcher = EXTRACT_PACKAGE_NAME_AND_VERSION
 }: ConstructCachePath) => {
-  const { pathname } = new URL(modulePath);
-  const urlParts = pathname.match(
-    matcher
-  );
-  if (!urlParts) {
-    if (debug) console.error(`no match for ${modulePath}`);
-    return ''
-  }
-  const [, packageName, version, filePath] = urlParts;
-  if (debug) console.log(`${packageName}@${version}`);
-  return join(cache, `${packageName}@${version}`, filePath);
+  const { name, version, file } = getPackageNameVersionFromUrl(modulePath, debug);
+  if (debug) console.log(`${name}@${version}`);
+  return join(cache, `${name}@${version}`, file);
 }
 
 /**
@@ -143,7 +147,7 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
  * @description a convenience function to parse the modules, this function is called by the loader automatically
  * @param specifier string
  * @param modulePath string
- * @returns
+ * @returns string
  */
 export const parseModule = async (specifier: string, modulePath: string) => {
   const { cache } = constructLoaderConfig()

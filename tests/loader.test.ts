@@ -6,6 +6,9 @@ import {
   constructLoaderConfig,
   constructImportMap,
   constructCachePath,
+  getLastPart,
+  getPackageNameVersionFromUrl,
+  getVersion,
 } from "../src/loader"
 
 vi.mock('url', () => ({
@@ -49,7 +52,25 @@ test('constructCachePath', () => {
     modulePath: 'https://ga.jspm.io/npm:morgan@1.10.0/index.js',
     debug: true,
   });
-  console.log(result)
-  expect(result).toStrictEqual('')
+  expect(result).toStrictEqual('bin/morgan@1.10.0/index.js')
+});
 
+test('getVersion', () => {
+  const urlParts = ['1.10.0/index.js']
+  const result = getVersion(urlParts)(0)
+  expect(result).toStrictEqual('1.10.0')
+});
+
+test('getLastPart', () => {
+  const result = getLastPart('1.10.0/index.js', '/')
+  expect(result).toStrictEqual('index.js')
+});
+
+test('getPackageNameVersionFromUrl', () => {
+  const result = getPackageNameVersionFromUrl('https://ga.jspm.io/npm:morgan@1.10.0/index.js')
+  expect(result).toStrictEqual({
+    file: 'index.js',
+    name: 'morgan',
+    version: '1.10.0',
+  });
 });

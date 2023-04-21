@@ -1,3 +1,5 @@
+import { URL } from "node:url";
+
 export type Context = {
   parentURL?: string;
 }
@@ -10,3 +12,5 @@ export type ConstructCachePath = {
 }
 
 export type NextResolve = (specifier: string) => Promise<string | unknown>;
+
+export type UrlType = URL

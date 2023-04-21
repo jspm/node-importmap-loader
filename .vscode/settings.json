@@ -3,5 +3,6 @@
   "eslint.format.enable": true,
   "eslint.lintTask.enable": true,
   "eslint.packageManager": "pnpm",
-  "eslint.run": "onSave"
+  "eslint.run": "onSave",
+  "testing.automaticallyOpenPeekView": "never"
 }

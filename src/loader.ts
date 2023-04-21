@@ -4,11 +4,25 @@ import { fileURLToPath } from "node:url";
 import { ImportMap } from "@jspm/import-map";
 import fetch from "node-fetch";
 import { ensureFileSync } from "fs-extra";
-import { ConstructCachePath, Context, NextResolve } from './types'
+import { ConstructCachePath, Context, NextResolve, UrlType } from './types'
 
 // matches the name and version of an npm package
 // https://stackoverflow.com/questions/64880479/a-regex-for-npm-or-any-other-package-both-for-name-and-any-version-number
-const EXTRACT_PACKAGE_NAME_AND_VERSION = /@[~^]?([\dvx*]+(?:[-.](?:[\dx*]+|alpha|beta))*)/;
+const EXTRACT_PACKAGE_NAME_AND_VERSION = /@[~^]?([\dvx*]+(?:[-.](?:[\dx*]+|alpha|beta))*)/g;
+
+const getNameAndVersion = (specifier: string) => {
+  const ats = specifier.match(/@/g);
+  const hasTooManyAts = ats?.length > 2;
+  if (hasTooManyAts) {
+    return {
+
+    };
+  }
+  if (has2Ats) {
+    const specifier.split("@");
+    return packageName;
+  }
+}
 // hoist the cache map
 const cacheMap = new Map();
 
@@ -27,7 +41,7 @@ export const constructPath = (dir: string, root = '.') => join(root, dir)
  * @param url string
  * @returns object
  */
-export const constructLoaderConfig = (base = '.', url = import.meta.url) => {
+export const constructLoaderConfig = (base = '.', url: UrlType | string = import.meta.url) => {
   const urlPath = new URL(base, url)
   const root = fileURLToPath(urlPath)
   const cachePath = constructPath('.cache', root)
@@ -55,6 +69,29 @@ export const constructImportMap = (path = '', rootUrl = import.meta.url) => {
     map,
   })
 }
+
+export const getVersion = (urlParts: string[]) => (index: number) => urlParts?.[index]?.split('/')?.[0] || '';
+export const getLastPart = (part: string, char: string) => part.split(char).reverse()[0];
+
+export const getPackageNameVersionFromUrl = (url: string, debug = false) => {
+  const urlParts = url.split('@');
+  const urlPartsCount = urlParts.length;
+  let name = '';
+  let version = '';
+  if (urlPartsCount > 3 && debug) console.error(`Too many @'s in ${url}. Is this a valid url?`);
+  else if (!urlPartsCount && debug) console.error(`No @'s in ${url}. Is this a valid url?`);
+  else if (urlPartsCount === 3) {
+    name = `@${urlParts[1]}`;
+    version = getVersion(urlParts)(2);
+  } else {
+    name = getLastPart(getLastPart(urlParts[0], '/'), ':');
+    version = getVersion(urlParts)(1);
+  }
+  return {
+    name,
+    version,
+  };
+};
 
 export const constructCachePath = ({
   cache,

@@ -1,13 +1,25 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { accessSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ImportMap } from "@jspm/import-map";
 import fetch from "node-fetch";
-import { ensureFileSync } from "fs-extra";
 import { ConstructCachePath, Context, NextResolve, UrlType } from './types'
 
 // hoist the cache map
 const cacheMap = new Map();
+
+/**
+ * ensureFileSync
+ * @description a convenience function to ensure a file exists
+ * @param path
+ */
+function ensureFileSync(path: string) {
+  try {
+    accessSync(path);
+  } catch (err) {
+    writeFileSync(path, '');
+  }
+}
 
 /**
  * constructPath

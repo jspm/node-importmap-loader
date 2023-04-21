@@ -27,5 +27,5 @@
     "types": ["node"]
   },
   "include": ["src"],
-  "exclude": ["tests/*.ts", "tests/e2d=2/*.js"],
+  "exclude": ["tests/*.ts", "tests/e2e/*.js"],
 }

@@ -3,6 +3,7 @@ version = 0.1
 [[task]]
 name = 'build'
 run = 'tsup src/loader.ts --format esm,cjs --dts'
+deps = 'npm:install'
 
 [[task]]
 name = 'clean'

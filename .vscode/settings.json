@@ -1,0 +1,8 @@
+{
+  "editor.wordWrap": "on",
+  "eslint.format.enable": true,
+  "eslint.lintTask.enable": true,
+  "eslint.packageManager": "pnpm",
+  "eslint.run": "onSave",
+  "testing.automaticallyOpenPeekView": "never"
+}

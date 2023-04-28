@@ -1,0 +1,79 @@
+version = 0.1
+
+[[task]]
+name = 'build'
+run = 'tsup src/loader.ts --format esm,cjs --dts'
+deps = 'npm:install'
+
+[[task]]
+name = 'clean'
+run = 'rimraf dist'
+
+[[task]]
+name = 'commit'
+run = 'git-cz'
+
+[[task]]
+name = 'commit-msg'
+run = 'commitlint --edit $1'
+
+[[task]]
+name = 'default'
+run = 'npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node tests/e2e/test.js'
+
+[[task]]
+name = 'npm:install'
+run = 'npm install'
+deps = ['package.json']
+
+[[task]]
+name = 'lint'
+run = 'eslint src --ext .ts'
+
+[[task]]
+name = 'lint-fix'
+run = 'chomp lint --fix'
+
+[[task]]
+name = 'pre-commit'
+run = 'lint-staged'
+
+[[task]]
+name = 'prepare'
+run = 'husky install'
+
+[[task]]
+name = 'prepublishOnly'
+run = 'chomp test && chomp build'
+
+[[task]]
+name = 'release'
+run = 'release-it'
+
+[[task]]
+name = 'server'
+run = 'chomp server:build && chomp server:start'
+
+[[task]]
+name = 'server:build'
+run = "echo 'Building...' && chomp build && echo 'Build complete.'"
+
+[[task]]
+name = 'server:start'
+run = "echo 'Starting server...' && node --loader ./dist/loader.js tests/e2e/test-server.js && echo 'Server started.'"
+
+[[task]]
+name = 'test'
+run = 'concurrently --kill-others "chomp test:unit" "chomp test:e2e"'
+
+[[task]]
+name = 'test:e2e'
+run = 'chomp default && chomp build && node --loader ./dist/loader.js tests/e2e/test.js'
+
+[[task]]
+name = 'test:unit'
+run = 'vitest run'
+
+[[task]]
+name = 'typecheck'
+run = 'tsc --noEmit'

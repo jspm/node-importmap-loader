@@ -1,8 +1,17 @@
-Experimental node loader built on top of jspm utils to resovlve deps from remote in nodejs
+# Node ImportMap HTTP Loader
+
+Experimental node loader built on top of jspm utils to resolve deps from remote in nodejs
+
+---
+## Usage
+
+When executing
 
 ```sh
 node --loader ./loader.js test.js
 ```
+
+The following will be output
 
 ```bash
  loader git:(main) node --loader ./loader.js test.js
@@ -35,7 +44,7 @@ testing
 }
 ```
 
-## Size
+### Size Benefits
 
 One very significant upside of using deps using the `loader` and `import-map`. The dependencies from `test.js` loads
 
@@ -47,4 +56,33 @@ du -sh -I @jspm -I fs-extra -I node-fetch node_modules
 ```sh
 du -sh .cache
 3.6M    .cache
+```
+
+---
+
+## Local Development
+
+Try it yourself
+
+Clone
+
+```sh
+git clone git@github.com:jspm/node-importmap-http-loader.git
+```
+
+Then via [devcontainers](https://code.visualstudio.com/docs/remote/containers), launch the container by clicking the devcontainer button or via the command palette.
+
+To setup devcontainers
+
+1. Launch [vscode](https://code.visualstudio.com/) or your favorite devcontainers enabled editor
+1. Install [Remote Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
+1. Launch the container by clicking the devcontainer button or via the command palette
+
+---
+
+Unrecommended and supported for issues, etc:
+
+```sh
+git clone git@github.com:jspm/node-importmap-http-loader.git
+nvm i && npm i
 ```

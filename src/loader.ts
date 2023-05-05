@@ -13,7 +13,7 @@ const cacheMap = new Map();
  * @description a convenience function to ensure a file exists
  * @param path
  */
-function ensureFileSync(path: string) {
+export function ensureFileSync(path: string) {
   try {
     accessSync(path);
   } catch (err) {

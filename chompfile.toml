@@ -3,7 +3,14 @@ version = 0.1
 [[task]]
 name = 'build'
 run = 'tsup src/loader.ts --format esm,cjs --dts'
-deps = 'npm:install'
+dep = 'src/loader.ts'
+target = 'dist/loader.js'
+
+[[task]]
+name = 'npm:install'
+run = 'npm install'
+dep = 'package.json'
+target = 'package-lock.json'
 
 [[task]]
 name = 'clean'
@@ -22,13 +29,9 @@ name = 'default'
 run = 'npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node tests/e2e/test.js'
 
 [[task]]
-name = 'npm:install'
-run = 'npm install'
-deps = ['package.json']
-
-[[task]]
 name = 'lint'
 run = 'eslint src --ext .ts'
+deps = ['src/#.ts', 'tests/loader.test.ts']
 
 [[task]]
 name = 'lint-fix'
@@ -37,6 +40,9 @@ run = 'chomp lint --fix'
 [[task]]
 name = 'pre-commit'
 run = 'lint-staged'
+deps = ['src/#.ts', 'tests/loader.test.ts']
+
+[[task]]
 
 [[task]]
 name = 'prepare'
@@ -77,3 +83,4 @@ run = 'vitest run'
 [[task]]
 name = 'typecheck'
 run = 'tsc --noEmit'
+deps = ['src/#.ts']

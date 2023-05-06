@@ -5,13 +5,12 @@
   "author": "Jaya Krishna Namburu <namburu1995@gmail.com>",
   "type": "module",
   "main": "dist/loader.js",
-  "module": "dist/loader.js",
   "types": "dist/loader.d.ts",
   "exports": {
-    ".": "dist/loader.cjs"
+    ".": "dist/loader.js"
   },
   "scripts": {
-    "build": "tsup src/loader.ts --format esm,cjs --dts",
+    "build": "tsup src/loader.ts --format esm --dts",
     "clean": "rimraf dist",
     "commit": "git-cz",
     "commit-msg": "commitlint --edit $1",

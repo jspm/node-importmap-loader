@@ -1,5 +1,5 @@
-import { accessSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ImportMap } from "@jspm/import-map";
 import fetch from "node-fetch";
@@ -9,15 +9,40 @@ import { ConstructCachePath, Context, NextResolve, UrlType } from './types'
 const cacheMap = new Map();
 
 /**
+ * nsureDirSync
+ * @description a function to ensure the dis exists
+ * @param dirPath
+*/
+
+function ensureDirSync(dirPath: string) {
+  if (existsSync(dirPath)) {
+    return;
+  }
+
+  const parentDir = dirname(dirPath);
+  if (parentDir !== dirPath) {
+    ensureDirSync(parentDir);
+  }
+
+  mkdirSync(dirPath);
+}
+
+/**
  * ensureFileSync
  * @description a convenience function to ensure a file exists
  * @param path
  */
-export function ensureFileSync(path: string) {
+function ensureFileSync(path: string) {
+  const dirPath = dirname(path);
+
+  if (!existsSync(dirPath)) {
+    ensureDirSync(dirPath);
+  }
+
   try {
-    accessSync(path);
-  } catch (err) {
-    writeFileSync(path, '');
+    writeFileSync(path, '', { flag: 'wx' });
+  } catch {
+    console.log(`Failed in creating ${path}`)
   }
 }
 
@@ -166,13 +191,15 @@ export const parseModule = async (specifier: string, modulePath: string) => {
   const { protocol } = new URL(modulePath);
   const isNode = protocol === "node:";
   const isFile = protocol === "file:";
+
   if (isNode || isFile) return specifier;
 
   const cachePath = constructCachePath({ cache, modulePath })
+
   cacheMap.set(`file://${cachePath}`, modulePath);
   if (existsSync(cachePath)) return cachePath
-
   const code = await (await fetch(modulePath)).text();
+
   ensureFileSync(cachePath);
   writeFileSync(cachePath, code);
 

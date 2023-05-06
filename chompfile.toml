@@ -1,5 +1,7 @@
 version = 0.1
 
+default-task = 'build'
+
 [[task]]
 name = 'build'
 run = 'tsup src/loader.ts --format esm,cjs --dts'
@@ -41,8 +43,6 @@ run = 'chomp lint --fix'
 name = 'pre-commit'
 run = 'lint-staged'
 deps = ['src/#.ts', 'tests/loader.test.ts']
-
-[[task]]
 
 [[task]]
 name = 'prepare'

@@ -1,3 +1,5 @@
+import * as global from "node:fs";
+import { join } from "node:path";
 import { vi, test, expect } from 'vitest'
 import { ImportMap } from "@jspm/import-map";
 
@@ -9,6 +11,8 @@ import {
   getLastPart,
   getPackageNameVersionFromUrl,
   getVersion,
+  parseModule,
+  ensureFileSync,
 } from "../src/loader"
 
 vi.mock('url', () => ({
@@ -73,4 +77,13 @@ test('getPackageNameVersionFromUrl', () => {
     name: 'morgan',
     version: '1.10.0',
   });
+});
+
+
+test('should return the specifier if the module path is a node or file protocol', async () => {
+  const specifier = 'my-module';
+  const modulePath1 = 'node:fs';
+  const modulePath2 = 'file:///path/to/my/module.js';
+  expect(await parseModule(specifier, modulePath1)).toEqual(specifier);
+  expect(await parseModule(specifier, modulePath2)).toEqual(specifier);
 });

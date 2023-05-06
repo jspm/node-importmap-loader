@@ -37,7 +37,8 @@ deps = ['src/#.ts', 'tests/loader.test.ts']
 
 [[task]]
 name = 'lint-fix'
-run = 'chomp lint --fix'
+deps = ['src/#.ts', 'tests/loader.test.ts']
+run = 'eslint src --ext .ts --fix'
 
 [[task]]
 name = 'pre-commit'
@@ -50,7 +51,7 @@ run = 'husky install'
 
 [[task]]
 name = 'prepublishOnly'
-run = 'chomp test && chomp build'
+deps = [':test', ':build']
 
 [[task]]
 name = 'release'
@@ -58,23 +59,29 @@ run = 'release-it'
 
 [[task]]
 name = 'server'
-run = 'chomp server:build && chomp server:start'
+deps = [':server:build', ':server:start']
 
 [[task]]
 name = 'server:build'
-run = "echo 'Building...' && chomp build && echo 'Build complete.'"
+deps = ['build']
 
 [[task]]
 name = 'server:start'
-run = "echo 'Starting server...' && node --loader ./dist/loader.js tests/e2e/test-server.js && echo 'Server started.'"
+run = '''
+echo "Starting server..."
+node --loader ./dist/loader.js tests/e2e/test-server.js
+echo "Server started."
+'''
 
 [[task]]
 name = 'test'
-run = 'concurrently --kill-others "chomp test:unit" "chomp test:e2e"'
+deps = [':test:unit', ':test:e2e']
 
 [[task]]
 name = 'test:e2e'
-run = 'chomp default && chomp build && node --loader ./dist/loader.js tests/e2e/test.js'
+serial = true
+deps = [':default', ':build']
+run = 'node --loader ./dist/loader.js tests/e2e/test.js'
 
 [[task]]
 name = 'test:unit'

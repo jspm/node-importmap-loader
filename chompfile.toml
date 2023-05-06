@@ -63,7 +63,7 @@ deps = [':server:build', ':server:start']
 
 [[task]]
 name = 'server:build'
-deps = ['build']
+run = "echo 'Building...' && chomp build && echo 'Build complete.'"
 
 [[task]]
 name = 'server:start'

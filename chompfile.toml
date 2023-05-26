@@ -81,7 +81,7 @@ deps = [':test:unit', ':test:e2e']
 name = 'test:e2e'
 serial = true
 deps = [':default', ':build']
-run = 'node --loader ./dist/loader.js tests/e2e/test.js'
+run = 'node --loader ./dist/loader.js tests/e2e/test.js -i ../'
 
 [[task]]
 name = 'test:unit'

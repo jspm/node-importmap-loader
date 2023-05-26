@@ -10,5 +10,5 @@ import * as reactRouter from "react-router";
 import * as reactRouterDom from "react-router-dom";
 
 // Write main module code here, or as a separate file with a "src" attribute on the module script.
-console.log(TeleportProjectGeneratorPreact, TeleportProjectGeneratorReact, TeleportTypes, chalk, express, morgan, react, reactDom, reactRouter, reactRouterDom);
+// console.log(TeleportProjectGeneratorPreact, TeleportProjectGeneratorReact, TeleportTypes, chalk, express, morgan, react, reactDom, reactRouter, reactRouterDom);
 console.log(chalk.default.green("Hello......."));

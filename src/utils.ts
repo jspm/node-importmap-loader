@@ -170,8 +170,6 @@ export const createCacheMap = (debug = false) => {
   }
 }
 
-
-
 /**
  * parseModule
  * @description a convenience function to parse the modules, this function is called by the loader automatically
@@ -193,5 +191,12 @@ export const parseNodeModuleCachePath = async (modulePath: string, cachePath: st
   }
 };
 
+/**
+ * processCliArgs
+ * @description a convenience function to process cli args
+ * @param {string[]} args
+ * @param {object }opts
+ * @returns {object}
+ */
 export const processCliArgs = (args: string[], opts = PROCESS_CLI_ARGS_OPTIONS) =>
   parseArgs({ args, options: opts, allowPositionals: true });

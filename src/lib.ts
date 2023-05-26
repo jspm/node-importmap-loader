@@ -1,6 +1,16 @@
 import { getVersion, getLastPart } from "./utils";
 
 /**
+ * ******************************************************
+ * LIB
+ * ------------------------------------------------------
+ * @description functions specific to the project
+ * @summary functions specific to the project that rely on utils
+ *
+ * ******************************************************
+ */
+
+/**
  * getPackageNameVersionFromUrl
  * @description a convenience function to get the package name and version from a url
  * @param {string} url

@@ -10,6 +10,16 @@ import {
 } from './utils'
 import { Context, NextResolve } from './types'
 
+/**
+ * ******************************************************
+ * LOADER
+ * ------------------------------------------------------
+ * @description the resolver for a node command
+ * @summary TODO: add summary
+ *
+ * ******************************************************
+ */
+
 const metaUrl = import.meta.url || '';
 
 const { values: { basePath, cachePath, debug: isDebugging = false, importmapPath } } = processCliArgs(process.argv)
@@ -26,7 +36,6 @@ const cacheMap = createCacheMap(isDebugging)
  */
 export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve, debug = isDebugging) => {
   try {
-
     const root = constructUrlPath(basePath, metaUrl, debug);
     const pathToImportMap = importmapPath || root;
     const nodeImportMapPath = constructPath('node.importmap', pathToImportMap);

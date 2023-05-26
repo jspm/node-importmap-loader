@@ -1,4 +1,5 @@
 
+import { getPackageNameVersionFromUrl } from './lib';
 import {
   constructPath,
   constructImportMap,
@@ -44,9 +45,10 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
     const isFile = protocol === "file:";
     if (isNode || isFile) return nextResolve(specifier);
 
-    cacheMap.set(`file://${cacheMapPath}`, modulePath);
-    const moduleCachePath = await parseNodeModuleCachePath(modulePath, cacheMapPath, debug);
-    return nextResolve(moduleCachePath);
+    const nodeModuleCachePath = getPackageNameVersionFromUrl(modulePath);
+    cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);
+    const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath, debug);
+    return nextResolve(parsedNodeModuleCachePath);
   } catch (err) {
     if (debug) console.log(`resolve: Failed in resolving ${err}`);
     return nextResolve(specifier);

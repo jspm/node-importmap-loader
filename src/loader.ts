@@ -42,7 +42,7 @@ function ensureFileSync(path: string) {
   try {
     writeFileSync(path, '', { flag: 'wx' });
   } catch {
-    throw new Error(`Failed in creating ${path}`)
+    console.log(`Failed in creating ${path}`)
   }
 }
 

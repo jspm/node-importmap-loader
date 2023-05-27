@@ -161,11 +161,10 @@ export const constructCachePath = ({
  * @param nextResolve callback
  * @returns string
  */
-export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve, debug = false) => {
+export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve) => {
   const { nodeImportMapPath } = constructLoaderConfig()
   if (!parentURL || !nodeImportMapPath) return nextResolve(specifier);
 
-  try {
     const importmap = constructImportMap(nodeImportMapPath)
     const modulePath = importmap.resolve(
       specifier,
@@ -173,10 +172,6 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
     );
     const moduleCachePath = await parseModule(specifier, modulePath);
     return nextResolve(moduleCachePath);
-  } catch (error) {
-    if (debug) console.log(error);
-    return nextResolve(specifier);
-  }
 };
 
 /**
@@ -198,7 +193,12 @@ export const parseModule = async (specifier: string, modulePath: string) => {
 
   cacheMap.set(`file://${cachePath}`, modulePath);
   if (existsSync(cachePath)) return cachePath
-  const code = await (await fetch(modulePath)).text();
+  const code = await (await fetch(modulePath).then(response => {
+    if (!response.ok) {
+      throw Error(`404: Module not found: ${modulePath}`);
+    }
+    return response;
+  })).text();
 
   ensureFileSync(cachePath);
   writeFileSync(cachePath, code);

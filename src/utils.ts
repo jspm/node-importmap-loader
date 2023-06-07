@@ -22,7 +22,7 @@ import {
  * ******************************************************
  */
 
-const metaUrl = import.meta.url || '';
+const cwd = process.cwd();
 
 /**
  * constructPath
@@ -34,39 +34,6 @@ const metaUrl = import.meta.url || '';
 export const constructPath = (dir: string, root = '.') => join(root, dir)
 
 /**
- * getVersion
- * @description a convenience function to get the version from a node module cdn url
- * @param {string[]} urlParts
- * @param {boolean} debug
- * @returns {string}
- */
-export const getVersion = (urlParts: string[], index: number, debug = false) => {
-  try {
-    return urlParts?.[index]?.split('/')?.[0]
-  } catch (err) {
-    if (debug) console.error(`getVersion: Failed in getting the version from the url ${err}`)
-    return ''
-  }
-};
-
-/**
- * getLastPart
- * @description a convenience function to get the last part of a string
- * @param {string} part
- * @param {string} char
- * @param {boolean} debug
- * @returns {string}
- */
-export const getLastPart = (part: string, char: string, debug = false) => {
-  try {
-    return part.length && char && part.split(char).reverse()[0] || '';
-  } catch (err) {
-    if (debug) console.error(`getLastPart: Failed in getting the last part of a string ${err}`)
-    return ''
-  }
-}
-
-/**
  * constructUrlPath
  * @description a convenience function to construct a url path
  * @param {string} base
@@ -74,10 +41,10 @@ export const getLastPart = (part: string, char: string, debug = false) => {
  * @param {boolean} debug
  * @returns {string}
  */
-export const constructUrlPath = (base = '.', url: string = metaUrl, debug = false) => {
+export const constructUrlPath = (base = '.', url: string = cwd, debug = false) => {
   try {
     const path = new URL(base, url)
-    return fileURLToPath(path)
+    return fileURLToPath(path.href)
   } catch (err) {
     if (debug) console.error(`constructUrlPath: Failed in creating a url path ${err}`)
     return ''
@@ -91,12 +58,13 @@ export const constructUrlPath = (base = '.', url: string = metaUrl, debug = fals
  * @param {string} rootUrl
  * @returns {ImportMap|null}
  */
-export const constructImportMap = (path = '', rootUrl = metaUrl) => {
+export const constructImportMap = (path = '', rootUrl = cwd) => {
   try {
     const pathExists = existsSync(path)
     const map = pathExists
       ? JSON.parse(readFileSync(path, { encoding: "utf8" }))
       : {}
+    console.log({ map });
     return new ImportMap({
       rootUrl,
       map,
@@ -104,39 +72,6 @@ export const constructImportMap = (path = '', rootUrl = metaUrl) => {
   } catch (err) {
     console.error(`constructImportMap: Failed in creating an import map ${err}`)
     return null
-  }
-}
-
-/**
- * nsureDirSync
- * @description a function to ensure the dis exists
- * @param {string} path
- * @param {boolean} debug
- * @returns {void}
-*/
-
-export function ensureDirSync(path: string, debug = false) {
-  try {
-    const dirPath = dirname(path);
-    if (!existsSync(path)) mkdirSync(dirPath, { recursive: true })
-  } catch (err) {
-    if (debug) console.error(`ensureDirSync: Failed in creating dir ${err}`)
-  }
-}
-
-/**
- * ensureFileSync
- * @description a convenience function to ensure a file exists
- * @param {string} path
- * @param {boolean} debug
- * @returns {void}
- */
-
-export function ensureFileSync(path: string, debug = false) {
-  try {
-    writeFileSync(path, '', { flag: 'wx' });
-  } catch (err) {
-    if (debug) console.error(`ensureFileSync: Failed in creating ${err}`)
   }
 }
 
@@ -180,9 +115,15 @@ export const createCacheMap = (debug = false) => {
  */
 export const parseNodeModuleCachePath = async (modulePath: string, cachePath: string, debug = false) => {
   try {
-    const nodeModuleCode = await (await fetch(modulePath)).text();
+    if (existsSync(cachePath)) return cachePath
+
+    const nodeModuleCode = await (await fetch(modulePath).then(response => {
+      if (!response.ok) throw Error(`404: Module not found: ${modulePath}`);
+      return response;
+    })).text();
     const dirPath = dirname(cachePath);
     if (!existsSync(cachePath)) mkdirSync(dirPath, { recursive: true })
+
     writeFileSync(cachePath, nodeModuleCode);
     return cachePath;
   } catch (err) {

@@ -61,10 +61,8 @@ export const constructUrlPath = (base = '.', url: string = cwd, debug = false) =
 export const constructImportMap = (path = '', rootUrl = cwd) => {
   try {
     const pathExists = existsSync(path)
-    const map = pathExists
-      ? JSON.parse(readFileSync(path, { encoding: "utf8" }))
-      : {}
-    console.log({ map });
+    const json = readFileSync(path, { encoding: "utf8" })
+    const map = pathExists ? JSON.parse(json) : {}
     return new ImportMap({
       rootUrl,
       map,
@@ -92,14 +90,20 @@ export const createCacheMap = (debug = false) => {
     modulePath,
     get(cachePath: string) {
       this.cachePath = this.instance.get(cachePath) || cachePath;
-      if (!this.cachePath && this.isDebugging) console.error(NO_CACHE_MAP_DEFINED);
+      if (!this.cachePath) {
+        if (this.isDebugging) console.error(NO_CACHE_MAP_DEFINED);
+        return;
+      }
       return this.cachePath;
     },
     set(cachePath: string, modulePath: string) {
       this.cachePath = cachePath;
       this.modulePath = modulePath;
       const hasRequiredArgs = this.cachePath && this.modulePath;
-      if (!hasRequiredArgs && this.isDebugging) return console.error(ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED);
+      if (!hasRequiredArgs) {
+        if (this.isDebugging) console.error(ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED);
+        return;
+      }
       this.instance.set(this.cachePath, this.modulePath);
     }
   }

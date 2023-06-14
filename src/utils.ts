@@ -89,22 +89,20 @@ export const createCacheMap = (debug = false) => {
     isDebugging,
     modulePath,
     get(cachePath: string) {
-      this.cachePath = this.instance.get(cachePath) || cachePath;
-      if (!this.cachePath) {
+      const path = this.instance.get(cachePath);
+      if (!path) {
         if (this.isDebugging) console.error(NO_CACHE_MAP_DEFINED);
         return;
       }
-      return this.cachePath;
+      return path;
     },
     set(cachePath: string, modulePath: string) {
-      this.cachePath = cachePath;
-      this.modulePath = modulePath;
-      const hasRequiredArgs = this.cachePath && this.modulePath;
+      const hasRequiredArgs = cachePath && modulePath;
       if (!hasRequiredArgs) {
         if (this.isDebugging) console.error(ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED);
-        return;
+        return
       }
-      this.instance.set(this.cachePath, this.modulePath);
+      this.instance.set(cachePath, modulePath);
     }
   }
 }
@@ -120,14 +118,11 @@ export const createCacheMap = (debug = false) => {
 export const parseNodeModuleCachePath = async (modulePath: string, cachePath: string, debug = false) => {
   try {
     if (existsSync(cachePath)) return cachePath
-
-    const nodeModuleCode = await (await fetch(modulePath).then(response => {
-      if (!response.ok) throw Error(`404: Module not found: ${modulePath}`);
-      return response;
-    })).text();
+    const resp = await fetch(modulePath)
+    if (!resp.ok) throw Error(`404: Module not found: ${modulePath}`);
+    const nodeModuleCode = await resp.text();
     const dirPath = dirname(cachePath);
-    if (!existsSync(cachePath)) mkdirSync(dirPath, { recursive: true })
-
+    mkdirSync(dirPath, { recursive: true })
     writeFileSync(cachePath, nodeModuleCode);
     return cachePath;
   } catch (err) {

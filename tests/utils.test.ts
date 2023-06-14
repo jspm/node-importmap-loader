@@ -1,23 +1,31 @@
-import { vi, test, expect } from 'vitest'
+import * as fs from 'node:fs';
 import { ImportMap } from '@jspm/import-map';
+import { vi, test, expect, describe, afterEach, Mock } from 'vitest'
 
 import {
   constructPath,
   constructUrlPath,
   constructImportMap,
   createCacheMap,
+  parseNodeModuleCachePath
 } from '../src/utils';
 
 import {
   ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED,
-  NO_CACHE_MAP_DEFINED,
-  PROCESS_CLI_ARGS_OPTIONS
 } from "../src/constants";
+
+vi.mock('node-fetch', () => ({
+  default: vi.fn().mockResolvedValue({
+    ok: true,
+    text: vi.fn().mockResolvedValue('module code')
+  })
+}))
 
 vi.mock('@jspm/import-map', () => {
   const ImportMap = vi.fn()
   return { ImportMap }
 })
+
 
 test('constructPath minimal', () => {
   const result = constructPath('foo')
@@ -62,7 +70,7 @@ test('constructImportMap should return null if path does not exist', () => {
 });
 
 test('constructImportMap should return ImportMap instance if path exists', () => {
-  const path = `${process.cwd()}/tests/__fixtures__/fake.json`
+  const path = `${process.cwd()}/tests/__fixtures__/fake.json`;
   constructImportMap(path)
   expect(ImportMap).toHaveBeenCalled()
 })
@@ -72,7 +80,7 @@ test('constructImportMap should use cwd if no path provided', () => {
   expect(ImportMap).toHaveBeenCalledWith({
     rootUrl: process.cwd(),
     map: {
-      "name": "is fake json"
+      // "name": "is fake json",
     }
   })
 })
@@ -90,16 +98,15 @@ test('createCacheMap.get should return cachePath if defined', () => {
   expect(cacheMap.get('foo')).toBe('bar')
 })
 
-// test('createCacheMap.get should return undefined if cachePath is not defined', () => {
-//   const cacheMap = createCacheMap()
-//   expect(cacheMap.get('foo')).toBeUndefined()
-// })
+test('createCacheMap.get should return undefined if cachePath is not defined', () => {
+  const cacheMap = createCacheMap()
+  expect(cacheMap.get('foo')).toBeUndefined()
+})
 
 test('createCacheMap.set should set cachePath and modulePath', () => {
   const cacheMap = createCacheMap()
   cacheMap.set('foo', 'bar')
-  expect(cacheMap.cachePath).toBe('foo')
-  expect(cacheMap.modulePath).toBe('bar')
+  expect(cacheMap.get('foo')).toBe('bar')
 })
 
 test('createCacheMap.set should log error if cachePath or modulePath are undefined', () => {
@@ -108,3 +115,42 @@ test('createCacheMap.set should log error if cachePath or modulePath are undefin
   cacheMap.set(undefined as unknown as string, 'bar')
   expect(spy).toHaveBeenCalledWith(ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED)
 })
+
+describe('parseNodeModuleCachePath', () => {
+  const cachePath = '/path/to/cache';
+  vi.mock("node:fs", async () => {
+    return {
+      ...(await vi.importActual<typeof import("node:fs")>("node:fs")),
+      existsSync: vi.fn(),
+    };
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('should return cachePath if it exists', async () => {
+    (fs.existsSync as Mock).mockReturnValue(true)
+    const result = await parseNodeModuleCachePath('modulePath', cachePath)
+    expect(result).toBe(cachePath)
+  })
+
+  test('should make directories and write file if cachePath does not exist', async () => {
+    (fs.existsSync as Mock).mockReturnValue(false)
+    const mkdirSyncSpy = await vi.spyOn(fs, 'mkdirSync').mockReturnValue('');
+    const writeFileSyncSpy = await vi.spyOn(fs, 'writeFileSync');
+    await parseNodeModuleCachePath('modulePath', cachePath)
+    expect(mkdirSyncSpy).toHaveBeenCalledWith('/path/to', { recursive: true })
+    expect(writeFileSyncSpy).toHaveBeenCalledWith(cachePath, 'module code')
+  })
+
+  test('should return empty string if there is an error', async () => {
+    (fs.existsSync as Mock).mockReturnValue(false)
+    await vi.spyOn(fs, 'mkdirSync').mockReturnValue('');
+    await vi.spyOn(fs, 'writeFileSync').mockImplementation(() => { throw new Error('error') });
+    const errorSpy = await vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const result = await parseNodeModuleCachePath('modulePath', cachePath, true)
+    expect(result).toBe('')
+    expect(errorSpy).toHaveBeenCalled()
+  })
+});

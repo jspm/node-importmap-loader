@@ -7,7 +7,8 @@ import {
   constructUrlPath,
   constructImportMap,
   createCacheMap,
-  parseNodeModuleCachePath
+  parseNodeModuleCachePath,
+  processCliArgs,
 } from '../src/utils';
 
 import {
@@ -153,4 +154,41 @@ describe('parseNodeModuleCachePath', () => {
     expect(result).toBe('')
     expect(errorSpy).toHaveBeenCalled()
   })
+});
+
+test('processCliArgs should return an object with the parsed CLI arguments', () => {
+  const args = ['src', 'cache', '--debug'];
+  const result = processCliArgs(args);
+  expect(result).toEqual({
+    positionals: ['src', 'cache'],
+    values: {
+      debug: true,
+    },
+  });
+});
+
+test('processCliArgs should send empty defaults', () => {
+  const result = processCliArgs([]);
+  expect(result).toEqual({
+    positionals: [],
+    values: {},
+  });
+});
+
+test('processCliArgs should allow boolean flags', () => {
+  const args = ['--debug'];
+  const result = processCliArgs(args);
+  expect(result).toEqual({
+    positionals: [],
+    values: { debug: true },
+  });
+});
+
+test('processCliArgs should allow positionals', () => {
+  const args = ['src', 'cache'];
+  const result = processCliArgs(args);
+  expect(result).toEqual({
+    positionals: ['src', 'cache'],
+    values: {},
+  });
 });

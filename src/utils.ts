@@ -31,7 +31,7 @@ const cwd = process.cwd();
  * @param {string} root
  * @returns {string}
  */
-export const constructPath = (dir: string, root = '.') => join(root, dir)
+export const constructPath = (dir: string, root = './') => join(root, dir)
 
 /**
  * constructUrlPath
@@ -59,18 +59,13 @@ export const constructUrlPath = (base = '.', url: string = cwd, debug = false) =
  * @returns {ImportMap|null}
  */
 export const constructImportMap = (path = '', rootUrl = cwd) => {
-  try {
-    const pathExists = existsSync(path)
-    const json = readFileSync(path, { encoding: "utf8" })
-    const map = pathExists ? JSON.parse(json) : {}
-    return new ImportMap({
-      rootUrl,
-      map,
-    })
-  } catch (err) {
-    console.error(`constructImportMap: Failed in creating an import map ${err}`)
-    return null
-  }
+  const pathExists = existsSync(path)
+  const json = readFileSync(path, { encoding: "utf8" })
+  const map = pathExists && json ? JSON.parse(json) : {}
+  return new ImportMap({
+    rootUrl,
+    map,
+  })
 }
 
 /**

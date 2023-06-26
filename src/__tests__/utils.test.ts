@@ -1,4 +1,6 @@
 import * as fs from 'node:fs';
+import * as path from 'node:path';
+import fetch from 'node-fetch';
 import { ImportMap } from '@jspm/import-map';
 
 import {
@@ -14,12 +16,20 @@ import {
   ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED,
 } from "src/constants";
 
-jest.mock('node-fetch', () => ({
-  default: jest.fn().mockResolvedValue({
-    ok: true,
-    text: jest.fn().mockResolvedValue('module code')
-  })
-}))
+jest.mock('node:fs');
+jest.mock('node:path', () => {
+  const actual = jest.requireActual('node:path');
+  return {
+    ...actual,
+    dirname: jest.fn((str) => str),
+    join: jest.fn((str, str2) => `${str}${str2}`)
+  }
+});
+jest.mock('node-fetch', () => jest.fn().mockResolvedValue({
+  ok: true,
+  text: jest.fn().mockResolvedValue('module code')
+})
+)
 
 jest.mock('@jspm/import-map', () => {
   const ImportMap = jest.fn()
@@ -29,12 +39,12 @@ jest.mock('@jspm/import-map', () => {
 
 test('constructPath minimal', () => {
   const result = constructPath('foo')
-  expect(result).toStrictEqual('foo');
+  expect(result).toStrictEqual('./foo');
 });
 
 test('constructPath with root', () => {
   const result = constructPath('/foo', './bar')
-  expect(result).toStrictEqual('bar/foo');
+  expect(result).toStrictEqual('./bar/foo');
 });
 
 test('constructUrlPath minimal', () => {
@@ -61,15 +71,16 @@ test('constructUrlPath with base url and no debug', () => {
 
 test('constructImportMap minimal', () => {
   const result = constructImportMap()
-  expect(result).toStrictEqual(null);
+  expect(result).toBeInstanceOf(ImportMap);
 });
 
 test('constructImportMap should return null if path does not exist', () => {
+  jest.spyOn(fs, 'readFileSync').mockReturnValue(Error('invalid/path'))
   const result = constructImportMap('invalid/path')
-  expect(result).toBeNull()
+  expect(result).toEqual({})
 });
 
-test.only('constructImportMap should return ImportMap instance if path exists', () => {
+test('constructImportMap should return ImportMap instance if path exists', () => {
   const path = `${process.cwd()}/src/__fixtures__/fake.json`;
   constructImportMap(path)
   expect(ImportMap).toHaveBeenCalled()
@@ -79,9 +90,7 @@ test('constructImportMap should use cwd if no path provided', () => {
   constructImportMap()
   expect(ImportMap).toHaveBeenCalledWith({
     rootUrl: process.cwd(),
-    map: {
-      // "name": "is fake json",
-    }
+    map: {}
   })
 })
 
@@ -131,22 +140,24 @@ describe('parseNodeModuleCachePath', () => {
   });
 
   test('should return cachePath if it exists', async () => {
-    (fs.existsSync as Mock).mockReturnValue(true)
+    (fs.existsSync as jest.Mock).mockReturnValue(true)
     const result = await parseNodeModuleCachePath('modulePath', cachePath)
     expect(result).toBe(cachePath)
   })
 
   test('should make directories and write file if cachePath does not exist', async () => {
-    (fs.existsSync as Mock).mockReturnValue(false)
-    const mkdirSyncSpy = await jest.spyOn(fs, 'mkdirSync').mockReturnValue('');
-    const writeFileSyncSpy = await jest.spyOn(fs, 'writeFileSync');
+    (fs.existsSync as jest.Mock).mockReturnValue(false)
+    const dirNameSpy = jest.spyOn(path, 'dirname');
+    const mkdirSyncSpy = jest.spyOn(fs, 'mkdirSync').mockReturnValue('');
+    const writeFileSyncSpy = jest.spyOn(fs, 'writeFileSync');
     await parseNodeModuleCachePath('modulePath', cachePath)
-    expect(mkdirSyncSpy).toHaveBeenCalledWith('/path/to', { recursive: true })
-    expect(writeFileSyncSpy).toHaveBeenCalledWith(cachePath, 'module code')
+    expect(dirNameSpy).toBeCalled();
+    expect(mkdirSyncSpy).toBeCalledWith('/path/to/cache', { recursive: true })
+    expect(writeFileSyncSpy).toBeCalledWith(cachePath, 'module code')
   })
 
   test('should return empty string if there is an error', async () => {
-    (fs.existsSync as Mock).mockReturnValue(false)
+    (fs.existsSync as jest.Mock).mockReturnValue(false)
     await jest.spyOn(fs, 'mkdirSync').mockReturnValue('');
     await jest.spyOn(fs, 'writeFileSync').mockImplementation(() => { throw new Error('error') });
     const errorSpy = await jest.spyOn(console, 'error').mockImplementation(() => undefined);

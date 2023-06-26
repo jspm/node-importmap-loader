@@ -115,7 +115,13 @@
     "src/**/*.ts": [
       "eslint --cache --fix",
       "jest --bail --findRelatedTests"
+    ],
+    "*.{ts,json,md}": [
+      "prettier --write"
     ]
+  },
+  "prettier": {
+    "printWidth": 120
   },
   "release-it": {
     "git": {

@@ -14,3 +14,10 @@ export type ConstructCachePath = {
 export type NextResolve = (specifier: string) => Promise<string | unknown>;
 
 export type UrlType = URL
+
+export type ResolveOptions = {
+  basePath?: string;
+  cachePath?: string;
+  debug?: boolean;
+  importmapPath?: string;
+}

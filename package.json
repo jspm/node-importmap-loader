@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "tsup src/loader.ts --format esm --dts",
-    "clean": "rimraf dist",
+    "clean": "rm -rf dist",
     "commit": "git-cz",
     "commit-msg": "commitlint --edit $1",
     "default": "npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node tests/e2e/test.js",
@@ -56,7 +56,6 @@
     "morgan": "^1.10.0",
     "prettier": "^2.8.3",
     "release-it": "^15.6.0",
-    "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.1",
     "tsup": "^6.7.0",
@@ -93,13 +92,19 @@
     "testMatch": [
       "**/**/*.test.ts"
     ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!node:http)",
+      "node_modules/(?!@jspm/import-map)"
+    ],
     "transform": {
       "^.+\\.(ts)$": "@swc/jest"
     },
     "testEnvironment": "jest-environment-node",
     "clearMocks": true,
     "moduleFileExtensions": [
+      "cjs",
       "js",
+      "mjs",
       "ts",
       "json"
     ],

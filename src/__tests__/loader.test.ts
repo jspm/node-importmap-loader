@@ -1,32 +1,25 @@
 import { resolve } from "src/loader"
+import { ResolveOptions } from "src/types";
+
+jest.mock('node-fetch', () => jest.fn());
+jest.mock('@jspm/import-map', () => ({
+  ImportMap: jest.fn()
+}));
 
 jest.mock('@jspm/generator', () => ({
   parseUrlPkg: jest.fn(),
 }));
 
-jest.mock('src/utils', () => ({
-  constructPath: jest.fn(),
-  constructImportMap: jest.fn(),
-  constructUrlPath: jest.fn(),
-  createCacheMap: jest.fn(),
-  parseNodeModuleCachePath: jest.fn(),
-  processCliArgs: jest.fn(),
-}));
+import * as utils from 'src/utils';
 
-import * as utils from '../utils';
+jest.mock('src/utils');
 
 test('resolve success', async () => {
-  jest.spyOn(utils, 'processCliArgs').mockReturnValue({
-    values: { basePath: 'basePath', cachePath: 'cachePath', debug: true, importmapPath: 'importmapPath' },
-    positionals: []
-  })
-  const constructUrlPathSpy = jest.spyOn(utils, 'constructUrlPath');
+  const constructPathSpy = jest.spyOn(utils, 'constructPath');
   const nextResolve = jest.fn();
   const context = { parentURL: 'parentURL' };
   const specifier = 'specifier';
-  const debug = true;
-
-  await resolve(specifier, context, nextResolve, debug);
-  expect(constructUrlPathSpy).toHaveBeenCalled();
-  expect(constructUrlPathSpy);
+  const options = { debug: true } as ResolveOptions;
+  await resolve(specifier, context, nextResolve, options);
+  expect(constructPathSpy).toHaveBeenCalled();
 });

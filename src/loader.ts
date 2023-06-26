@@ -8,7 +8,7 @@ import {
   parseNodeModuleCachePath,
   processCliArgs,
 } from './utils'
-import { Context, NextResolve } from './types'
+import { Context, NextResolve, ResolveOptions } from 'src/types'
 
 /**
  * ******************************************************
@@ -20,8 +20,8 @@ import { Context, NextResolve } from './types'
  * ******************************************************
  */
 
-const { values: { basePath, cachePath, debug: isDebugging = false, importmapPath } } = processCliArgs(process.argv)
-const cacheMap = createCacheMap(isDebugging)
+const config = processCliArgs(process.argv) || {}
+const cacheMap = createCacheMap(config?.values?.debug)
 
 
 
@@ -34,12 +34,12 @@ const cacheMap = createCacheMap(isDebugging)
  * @returns {function} nextResolve
  */
 
-export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve, debug = isDebugging) => {
+export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve, options: ResolveOptions = config?.values) => {
+  const { basePath, cachePath, debug: isDebugging = false, importmapPath } = options || {}
   try {
     // define importmap path
     const cwd = process.cwd();
-    console.log({ cwd, importmapPath });
-    const pathToImportMap = importmapPath || constructUrlPath(basePath, cwd, debug);
+    const pathToImportMap = importmapPath || constructUrlPath(basePath, cwd, isDebugging);
     const nodeImportMapPath = constructPath('node.importmap', pathToImportMap);
     if (isDebugging) console.debug('resolve:', { cwd, pathToImportMap, nodeImportMapPath });
     if (!nodeImportMapPath) throw new Error('Failed in resolving import map path');
@@ -76,7 +76,7 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
     const { pkg: { name, version } } = moduleMetaData;
     const nodeModuleCachePath = constructPath(`${name}@${version}`, pathToCache);
     cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);
-    const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath, debug);
+    const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath, isDebugging);
     if (isDebugging) console.debug('resolve:', { nodeModuleCachePath, parsedNodeModuleCachePath });
     if (!parsedNodeModuleCachePath) throw new Error('Failed in parsing node module cache path');
 

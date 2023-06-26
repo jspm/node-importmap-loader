@@ -16,7 +16,7 @@ target = 'package-lock.json'
 
 [[task]]
 name = 'clean'
-run = 'rimraf dist'
+run = 'rm -rf dist'
 
 [[task]]
 name = 'commit'

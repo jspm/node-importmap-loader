@@ -1,6 +1,5 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import fetch from 'node-fetch';
 import { ImportMap } from '@jspm/import-map';
 
 import {
@@ -28,8 +27,7 @@ jest.mock('node:path', () => {
 jest.mock('node-fetch', () => jest.fn().mockResolvedValue({
   ok: true,
   text: jest.fn().mockResolvedValue('module code')
-})
-)
+}))
 
 jest.mock('@jspm/import-map', () => {
   const ImportMap = jest.fn()

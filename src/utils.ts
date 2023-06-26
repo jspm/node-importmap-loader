@@ -138,5 +138,4 @@ export const parseNodeModuleCachePath = async (modulePath: string, cachePath: st
  * @param {object }opts
  * @returns {object}
  */
-export const processCliArgs = (args: string[], opts = PROCESS_CLI_ARGS_OPTIONS) =>
-  parseArgs({ args, options: opts, allowPositionals: true });
+export const processCliArgs = (args: string[], opts = PROCESS_CLI_ARGS_OPTIONS) => parseArgs({ args, options: opts, allowPositionals: true });

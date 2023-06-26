@@ -85,7 +85,7 @@ run = 'node --loader ./dist/loader.js tests/e2e/test.js -i ../'
 
 [[task]]
 name = 'test:unit'
-run = 'vitest run'
+run = 'jest'
 
 [[task]]
 name = 'typecheck'

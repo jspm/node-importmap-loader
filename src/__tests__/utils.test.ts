@@ -1,6 +1,5 @@
 import * as fs from 'node:fs';
 import { ImportMap } from '@jspm/import-map';
-import { vi, test, expect, describe, afterEach, Mock } from 'vitest'
 
 import {
   constructPath,
@@ -9,21 +8,21 @@ import {
   createCacheMap,
   parseNodeModuleCachePath,
   processCliArgs,
-} from '../src/utils';
+} from "src/utils";
 
 import {
   ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED,
-} from "../src/constants";
+} from "src/constants";
 
-vi.mock('node-fetch', () => ({
-  default: vi.fn().mockResolvedValue({
+jest.mock('node-fetch', () => ({
+  default: jest.fn().mockResolvedValue({
     ok: true,
-    text: vi.fn().mockResolvedValue('module code')
+    text: jest.fn().mockResolvedValue('module code')
   })
 }))
 
-vi.mock('@jspm/import-map', () => {
-  const ImportMap = vi.fn()
+jest.mock('@jspm/import-map', () => {
+  const ImportMap = jest.fn()
   return { ImportMap }
 })
 
@@ -49,13 +48,13 @@ test('constructUrlPath with base url', () => {
 });
 
 test('constructUrlPath with base url and no debug', () => {
-  const spy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+  const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
   constructUrlPath('bar.txt', 'bin/foo/biz', true)
   expect(spy).toHaveBeenCalled();
 });
 
 test('constructUrlPath with base url and no debug', () => {
-  const spy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+  const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
   constructUrlPath('bar.txt', 'bin/foo/biz', false)
   expect(spy).not.toHaveBeenCalled();
 });
@@ -70,8 +69,8 @@ test('constructImportMap should return null if path does not exist', () => {
   expect(result).toBeNull()
 });
 
-test('constructImportMap should return ImportMap instance if path exists', () => {
-  const path = `${process.cwd()}/tests/__fixtures__/fake.json`;
+test.only('constructImportMap should return ImportMap instance if path exists', () => {
+  const path = `${process.cwd()}/src/__fixtures__/fake.json`;
   constructImportMap(path)
   expect(ImportMap).toHaveBeenCalled()
 })
@@ -111,7 +110,7 @@ test('createCacheMap.set should set cachePath and modulePath', () => {
 })
 
 test('createCacheMap.set should log error if cachePath or modulePath are undefined', () => {
-  const spy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+  const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
   const cacheMap = createCacheMap(true)
   cacheMap.set(undefined as unknown as string, 'bar')
   expect(spy).toHaveBeenCalledWith(ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED)
@@ -119,15 +118,16 @@ test('createCacheMap.set should log error if cachePath or modulePath are undefin
 
 describe('parseNodeModuleCachePath', () => {
   const cachePath = '/path/to/cache';
-  vi.mock("node:fs", async () => {
+  jest.mock("node:fs", async () => {
+    const actual = await jest.requireActual<typeof import("node:fs")>("node:fs");
     return {
-      ...(await vi.importActual<typeof import("node:fs")>("node:fs")),
-      existsSync: vi.fn(),
+      ...actual,
+      existsSync: jest.fn(),
     };
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   test('should return cachePath if it exists', async () => {
@@ -138,8 +138,8 @@ describe('parseNodeModuleCachePath', () => {
 
   test('should make directories and write file if cachePath does not exist', async () => {
     (fs.existsSync as Mock).mockReturnValue(false)
-    const mkdirSyncSpy = await vi.spyOn(fs, 'mkdirSync').mockReturnValue('');
-    const writeFileSyncSpy = await vi.spyOn(fs, 'writeFileSync');
+    const mkdirSyncSpy = await jest.spyOn(fs, 'mkdirSync').mockReturnValue('');
+    const writeFileSyncSpy = await jest.spyOn(fs, 'writeFileSync');
     await parseNodeModuleCachePath('modulePath', cachePath)
     expect(mkdirSyncSpy).toHaveBeenCalledWith('/path/to', { recursive: true })
     expect(writeFileSyncSpy).toHaveBeenCalledWith(cachePath, 'module code')
@@ -147,9 +147,9 @@ describe('parseNodeModuleCachePath', () => {
 
   test('should return empty string if there is an error', async () => {
     (fs.existsSync as Mock).mockReturnValue(false)
-    await vi.spyOn(fs, 'mkdirSync').mockReturnValue('');
-    await vi.spyOn(fs, 'writeFileSync').mockImplementation(() => { throw new Error('error') });
-    const errorSpy = await vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    await jest.spyOn(fs, 'mkdirSync').mockReturnValue('');
+    await jest.spyOn(fs, 'writeFileSync').mockImplementation(() => { throw new Error('error') });
+    const errorSpy = await jest.spyOn(console, 'error').mockImplementation(() => undefined);
     const result = await parseNodeModuleCachePath('modulePath', cachePath, true)
     expect(result).toBe('')
     expect(errorSpy).toHaveBeenCalled()

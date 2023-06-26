@@ -21,7 +21,6 @@ import { Context, NextResolve } from './types'
  */
 
 const { values: { basePath, cachePath, debug: isDebugging = false, importmapPath } } = processCliArgs(process.argv)
-
 const cacheMap = createCacheMap(isDebugging)
 
 
@@ -39,6 +38,7 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
   try {
     // define importmap path
     const cwd = process.cwd();
+    console.log({ cwd, importmapPath });
     const pathToImportMap = importmapPath || constructUrlPath(basePath, cwd, debug);
     const nodeImportMapPath = constructPath('node.importmap', pathToImportMap);
     if (isDebugging) console.debug('resolve:', { cwd, pathToImportMap, nodeImportMapPath });

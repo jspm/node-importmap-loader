@@ -7,7 +7,6 @@
 	"settings": {},
 	"extensions": [
 		"rvest.vs-code-prettier-eslint",
-    "ZixuanChen.vitest-explorer",
     "wix.vscode-import-cost",
     "eamodio.gitlens"
 	],

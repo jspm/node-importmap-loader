@@ -36,11 +36,6 @@ run = 'eslint src --ext .ts'
 deps = ['src/#.ts']
 
 [[task]]
-name = 'lint-fix'
-deps = ['src/#.ts']
-run = 'eslint src --ext .ts --fix'
-
-[[task]]
 name = 'prepare'
 run = 'husky install'
 

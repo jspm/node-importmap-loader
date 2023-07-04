@@ -24,7 +24,7 @@
     "server": "chomp server:build && chomp server:start",
     "server:build": "echo 'Building...' && chomp build && echo 'Build complete.'",
     "server:start": "echo 'Starting server...' && node --loader ./dist/loader.js tests/e2e/test-server.js && echo 'Server started.'",
-    "test": "concurrently --kill-others \"chomp test:unit\" \"chomp test:e2e\"",
+    "test": "chomp test:unit && chomp test:e2e",
     "test:e2e": "chomp default && chomp build && node --loader ./dist/loader.js tests/e2e/test.js",
     "test:unit": "jest",
     "typecheck": "tsc --noEmit"

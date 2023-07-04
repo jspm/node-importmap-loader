@@ -70,13 +70,11 @@ echo "Server started."
 
 [[task]]
 name = 'test'
-deps = [':test:unit', ':test:e2e']
+run = 'chomp test:unit && chomp test:e2e'
 
 [[task]]
 name = 'test:e2e'
-serial = true
-deps = [':default', ':build']
-run = 'node --loader ./dist/loader.js tests/e2e/test.js -i ../'
+run = 'npm run default && npm run build && node --loader ./dist/loader.js tests/e2e/test.js -i ../'
 
 [[task]]
 name = 'test:unit'

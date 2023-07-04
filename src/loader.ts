@@ -63,11 +63,15 @@ export const resolve = async (
 
     // construct module path
     const modulePath = importmap.resolve(specifier, cacheMapPath);
+    if (isDebugging) console.debug("resolve:modulePath:", { modulePath });
+    if (!modulePath) throw new Error("Failed in resolving module path");
+
+    // resolve URL
     const { protocol = "" } = new URL(modulePath);
     const isNode = protocol === "node:";
     const isFile = protocol === "file:";
-    if (isDebugging) console.debug("resolve:modulePath:", { modulePath, protocol, isNode, isFile });
-    if (isNode || isFile) throw new Error("Failed in resolving module path");
+    if (isDebugging) console.debug("resolve:protocol:", { protocol, isNode, isFile });
+    if (isNode || isFile) throw new Error("Failed in resolving URL");
 
     // get node module information
     const moduleMetaData = await parseUrlPkg(modulePath);

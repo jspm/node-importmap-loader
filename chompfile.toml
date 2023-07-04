@@ -41,10 +41,6 @@ deps = ['src/#.ts']
 run = 'eslint src --ext .ts --fix'
 
 [[task]]
-name = 'pre-commit'
-run = 'lint-staged'
-
-[[task]]
 name = 'prepare'
 run = 'husky install'
 

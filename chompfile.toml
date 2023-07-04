@@ -43,7 +43,6 @@ run = 'eslint src --ext .ts --fix'
 [[task]]
 name = 'pre-commit'
 run = 'lint-staged'
-deps = ['src/#.ts']
 
 [[task]]
 name = 'prepare'

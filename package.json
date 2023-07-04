@@ -88,6 +88,29 @@
       ]
     }
   },
+  "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier"
+    ],
+    "rules": {
+      "prefer-destructuring": [
+        "error",
+        {
+          "AssignmentExpression": {
+            "array": false,
+            "object": false
+          }
+        }
+      ]
+    }
+  },
   "jest": {
     "testMatch": [
       "**/**/*.test.ts"

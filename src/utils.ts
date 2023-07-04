@@ -1,15 +1,15 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { parseArgs } from 'node:util';
+import { parseArgs } from "node:util";
 import fetch from "node-fetch";
 import { ImportMap } from "@jspm/import-map";
-
+import { CreateCacheMapFactory } from "src/types";
 import {
   ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED,
   NO_CACHE_MAP_DEFINED,
-  PROCESS_CLI_ARGS_OPTIONS
-} from "./constants";
+  PROCESS_CLI_ARGS_OPTIONS,
+} from "src/constants";
 
 /**
  * ******************************************************
@@ -31,7 +31,7 @@ const cwd = process.cwd();
  * @param {string} root
  * @returns {string}
  */
-export const constructPath = (dir: string, root = './') => join(root, dir)
+export const constructPath = (dir: string, root = "./") => join(root, dir);
 
 /**
  * constructUrlPath
@@ -41,15 +41,15 @@ export const constructPath = (dir: string, root = './') => join(root, dir)
  * @param {boolean} debug
  * @returns {string}
  */
-export const constructUrlPath = (base = '.', url: string = cwd, debug = false) => {
+export const constructUrlPath = (base = ".", url: string = cwd, debug = false) => {
   try {
-    const path = new URL(base, url)
-    return fileURLToPath(path.href)
+    const path = new URL(base, url);
+    return fileURLToPath(path.href);
   } catch (err) {
-    if (debug) console.error(`constructUrlPath: Failed in creating a url path ${err}`)
-    return ''
+    if (debug) console.error(`constructUrlPath: Failed in creating a url path ${err}`);
+    return "";
   }
-}
+};
 
 /**
  * constructImportMap
@@ -58,15 +58,15 @@ export const constructUrlPath = (base = '.', url: string = cwd, debug = false) =
  * @param {string} rootUrl
  * @returns {ImportMap|null}
  */
-export const constructImportMap = (path = '', rootUrl = cwd) => {
-  const pathExists = existsSync(path)
-  const json = readFileSync(path, { encoding: "utf8" })
-  const map = pathExists && json ? JSON.parse(json) : {}
+export const constructImportMap = (path = "", rootUrl = cwd) => {
+  const pathExists = existsSync(path);
+  const json = readFileSync(path, { encoding: "utf8" });
+  const map = pathExists && json ? JSON.parse(json) : {};
   return new ImportMap({
     rootUrl,
     map,
-  })
-}
+  });
+};
 
 /**
  * createCacheMap
@@ -74,7 +74,7 @@ export const constructImportMap = (path = '', rootUrl = cwd) => {
  * @param {boolean} debug
  * @returns {createCacheMap}
  */
-export const createCacheMap = (debug = false) => {
+export const createCacheMap = (debug = false): CreateCacheMapFactory => {
   const instance = new Map();
   const isDebugging = debug;
   let cachePath: string | undefined, modulePath: string | undefined;
@@ -95,12 +95,12 @@ export const createCacheMap = (debug = false) => {
       const hasRequiredArgs = cachePath && modulePath;
       if (!hasRequiredArgs) {
         if (this.isDebugging) console.error(ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED);
-        return
+        return;
       }
       this.instance.set(cachePath, modulePath);
-    }
-  }
-}
+    },
+  };
+};
 
 /**
  * parseModule
@@ -112,17 +112,17 @@ export const createCacheMap = (debug = false) => {
  */
 export const parseNodeModuleCachePath = async (modulePath: string, cachePath: string, debug = false) => {
   try {
-    if (existsSync(cachePath)) return cachePath
-    const resp = await fetch(modulePath)
+    if (existsSync(cachePath)) return cachePath;
+    const resp = await fetch(modulePath);
     if (!resp.ok) throw Error(`404: Module not found: ${modulePath}`);
     const nodeModuleCode = await resp.text();
     const dirPath = dirname(cachePath);
-    mkdirSync(dirPath, { recursive: true })
+    mkdirSync(dirPath, { recursive: true });
     writeFileSync(cachePath, nodeModuleCode);
     return cachePath;
   } catch (err) {
     if (debug) console.error(`parseNodeModuleCachePath: Failed in parsing module ${err}`);
-    return '';
+    return "";
   }
 };
 
@@ -133,4 +133,5 @@ export const parseNodeModuleCachePath = async (modulePath: string, cachePath: st
  * @param {object }opts
  * @returns {object}
  */
-export const processCliArgs = (args: string[], opts = PROCESS_CLI_ARGS_OPTIONS) => parseArgs({ args, options: opts, allowPositionals: true });
+export const processCliArgs = (args: string[], opts = PROCESS_CLI_ARGS_OPTIONS) =>
+  parseArgs({ args, options: opts, allowPositionals: true });

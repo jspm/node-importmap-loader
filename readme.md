@@ -85,5 +85,5 @@ Unrecommended and supported for issues, etc:
 
 ```sh
 git clone git@github.com:jspm/node-importmap-http-loader.git
-nvm i && pnpm i
+nvm install && npm install
 ```

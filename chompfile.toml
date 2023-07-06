@@ -9,10 +9,10 @@ dep = 'src/loader.ts'
 target = 'dist/loader.js'
 
 [[task]]
-name = 'pnpm:install'
-run = 'pnpm install'
+name = 'npm:install'
+run = 'npm install'
 dep = 'package.json'
-target = 'pnpm-lock.yaml'
+target = 'package-lock.json'
 
 [[task]]
 name = 'clean'
@@ -24,7 +24,7 @@ run = 'git-cz'
 
 [[task]]
 name = 'default'
-run = 'pnpm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1'
+run = 'npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1'
 
 [[task]]
 name = 'format'
@@ -42,7 +42,7 @@ deps = ['src/#.ts']
 
 [[task]]
 name = 'post-merge'
-deps = ['pnpm:install', 'build']
+deps = ['npm:install', 'build']
 
 [[task]]
 name = 'pre-commit'
@@ -99,4 +99,4 @@ run = 'tsc --noEmit'
 
 [[task]]
 name = 'upgrade'
-run = 'pnpm update --latest'
+run = 'npm update --latest'

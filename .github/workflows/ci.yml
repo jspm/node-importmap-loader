@@ -22,10 +22,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - run: pnpm install --no-frozen-lockfile
       - name: Setup Chomp
         uses: guybedford/chomp-action@v1
         env:

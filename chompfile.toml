@@ -23,10 +23,6 @@ name = 'commit'
 run = 'git-cz'
 
 [[task]]
-name = 'commit-msg'
-run = 'commitlint --edit $1'
-
-[[task]]
 name = 'default'
 run = 'pnpm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1'
 

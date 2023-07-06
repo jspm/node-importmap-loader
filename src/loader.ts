@@ -35,7 +35,7 @@ export const resolve = async (
   specifier: string,
   { parentURL }: Context,
   nextResolve: NextResolve,
-  options: ResolveOptions = config?.values
+  options: ResolveOptions = config?.values,
 ) => {
   const { basePath, cachePath, debug: isDebugging = false, importmapPath, cacheMap = initialCacheMap } = options || {};
   try {

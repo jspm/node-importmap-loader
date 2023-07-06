@@ -9,10 +9,10 @@ dep = 'src/loader.ts'
 target = 'dist/loader.js'
 
 [[task]]
-name = 'npm:install'
-run = 'npm install'
+name = 'pnpm:install'
+run = 'pnpm install'
 dep = 'package.json'
-target = 'package-lock.json'
+target = 'pnpm-lock.yaml'
 
 [[task]]
 name = 'clean'
@@ -43,6 +43,10 @@ deps = ['src/#.ts']
 name = 'lint:fix'
 run = 'eslint src --ext .ts --fix'
 deps = ['src/#.ts']
+
+[[task]]
+name = 'post-merge'
+deps = ['pnpm:install', 'build']
 
 [[task]]
 name = 'pre-commit'

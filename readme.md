@@ -9,7 +9,7 @@ Experimental node loader built on top of jspm utils to resolve deps from remote 
 When executing
 
 ```sh
-node --loader ./loader.js test.js
+node --loader ./dist/loader.js test/e2e/test.js
 ```
 
 The following will be output
@@ -85,5 +85,5 @@ Unrecommended and supported for issues, etc:
 
 ```sh
 git clone git@github.com:jspm/node-importmap-http-loader.git
-nvm i && npm i
+nvm i && pnpm i
 ```

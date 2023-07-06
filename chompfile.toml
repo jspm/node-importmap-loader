@@ -32,7 +32,7 @@ run = 'prettier --write **/*.{ts,json,md}'
 
 [[task]]
 name = 'lint'
-run = 'eslint src --ext'
+run = 'eslint src --ext .ts'
 deps = ['src/#.ts']
 
 [[task]]

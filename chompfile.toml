@@ -28,12 +28,25 @@ run = 'commitlint --edit $1'
 
 [[task]]
 name = 'default'
-run = 'npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node tests/e2e/test.js'
+run = 'pnpm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1'
+
+[[task]]
+name = 'format'
+run = 'prettier --write **/*.{ts,json,md}'
 
 [[task]]
 name = 'lint'
-run = 'eslint src --ext .ts'
+run = 'eslint src --ext'
 deps = ['src/#.ts']
+
+[[task]]
+name = 'lint:fix'
+run = 'eslint src --ext .ts --fix'
+deps = ['src/#.ts']
+
+[[task]]
+name = 'pre-commit'
+deps = ['typecheck', 'test:changed', 'lint:fix', 'format']
 
 [[task]]
 name = 'prepare'
@@ -41,7 +54,7 @@ run = 'husky install'
 
 [[task]]
 name = 'prepublishOnly'
-deps = [':test', ':build']
+deps = ['test', 'build']
 
 [[task]]
 name = 'release'
@@ -49,7 +62,7 @@ run = 'release-it'
 
 [[task]]
 name = 'server'
-deps = [':server:build', ':server:start']
+deps = ['server:build', 'server:start']
 
 [[task]]
 name = 'server:build'
@@ -65,17 +78,25 @@ echo "Server started."
 
 [[task]]
 name = 'test'
-run = 'chomp test:unit && chomp test:e2e'
+deps = ['test:unit', 'test:e2e']
 
 [[task]]
 name = 'test:e2e'
-run = 'npm run default && npm run build && node --loader ./dist/loader.js tests/e2e/test.js -i ../'
+run = 'node --loader ./dist/loader.js tests/e2e/test.js -i ../'
+deps = ['default', 'build']
 
 [[task]]
 name = 'test:unit'
 run = 'jest'
 
 [[task]]
+name = 'test:changed'
+run = 'jest --bail --changesince=main'
+
+[[task]]
 name = 'typecheck'
 run = 'tsc --noEmit'
-deps = ['src/#.ts']
+
+[[task]]
+name = 'upgrade'
+run = 'pnpm update --latest'

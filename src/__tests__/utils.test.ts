@@ -74,7 +74,7 @@ test("constructImportMap minimal", () => {
 });
 
 test("constructImportMap should return null if path does not exist", () => {
-  jest.spyOn(fs, "readFileSync").mockReturnValue(Error("invalid/path") as any);
+  jest.spyOn(fs, "readFileSync").mockReturnValue(Error("invalid/path") as unknown as string);
   const result = constructImportMap("invalid/path");
   expect(result).toEqual({});
 });

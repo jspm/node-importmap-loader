@@ -28,7 +28,7 @@ test("resolved with no nodeImportMapPath error", async () => {
   const context = { parentURL: "parentURL" };
   await resolve(specifier, context, nextResolve, options);
   expect(constructPathSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: Error: Failed in resolving import map path");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving import map path");
   expect(nextResolve).toHaveBeenCalled();
 });
 
@@ -38,7 +38,7 @@ test("resolved with no cache path error", async () => {
   const options = { debug: true } as ResolveOptions;
   await resolve(specifier, context, nextResolve, options);
   expect(constructPathSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: Error: Failed in resolving cache path");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving cache path");
 });
 
 test("resolved with no pathToCache error", async () => {
@@ -47,7 +47,7 @@ test("resolved with no pathToCache error", async () => {
   const options = { debug: true } as ResolveOptions;
   await resolve(specifier, context, nextResolve, options);
   expect(constructPathSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: Error: Failed in constructing import map");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in constructing import map");
 });
 
 test("resolved with no cacheMapPath error", async () => {
@@ -64,7 +64,7 @@ test("resolved with no cacheMapPath error", async () => {
   await resolve(specifier, context, nextResolve, options);
   expect(constructPathSpy).toHaveBeenCalled();
   expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: Error: Failed in resolving cache map path");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving cache map path");
 });
 
 test("resolved with no modulePath error", async () => {
@@ -79,7 +79,7 @@ test("resolved with no modulePath error", async () => {
   await resolve(specifier, context, nextResolve, options);
   expect(constructPathSpy).toHaveBeenCalled();
   expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: Error: Failed in resolving module path");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving module path");
 });
 
 test("resolved with URL error", async () => {
@@ -94,7 +94,7 @@ test("resolved with URL error", async () => {
   await resolve(specifier, context, nextResolve, options);
   expect(constructPathSpy).toHaveBeenCalled();
   expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: TypeError [ERR_INVALID_URL]: Invalid URL");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: TypeError [ERR_INVALID_URL]: Invalid URL");
 });
 
 test("resolved with `isNode` protocol error", async () => {
@@ -109,7 +109,7 @@ test("resolved with `isNode` protocol error", async () => {
   await resolve(specifier, context, nextResolve, options);
   expect(constructPathSpy).toHaveBeenCalled();
   expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: Error: Failed in resolving URL");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving URL");
 });
 
 test("resolved with `isFile` protocol error", async () => {
@@ -124,7 +124,7 @@ test("resolved with `isFile` protocol error", async () => {
   await resolve(specifier, context, nextResolve, options);
   expect(constructPathSpy).toHaveBeenCalled();
   expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: Error: Failed in resolving URL");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving URL");
 });
 
 test("resolved with parseUrlPkg error", async () => {
@@ -141,7 +141,7 @@ test("resolved with parseUrlPkg error", async () => {
   await resolve(specifier, context, nextResolve, options);
   expect(constructPathSpy).toHaveBeenCalled();
   expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: Error: Failed in parsing module meta data");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in parsing module meta data");
 });
 
 test("resolved with parsing node module cache path error", async () => {
@@ -159,7 +159,7 @@ test("resolved with parsing node module cache path error", async () => {
   expect(constructPathSpy).toHaveBeenCalled();
   expect(constructImportMapSpy).toHaveBeenCalled();
   expect(parseUrlPkg).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("resolve: Error: Failed in parsing node module cache path");
+  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in parsing node module cache path");
 });
 
 test("resolved without an error", async () => {

@@ -11,6 +11,10 @@ import {
   PROCESS_CLI_ARGS_OPTIONS,
 } from "src/constants";
 
+import { logger } from "./logger";
+
+const log = logger({ file: "utils" });
+
 /**
  * ******************************************************
  * UTILS
@@ -46,7 +50,7 @@ export const constructUrlPath = (base = ".", url: string = cwd, debug = false) =
     const path = new URL(base, url);
     return fileURLToPath(path.href);
   } catch (err) {
-    if (debug) console.error(`constructUrlPath: Failed in creating a url path ${err}`);
+    log.error('constructUrlPath:error:', { err });
     return "";
   }
 };
@@ -86,7 +90,7 @@ export const createCacheMap = (debug = false): CreateCacheMapFactory => {
     get(cachePath: string) {
       const path = this.instance.get(cachePath);
       if (!path) {
-        if (this.isDebugging) console.error(NO_CACHE_MAP_DEFINED);
+        log.error(NO_CACHE_MAP_DEFINED);
         return;
       }
       return path;
@@ -94,7 +98,7 @@ export const createCacheMap = (debug = false): CreateCacheMapFactory => {
     set(cachePath: string, modulePath: string) {
       const hasRequiredArgs = cachePath && modulePath;
       if (!hasRequiredArgs) {
-        if (this.isDebugging) console.error(ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED);
+        log.error(ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED);
         return;
       }
       this.instance.set(cachePath, modulePath);
@@ -121,7 +125,7 @@ export const parseNodeModuleCachePath = async (modulePath: string, cachePath: st
     writeFileSync(cachePath, nodeModuleCode);
     return cachePath;
   } catch (err) {
-    if (debug) console.error(`parseNodeModuleCachePath: Failed in parsing module ${err}`);
+    log.error(`parseNodeModuleCachePath: Failed in parsing module ${err}`);
     return "";
   }
 };

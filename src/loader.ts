@@ -8,6 +8,9 @@ import {
   processCliArgs,
 } from "src/utils";
 import { Context, NextResolve, ResolveOptions } from "src/types";
+import { logger } from './logger'
+
+const log = logger({ file: "loader" });
 
 /**
  * ******************************************************
@@ -38,44 +41,45 @@ export const resolve = async (
   options: ResolveOptions = config?.values,
 ) => {
   const { basePath, cachePath, debug: isDebugging = false, importmapPath, cacheMap = initialCacheMap } = options || {};
+  log.setLogger(isDebugging)
   try {
     // define importmap path
     const cwd = process.cwd();
     const pathToImportMap = importmapPath || constructUrlPath(basePath, cwd, isDebugging);
     const nodeImportMapPath = constructPath("node.importmap", pathToImportMap);
-    if (isDebugging) console.debug("resolve:nodeImportMapPath:", { cwd, pathToImportMap, nodeImportMapPath });
+    log.debug("resolve:nodeImportMapPath:", { cwd, pathToImportMap, nodeImportMapPath });
     if (!nodeImportMapPath) throw new Error("Failed in resolving import map path");
 
     // define cache path
     const pathToCache = cachePath || parentURL;
-    if (isDebugging) console.debug("resolve:pathToCache:", { pathToCache });
+    log.debug("resolve:pathToCache:", { pathToCache });
     if (!pathToCache) throw new Error("Failed in resolving cache path");
 
     // construct importmap
     const importmap = constructImportMap(nodeImportMapPath);
-    if (isDebugging) console.debug("resolve:importmap:", { importmap });
+    log.debug("resolve:importmap:", { importmap });
     if (!importmap) throw new Error("Failed in constructing import map");
 
     // construct cache map path
     const cacheMapPath = cacheMap.get(pathToCache);
-    if (isDebugging) console.debug("resolve:cacheMapPath:", { cacheMapPath });
+    log.debug("resolve:cacheMapPath:", { cacheMapPath });
     if (!cacheMapPath) throw new Error("Failed in resolving cache map path");
 
     // construct module path
     const modulePath = importmap.resolve(specifier, cacheMapPath);
-    if (isDebugging) console.debug("resolve:modulePath:", { modulePath });
+    log.debug("resolve:modulePath:", { modulePath });
     if (!modulePath) throw new Error("Failed in resolving module path");
 
     // resolve URL
     const { protocol = "" } = new URL(modulePath);
     const isNode = protocol === "node:";
     const isFile = protocol === "file:";
-    if (isDebugging) console.debug("resolve:protocol:", { protocol, isNode, isFile });
+    log.debug("resolve:protocol:", { protocol, isNode, isFile });
     if (isNode || isFile) throw new Error("Failed in resolving URL");
 
     // get node module information
     const moduleMetaData = await parseUrlPkg(modulePath);
-    if (isDebugging) console.debug("resolve:moduleMetaData:", { moduleMetaData });
+    log.debug("resolve:moduleMetaData:", { moduleMetaData });
     if (!moduleMetaData) throw new Error("Failed in parsing module meta data");
 
     // construct node module cache path
@@ -85,13 +89,13 @@ export const resolve = async (
     const nodeModuleCachePath = constructPath(`${name}@${version}`, pathToCache);
     cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);
     const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath, isDebugging);
-    if (isDebugging) console.debug("resolve:nodeModuleCachePath:", { nodeModuleCachePath, parsedNodeModuleCachePath });
+    log.debug("resolve:nodeModuleCachePath:", { nodeModuleCachePath, parsedNodeModuleCachePath });
     if (!parsedNodeModuleCachePath) throw new Error("Failed in parsing node module cache path");
 
     // resolve node module cache path
     return nextResolve(parsedNodeModuleCachePath);
   } catch (err) {
-    if (isDebugging) console.error(`resolve: ${err}`);
+    log.error(`resolve: ${err}`);
     return nextResolve(specifier);
   }
 };

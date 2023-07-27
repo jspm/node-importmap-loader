@@ -31,3 +31,8 @@ export type ResolveOptions = {
   importmapPath?: string;
   cacheMap?: CreateCacheMapFactory;
 };
+
+export type LoggerOptions = {
+  file: string;
+  isLogging?: boolean;
+}

@@ -62,12 +62,6 @@ test("constructUrlPath with base url and no debug", () => {
   expect(spy).toHaveBeenCalled();
 });
 
-test("constructUrlPath with base url and no debug", () => {
-  const spy = jest.spyOn(console, "error").mockImplementation(() => undefined);
-  constructUrlPath("bar.txt", "bin/foo/biz", false);
-  expect(spy).not.toHaveBeenCalled();
-});
-
 test("constructImportMap minimal", () => {
   const result = constructImportMap();
   expect(result).toBeInstanceOf(ImportMap);
@@ -121,7 +115,7 @@ test("createCacheMap.set should log error if cachePath or modulePath are undefin
   const spy = jest.spyOn(console, "error").mockImplementation(() => undefined);
   const cacheMap = createCacheMap(true);
   cacheMap.set(undefined as unknown as string, "bar");
-  expect(spy).toHaveBeenCalledWith(ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED);
+  expect(spy).toHaveBeenCalledWith(`jspm:[utils]: ${ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED}`);
 });
 
 describe("parseNodeModuleCachePath", () => {

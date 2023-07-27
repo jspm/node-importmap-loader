@@ -50,7 +50,7 @@ export const constructUrlPath = (base = ".", url: string = cwd, debug = false) =
     const path = new URL(base, url);
     return fileURLToPath(path.href);
   } catch (err) {
-    log.error('constructUrlPath:error:', { err });
+    log.error("constructUrlPath:error:", { err });
     return "";
   }
 };

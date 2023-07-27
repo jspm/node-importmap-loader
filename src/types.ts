@@ -35,4 +35,4 @@ export type ResolveOptions = {
 export type LoggerOptions = {
   file: string;
   isLogging?: boolean;
-}
+};

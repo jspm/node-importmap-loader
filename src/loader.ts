@@ -8,7 +8,7 @@ import {
   processCliArgs,
 } from "src/utils";
 import { Context, NextResolve, ResolveOptions } from "src/types";
-import { logger } from './logger'
+import { logger } from "./logger";
 
 const log = logger({ file: "loader" });
 
@@ -41,7 +41,7 @@ export const resolve = async (
   options: ResolveOptions = config?.values,
 ) => {
   const { basePath, cachePath, debug: isDebugging = false, importmapPath, cacheMap = initialCacheMap } = options || {};
-  log.setLogger(isDebugging)
+  log.setLogger(isDebugging);
   try {
     // define importmap path
     const cwd = process.cwd();

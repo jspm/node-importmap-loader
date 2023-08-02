@@ -1,5 +1,5 @@
 {
-  "name": "jspm-node-import-map-loader",
+  "name": "@jspm/node-importmap-loader",
   "version": "0.0.1",
   "description": "A Node.js loader for JSPM import maps",
   "author": "Jaya Krishna Namburu <namburu1995@gmail.com>",

@@ -4,8 +4,8 @@ default-task = 'build'
 
 [[task]]
 name = 'build'
-run = 'tsup src/loader.ts --format esm,cjs --dts'
-dep = 'src/loader.ts'
+run = 'tsup src/loader.ts --format esm --dts'
+dep = 'src/#.ts'
 target = 'dist/loader.js'
 
 [[task]]

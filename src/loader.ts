@@ -22,6 +22,7 @@ const log = logger({ file: "loader" });
  * ******************************************************
  */
 
+// TODO: fix
 const config = processCliArgs(process.argv) || {};
 const initialCacheMap = createCacheMap(config?.values?.debug);
 
@@ -38,20 +39,22 @@ export const resolve = async (
   specifier: string,
   { parentURL }: Context,
   nextResolve: NextResolve,
-  options: ResolveOptions = config?.values,
 ) => {
-  const { basePath, cachePath, debug: isDebugging = false, importmapPath, cacheMap = initialCacheMap } = options || {};
+  // TODO: fix
+  const { base, cache, debug: isDebugging = false, importmap, cacheMap = initialCacheMap } = config?.values || {};
   log.setLogger(isDebugging);
   try {
     // define importmap path
+    // TODO: fix
     const cwd = process.cwd();
-    const pathToImportMap = importmapPath || constructUrlPath(basePath, cwd, isDebugging);
+    const pathToImportMap = importmap || constructUrlPath(base, cwd, isDebugging);
     const nodeImportMapPath = constructPath("node.importmap", pathToImportMap);
+
     log.debug("resolve:nodeImportMapPath:", { cwd, pathToImportMap, nodeImportMapPath });
     if (!nodeImportMapPath) throw new Error("Failed in resolving import map path");
 
     // define cache path
-    const pathToCache = cachePath || parentURL;
+    const pathToCache = cache || parentURL;
     log.debug("resolve:pathToCache:", { pathToCache });
     if (!pathToCache) throw new Error("Failed in resolving cache path");
 
@@ -75,17 +78,21 @@ export const resolve = async (
     const isNode = protocol === "node:";
     const isFile = protocol === "file:";
     log.debug("resolve:protocol:", { protocol, isNode, isFile });
-    if (isNode || isFile) throw new Error("Failed in resolving URL");
+    if (isNode || isFile) {
+      log.debug("Failed reoslving a protocol");
+      return nextResolve(specifier);
+    }
 
     // get node module information
     const moduleMetaData = await parseUrlPkg(modulePath);
     log.debug("resolve:moduleMetaData:", { moduleMetaData });
-    if (!moduleMetaData) throw new Error("Failed in parsing module meta data");
+    if (!moduleMetaData) {
+      log.debug("Failed in parsing module meta data");
+      return nextResolve(specifier);
+    }
 
     // construct node module cache path
-    const {
-      pkg: { name, version },
-    } = moduleMetaData;
+    const { pkg: { name, version } } = moduleMetaData;
     const nodeModuleCachePath = constructPath(`${name}@${version}`, pathToCache);
     cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);
     const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath, isDebugging);

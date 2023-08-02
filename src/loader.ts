@@ -35,11 +35,7 @@ const initialCacheMap = createCacheMap(config?.values?.debug);
  * @returns {function} nextResolve
  */
 
-export const resolve = async (
-  specifier: string,
-  { parentURL }: Context,
-  nextResolve: NextResolve,
-) => {
+export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve) => {
   // TODO: fix
   const { base, cache, debug: isDebugging = false, importmap, cacheMap = initialCacheMap } = config?.values || {};
   log.setLogger(isDebugging);
@@ -92,7 +88,9 @@ export const resolve = async (
     }
 
     // construct node module cache path
-    const { pkg: { name, version } } = moduleMetaData;
+    const {
+      pkg: { name, version },
+    } = moduleMetaData;
     const nodeModuleCachePath = constructPath(`${name}@${version}`, pathToCache);
     cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);
     const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath, isDebugging);

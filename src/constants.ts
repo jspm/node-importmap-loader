@@ -14,7 +14,7 @@ export const PROCESS_TESTING_CLI_ARGS_OPTIONS = {
     type: <const>"string",
     short: "c",
   },
-}
+};
 
 export const PROCESS_DEFAULT_ARGS_OPTIONS = {
   debug: {
@@ -25,8 +25,9 @@ export const PROCESS_DEFAULT_ARGS_OPTIONS = {
     type: <const>"string",
     short: "i",
   },
-}
+};
 
-export const PROCESS_CLI_ARGS_OPTIONS = isDebugging || isTesting ?
-  Object.assign({}, PROCESS_DEFAULT_ARGS_OPTIONS, PROCESS_TESTING_CLI_ARGS_OPTIONS) :
-  PROCESS_DEFAULT_ARGS_OPTIONS;
+export const PROCESS_CLI_ARGS_OPTIONS =
+  isDebugging || isTesting
+    ? Object.assign({}, PROCESS_DEFAULT_ARGS_OPTIONS, PROCESS_TESTING_CLI_ARGS_OPTIONS)
+    : PROCESS_DEFAULT_ARGS_OPTIONS;

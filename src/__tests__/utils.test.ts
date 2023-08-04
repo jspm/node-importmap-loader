@@ -8,7 +8,6 @@ import {
   constructImportMap,
   createCacheMap,
   parseNodeModuleCachePath,
-  processCliArgs,
 } from "src/utils";
 
 import { ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED } from "src/constants";
@@ -52,13 +51,13 @@ test("constructUrlPath minimal", () => {
 });
 
 test("constructUrlPath with base url", () => {
-  const result = constructUrlPath("bar.txt", "file:///bin/foo/biz", true);
+  const result = constructUrlPath("bar.txt", "file:///bin/foo/biz");
   expect(result).toStrictEqual("/bin/foo/bar.txt");
 });
 
 test("constructUrlPath with base url and no debug", () => {
   const spy = jest.spyOn(console, "error").mockImplementation(() => undefined);
-  constructUrlPath("bar.txt", "bin/foo/biz", true);
+  constructUrlPath("bar.txt", "bin/foo/biz");
   expect(spy).toHaveBeenCalled();
 });
 
@@ -159,42 +158,5 @@ describe("parseNodeModuleCachePath", () => {
     const result = await parseNodeModuleCachePath("modulePath", cachePath, true);
     expect(result).toBe("");
     expect(errorSpy).toHaveBeenCalled();
-  });
-});
-
-test("processCliArgs should return an object with the parsed CLI arguments", () => {
-  const args = ["src", "cache", "--debug"];
-  const result = processCliArgs(args);
-  expect(result).toEqual({
-    positionals: ["src", "cache"],
-    values: {
-      debug: true,
-    },
-  });
-});
-
-test("processCliArgs should send empty defaults", () => {
-  const result = processCliArgs([]);
-  expect(result).toEqual({
-    positionals: [],
-    values: {},
-  });
-});
-
-test("processCliArgs should allow boolean flags", () => {
-  const args = ["--debug"];
-  const result = processCliArgs(args);
-  expect(result).toEqual({
-    positionals: [],
-    values: { debug: true },
-  });
-});
-
-test("processCliArgs should allow positionals", () => {
-  const args = ["src", "cache"];
-  const result = processCliArgs(args);
-  expect(result).toEqual({
-    positionals: ["src", "cache"],
-    values: {},
   });
 });

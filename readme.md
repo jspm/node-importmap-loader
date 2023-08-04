@@ -1,21 +1,27 @@
-# @jspm/node-importmap-generator
+# WIP: @jspm/node-importmap-loader
 
 ##### Don't bother installing dependencies you don't need to! 🏇🏻💨
 
-With **JSPM** **_node-importmap-loader_**, you no longer need to install dependencies! You can execute them directly! This increases productivity ⚡️, decreases security risk 🚔, and probably does other awesome things too!
+With **JSPM _node-importmap-loader_**, installing dependencies is a thing of the past! You can reference and execute them directly! Maximize productivity ⚡️, decrease security risk 🚔, and probably do other awesome things too! Use **JSPM _node-importmap-loader_** today!
+
+##### I'm skeptical, is this for real?
+
+Sort, yes and no—but it's close! This project's focus is to enable you to use import maps with Node if you have familiarity in the space. Meanwhile, we'll be working dev ex to make using this as seemless as possible.
+
+##### How does this work?
 
 JSPM uses [Node's experimental loader methodology](https://nodejs.org/api/esm.html#esm_import_map_loader) with JSPM's import map technology to allow _you_ 🫵 to import dependencies directly from a cdn source without needing to install them!
 
-More how-tos, documentation coming soon!
+##### 📣 More how-tos, documentation coming soon!
 
 ---
 
 ## Usage
 
-When executing the `jspm-node-importmap-loader`, followed by a file containing the node modules you'd like to reference
+When executing
 
 ```sh
-npx jspm-node-importmap-loader test/e2e/test.js
+node --loader ./dist/loader.js test.js
 ```
 
 The following will be output
@@ -91,5 +97,5 @@ Unrecommended and supported for issues, etc:
 
 ```sh
 git clone git@github.com:jspm/node-importmap-http-loader.git
-nvm install && npm install
+n install auto && npm install
 ```

@@ -5,11 +5,7 @@ import { parseArgs } from "node:util";
 import fetch from "node-fetch";
 import { ImportMap } from "@jspm/import-map";
 import { CreateCacheMapFactory } from "src/types";
-import {
-  ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED,
-  NO_CACHE_MAP_DEFINED,
-  PROCESS_CLI_ARGS_OPTIONS,
-} from "src/constants";
+import { ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED, NO_CACHE_MAP_DEFINED } from "src/constants";
 
 import { logger } from "./logger";
 
@@ -45,7 +41,7 @@ export const constructPath = (dir: string, root = "./") => join(root, dir);
  * @param {boolean} debug
  * @returns {string}
  */
-export const constructUrlPath = (base = ".", url: string = cwd, debug = false) => {
+export const constructUrlPath = (base = ".", url: string = cwd) => {
   try {
     const path = new URL(base, url);
     return fileURLToPath(path.href);
@@ -114,7 +110,7 @@ export const createCacheMap = (debug = false): CreateCacheMapFactory => {
  * @param {boolean} debug
  * @returns {string}
  */
-export const parseNodeModuleCachePath = async (modulePath: string, cachePath: string, debug = false) => {
+export const parseNodeModuleCachePath = async (modulePath: string, cachePath: string) => {
   try {
     if (existsSync(cachePath)) return cachePath;
     const resp = await fetch(modulePath);
@@ -136,6 +132,7 @@ export const parseNodeModuleCachePath = async (modulePath: string, cachePath: st
  * @param {string[]} args
  * @param {object }opts
  * @returns {object}
+ * TODO: [CLI] this is currently unused
  */
 export const processCliArgs = (args: string[], opts = PROCESS_CLI_ARGS_OPTIONS) =>
   parseArgs({ args, options: opts, allowPositionals: true });

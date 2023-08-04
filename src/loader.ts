@@ -16,15 +16,27 @@ const log = logger({ file: "loader" });
  * ******************************************************
  * LOADER
  * ------------------------------------------------------
- * @description the resolver for a node command
- * @summary TODO: add summary
- *
+ * @description generates a node.importmap
+ * @summary TODO: add s
+ * @notes
+ * The node loader api is being redesigned.
+ * JSPM will update to the new api when it is stable and
+ * aim to maintain this loader without breaking it's core functionality
+ * ------------------------------------------------------
+ * @sources :
+ * * https://nodejs.org/api/esm.html#esm_experimental_loaders
+ * * https://github.com/nodejs/loaders-test
  * ******************************************************
  */
 
 // TODO: fix
 const config = processCliArgs(process.argv) || {};
-const initialCacheMap = createCacheMap(config?.values?.debug);
+const values: ResolveOptions = config?.values || {};
+const cache = values?.cache || "";
+const importmap = values?.importmap || constructUrlPath();
+const isDebugging = values?.debug || false;
+const cacheMap = createCacheMap(isDebugging);
+const nodeImportMapPath = constructPath("node.importmap", importmap);
 
 /**
  * resolve
@@ -37,18 +49,8 @@ const initialCacheMap = createCacheMap(config?.values?.debug);
 
 export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve) => {
   // TODO: fix
-  const { base, cache, debug: isDebugging = false, importmap, cacheMap = initialCacheMap } = config?.values || {};
   log.setLogger(isDebugging);
   try {
-    // define importmap path
-    // TODO: fix
-    const cwd = process.cwd();
-    const pathToImportMap = importmap || constructUrlPath(base, cwd, isDebugging);
-    const nodeImportMapPath = constructPath("node.importmap", pathToImportMap);
-
-    log.debug("resolve:nodeImportMapPath:", { cwd, pathToImportMap, nodeImportMapPath });
-    if (!nodeImportMapPath) throw new Error("Failed in resolving import map path");
-
     // define cache path
     const pathToCache = cache || parentURL;
     log.debug("resolve:pathToCache:", { pathToCache });

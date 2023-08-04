@@ -9,6 +9,7 @@
   "exports": {
     ".": "dist/loader.js"
   },
+  "bin": "node --loader dist/loader.js",
   "dependencies": {
     "@jspm/generator": "^1.1.9",
     "@jspm/import-map": "^1.0.7",

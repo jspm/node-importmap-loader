@@ -25,10 +25,10 @@ export type CreateCacheMapFactory = {
 };
 
 export type ResolveOptions = {
-  basePath?: string;
-  cachePath?: string;
+  base?: string;
+  cache?: string;
   debug?: boolean;
-  importmapPath?: string;
+  importmap?: string;
   cacheMap?: CreateCacheMapFactory;
 };
 

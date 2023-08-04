@@ -1,15 +1,21 @@
-# Node ImportMap HTTP Loader
+# @jspm/node-importmap-generator
 
-Experimental node loader built on top of jspm utils to resolve deps from remote in nodejs
+##### Don't bother installing dependencies you don't need to! 🏇🏻💨
+
+With **JSPM** **_node-importmap-loader_**, you no longer need to install dependencies! You can execute them directly! This increases productivity ⚡️, decreases security risk 🚔, and probably does other awesome things too!
+
+JSPM uses [Node's experimental loader methodology](https://nodejs.org/api/esm.html#esm_import_map_loader) with JSPM's import map technology to allow _you_ 🫵 to import dependencies directly from a cdn source without needing to install them!
+
+More how-tos, documentation coming soon!
 
 ---
 
 ## Usage
 
-When executing
+When executing the `jspm-node-importmap-loader`, followed by a file containing the node modules you'd like to reference
 
 ```sh
-node --loader ./dist/loader.js test/e2e/test.js
+npx jspm-node-importmap-loader test/e2e/test.js
 ```
 
 The following will be output

@@ -5,9 +5,8 @@ import {
   constructUrlPath,
   createCacheMap,
   parseNodeModuleCachePath,
-  processCliArgs,
 } from "src/utils";
-import { Context, NextResolve, ResolveOptions } from "src/types";
+import { Context, NextResolve } from "src/types";
 import { logger } from "./logger";
 
 const log = logger({ file: "loader" });
@@ -17,7 +16,7 @@ const log = logger({ file: "loader" });
  * LOADER
  * ------------------------------------------------------
  * @description generates a node.importmap
- * @summary TODO: add s
+ * @summary loads node modules via an *assumed root working directory with a cache and node.importmap*
  * @notes
  * The node loader api is being redesigned.
  * JSPM will update to the new api when it is stable and
@@ -26,16 +25,15 @@ const log = logger({ file: "loader" });
  * @sources :
  * * https://nodejs.org/api/esm.html#esm_experimental_loaders
  * * https://github.com/nodejs/loaders-test
+ * TODO: should the working directory be assumed? should the cache path importmap path, and importmap filename be assumed?
  * ******************************************************
  */
 
-// TODO: fix
-const config = processCliArgs(process.argv) || {};
-const values: ResolveOptions = config?.values || {};
-const cache = values?.cache || "";
-const importmap = values?.importmap || constructUrlPath();
-const isDebugging = values?.debug || false;
+const isDebugging = Boolean(process.env.DEBUG) || false;
+const cache = "";
+const importmap = constructUrlPath();
 const cacheMap = createCacheMap(isDebugging);
+log.setLogger(isDebugging);
 const nodeImportMapPath = constructPath("node.importmap", importmap);
 
 /**
@@ -48,8 +46,6 @@ const nodeImportMapPath = constructPath("node.importmap", importmap);
  */
 
 export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve) => {
-  // TODO: fix
-  log.setLogger(isDebugging);
   try {
     // define cache path
     const pathToCache = cache || parentURL;
@@ -77,14 +73,14 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
     const isFile = protocol === "file:";
     log.debug("resolve:protocol:", { protocol, isNode, isFile });
     if (isNode || isFile) {
-      log.debug("Failed reoslving a protocol");
+      log.debug("Failed resolving a protocol");
       return nextResolve(specifier);
     }
 
     // get node module information
-    const moduleMetaData = await parseUrlPkg(modulePath);
-    log.debug("resolve:moduleMetaData:", { moduleMetaData });
-    if (!moduleMetaData) {
+    const moduleMetadata = await parseUrlPkg(modulePath);
+    log.debug("resolve:moduleMetaData:", { moduleMetadata });
+    if (!moduleMetadata) {
       log.debug("Failed in parsing module meta data");
       return nextResolve(specifier);
     }
@@ -92,10 +88,10 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
     // construct node module cache path
     const {
       pkg: { name, version },
-    } = moduleMetaData;
+    } = moduleMetadata;
     const nodeModuleCachePath = constructPath(`${name}@${version}`, pathToCache);
     cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);
-    const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath, isDebugging);
+    const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath);
     log.debug("resolve:nodeModuleCachePath:", { nodeModuleCachePath, parsedNodeModuleCachePath });
     if (!parsedNodeModuleCachePath) throw new Error("Failed in parsing node module cache path");
 

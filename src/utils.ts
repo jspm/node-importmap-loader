@@ -4,10 +4,7 @@ import { fileURLToPath } from "node:url";
 import fetch from "node-fetch";
 import { ImportMap } from "@jspm/import-map";
 import { CreateCacheMapFactory } from "src/types";
-import {
-  ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED,
-  NO_CACHE_MAP_DEFINED,
-} from "src/constants";
+import { ALL_CACHE_MAP_REQUIREMENTS_MUST_BE_DEFINED, NO_CACHE_MAP_DEFINED } from "src/constants";
 
 import { logger } from "./logger";
 

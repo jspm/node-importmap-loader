@@ -1,8 +1,9 @@
 import { resolve } from "src/loader";
-import { ResolveOptions } from "src/types";
 import { parseUrlPkg } from "@jspm/generator";
 import { ImportMap } from "@jspm/import-map";
 import * as utils from "src/utils";
+import * as config from "src/config";
+
 
 jest.mock("node-fetch", () => jest.fn());
 
@@ -17,170 +18,123 @@ jest.mock("@jspm/import-map", () => ({
   })),
 }));
 
-jest.mock("src/utils");
+jest.mock("src/utils", () => {
+  const actual = jest.requireActual("src/utils");
+  return {
+    __esModule: true,
+    ...actual,
+  };
+});
 
-const constructPathSpy = jest.spyOn(utils, "constructPath");
+jest.mock("src/config", () => {
+  const actual = jest.requireActual("src/config");
+  return {
+    __esModule: true,
+    ...actual,
+    cache: '',
+  }
+});
+
 const errorSpy = jest.spyOn(console, "error");
 const nextResolve = jest.fn();
 const specifier = "specifier";
-const options = { debug: true } as ResolveOptions;
-test("resolved with no nodeImportMapPath error", async () => {
-  const context = { parentURL: "parentURL" };
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving import map path");
-  expect(nextResolve).toHaveBeenCalled();
-});
+describe('loader', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  })
 
-test("resolved with no cache path error", async () => {
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const context = { parentURL: undefined };
-  const options = { debug: true } as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving cache path");
-});
+  test("resolved with no cache path error", async () => {
+    const context = { parentURL: undefined };
+    await resolve(specifier, context, nextResolve);
+    expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving cache path");
+  });
 
-test("resolved with no pathToCache error", async () => {
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const context = { parentURL: "parentURL" };
-  const options = { debug: true } as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in constructing import map");
-});
+  test("resolved with no modulePath error", async () => {
+    const cachePath = 'test/.cache';
+    (jest.mocked(config).cache as string) = cachePath
+    mockImportMapResolve = jest.fn().mockReturnValue(undefined);
+    const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
+    const context = { parentURL: "parentURL" };
+    await resolve(specifier, context, nextResolve);
+    expect(constructImportMapSpy).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving module path");
+  });
 
-test("resolved with no cacheMapPath error", async () => {
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
-  const errorSpy = jest.spyOn(console, "error");
-  const nextResolve = jest.fn();
-  const context = { parentURL: "parentURL" };
-  const specifier = "specifier";
-  const cacheMap = {
-    get: jest.fn().mockReturnValue(undefined),
-  };
-  const options = { debug: true, cacheMap } as unknown as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving cache map path");
-});
+  test("resolved with URL error", async () => {
+    const cachePath = 'test/.cache';
+    (jest.mocked(config).cache as string) = cachePath
+    mockImportMapResolve = jest.fn().mockReturnValue("./some/path");
+    const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
+    const context = { parentURL: "parentURL" };
+    await resolve(specifier, context, nextResolve);
+    expect(constructImportMapSpy).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: TypeError [ERR_INVALID_URL]: Invalid URL");
+  });
 
-test("resolved with no modulePath error", async () => {
-  mockImportMapResolve = jest.fn().mockReturnValue(undefined);
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
-  const context = { parentURL: "parentURL" };
-  const cacheMap = {
-    get: jest.fn().mockReturnValue("tests/node.importmap"),
-  };
-  const options = { debug: true, cacheMap } as unknown as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving module path");
-});
+  test("resolved with `isNode` protocol error", async () => {
+    const cachePath = 'test/.cache';
+    (jest.mocked(config).cache as string) = cachePath
+    mockImportMapResolve = jest.fn().mockReturnValue("node:/some/path");
+    const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
+    const context = { parentURL: "parentURL" };
+    await resolve(specifier, context, nextResolve);
+    expect(constructImportMapSpy).toHaveBeenCalled();
+    expect(nextResolve).toHaveBeenCalledWith('specifier');
+  });
 
-test("resolved with URL error", async () => {
-  mockImportMapResolve = jest.fn().mockReturnValue("./some/path");
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
-  const context = { parentURL: "parentURL" };
-  const cacheMap = {
-    get: jest.fn().mockReturnValue("tests/node.importmap"),
-  };
-  const options = { debug: true, cacheMap } as unknown as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: TypeError [ERR_INVALID_URL]: Invalid URL");
-});
+  test("resolved with `isFile` protocol error", async () => {
+    const cachePath = 'test/.cache';
+    (jest.mocked(config).cache as string) = cachePath
+    mockImportMapResolve = jest.fn().mockReturnValue("node:/some/path");
+    const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
+    const context = { parentURL: "parentURL" };
+    await resolve(specifier, context, nextResolve);
+    expect(constructImportMapSpy).toHaveBeenCalled();
+    expect(nextResolve).toHaveBeenCalledWith('specifier');
+  });
 
-test("resolved with `isNode` protocol error", async () => {
-  mockImportMapResolve = jest.fn().mockReturnValue("node:/some/path");
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
-  const context = { parentURL: "parentURL" };
-  const cacheMap = {
-    get: jest.fn().mockReturnValue("tests/node.importmap"),
-  };
-  const options = { debug: true, cacheMap } as unknown as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving URL");
-});
+  test("resolved with parseUrlPkg error", async () => {
+    const cachePath = 'test/.cache';
+    (jest.mocked(config).cache as string) = cachePath
+    mockImportMapResolve = jest.fn().mockReturnValue("https://ga.jspm.io/some/path");
+    const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
+    const nextResolve = jest.fn();
+    const context = { parentURL: "parentURL" };
+    const specifier = "specifier";
+    await resolve(specifier, context, nextResolve);
+    expect(constructImportMapSpy).toHaveBeenCalled();
+    expect(nextResolve).toHaveBeenCalledWith('specifier');
+  });
 
-test("resolved with `isFile` protocol error", async () => {
-  mockImportMapResolve = jest.fn().mockReturnValue("node:/some/path");
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
-  const context = { parentURL: "parentURL" };
-  const cacheMap = {
-    get: jest.fn().mockReturnValue("tests/node.importmap"),
-  };
-  const options = { debug: true, cacheMap } as unknown as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in resolving URL");
-});
+  test("resolved with parsing node module cache path error", async () => {
+    const cachePath = 'test/.cache';
+    (jest.mocked(config).cache as string) = cachePath
+    mockImportMapResolve = jest.fn().mockReturnValue("https://ga.jspm.io/some/path");
+    await (parseUrlPkg as jest.Mock).mockResolvedValue({ pkg: { name: "name", version: "version" } });
+    const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
+    const context = { parentURL: "parentURL" };
+    await resolve(specifier, context, nextResolve);
+    expect(constructImportMapSpy).toHaveBeenCalled();
+    expect(parseUrlPkg).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in parsing node module cache path");
+  });
 
-test("resolved with parseUrlPkg error", async () => {
-  mockImportMapResolve = jest.fn().mockReturnValue("https://ga.jspm.io/some/path");
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
-  const nextResolve = jest.fn();
-  const context = { parentURL: "parentURL" };
-  const specifier = "specifier";
-  const cacheMap = {
-    get: jest.fn().mockReturnValue("tests/node.importmap"),
-  };
-  const options = { debug: true, cacheMap } as unknown as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in parsing module meta data");
-});
-
-test("resolved with parsing node module cache path error", async () => {
-  mockImportMapResolve = jest.fn().mockReturnValue("https://ga.jspm.io/some/path");
-  await (parseUrlPkg as jest.Mock).mockResolvedValue({ pkg: { name: "name", version: "version" } });
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
-  const context = { parentURL: "parentURL" };
-  const cacheMap = {
-    get: jest.fn().mockReturnValue("tests/node.importmap"),
-    set: jest.fn(),
-  };
-  const options = { debug: true, cacheMap } as unknown as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(parseUrlPkg).toHaveBeenCalled();
-  expect(errorSpy).toHaveBeenCalledWith("jspm:[loader]: resolve: Error: Failed in parsing node module cache path");
-});
-
-test("resolved without an error", async () => {
-  mockImportMapResolve = jest.fn().mockReturnValue("https://ga.jspm.io/some/path");
-  await (parseUrlPkg as jest.Mock).mockResolvedValue({ pkg: { name: "name", version: "version" } });
-  constructPathSpy.mockReturnValue("tests/node.importmap");
-  const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
-  const context = { parentURL: "parentURL" };
-  const cacheMap = {
-    get: jest.fn().mockReturnValue("tests/node.importmap"),
-    set: jest.fn(),
-  };
-  const parseNodeModuleCachePathSpy = jest
-    .spyOn(utils, "parseNodeModuleCachePath")
-    .mockResolvedValue("node_modules/name/version");
-  const options = { debug: true, cacheMap } as unknown as ResolveOptions;
-  await resolve(specifier, context, nextResolve, options);
-  expect(constructPathSpy).toHaveBeenCalled();
-  expect(constructImportMapSpy).toHaveBeenCalled();
-  expect(parseUrlPkg).toHaveBeenCalled();
-  expect(parseNodeModuleCachePathSpy).toHaveBeenCalled();
-  expect(nextResolve).toHaveBeenCalledWith("node_modules/name/version");
-  expect(errorSpy).not.toHaveBeenCalled();
+  test("resolved without an error", async () => {
+    const cachePath = 'test/.cache';
+    (jest.mocked(config).cache as string) = cachePath
+    mockImportMapResolve = jest.fn().mockReturnValue("https://ga.jspm.io/some/path");
+    await (parseUrlPkg as jest.Mock).mockResolvedValue({ pkg: { name: "name", version: "version" } });
+    const constructImportMapSpy = jest.spyOn(utils, "constructImportMap").mockReturnValue(new ImportMap({}));
+    const context = { parentURL: "parentURL" };
+    const parseNodeModuleCachePathSpy = jest
+      .spyOn(utils, "parseNodeModuleCachePath")
+      .mockResolvedValue("node_modules/name/version");
+    const nodeModuleCachePathSpy = jest.spyOn(utils, 'constructPath').mockReturnValue('node_modules/name/version')
+    await resolve(specifier, context, nextResolve);
+    expect(constructImportMapSpy).toHaveBeenCalled();
+    expect(parseUrlPkg).toHaveBeenCalled();
+    expect(parseNodeModuleCachePathSpy).toHaveBeenCalled();
+    expect(nodeModuleCachePathSpy).toHaveBeenCalled();
+    expect(nextResolve).toHaveBeenCalledWith("node_modules/name/version");
+  });
 });

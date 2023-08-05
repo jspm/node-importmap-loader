@@ -155,7 +155,7 @@ describe("parseNodeModuleCachePath", () => {
       throw new Error("error");
     });
     const errorSpy = await jest.spyOn(console, "error").mockImplementation(() => undefined);
-    const result = await parseNodeModuleCachePath("modulePath", cachePath, true);
+    const result = await parseNodeModuleCachePath("modulePath", cachePath);
     expect(result).toBe("");
     expect(errorSpy).toHaveBeenCalled();
   });

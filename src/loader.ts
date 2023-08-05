@@ -1,13 +1,10 @@
 import { parseUrlPkg } from "@jspm/generator";
-import {
-  constructPath,
-  constructImportMap,
-  constructUrlPath,
-  createCacheMap,
-  parseNodeModuleCachePath,
-} from "src/utils";
-import { Context, NextResolve } from "src/types";
+import { cache, cacheMap, nodeImportMapPath } from "./config";
+import { IS_DEBUGGING } from "./constants";
+import { constructImportMap, constructPath, parseNodeModuleCachePath } from "./utils";
+import { Context, NextResolve } from "./types";
 import { logger } from "./logger";
+import path from "path";
 
 const log = logger({ file: "loader" });
 
@@ -29,12 +26,7 @@ const log = logger({ file: "loader" });
  * ******************************************************
  */
 
-const isDebugging = Boolean(process.env.DEBUG) || false;
-const cache = "";
-const importmap = constructUrlPath();
-const cacheMap = createCacheMap(isDebugging);
-log.setLogger(isDebugging);
-const nodeImportMapPath = constructPath("node.importmap", importmap);
+log.setLogger(IS_DEBUGGING);
 
 /**
  * resolve
@@ -58,9 +50,8 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
     if (!importmap) throw new Error("Failed in constructing import map");
 
     // construct cache map path
-    const cacheMapPath = cacheMap.get(pathToCache);
+    const cacheMapPath = cacheMap.get(pathToCache) || pathToCache;
     log.debug("resolve:cacheMapPath:", { cacheMapPath });
-    if (!cacheMapPath) throw new Error("Failed in resolving cache map path");
 
     // construct module path
     const modulePath = importmap.resolve(specifier, cacheMapPath);

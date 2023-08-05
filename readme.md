@@ -75,7 +75,7 @@ du -sh .cache
 
 ## Local Development
 
-Try it yourself
+Try it yourself!
 
 Clone
 
@@ -83,7 +83,7 @@ Clone
 git clone git@github.com:jspm/node-importmap-http-loader.git
 ```
 
-Then via [devcontainers](https://code.visualstudio.com/docs/remote/containers), launch the container by clicking the devcontainer button or via the command palette.
+Then, via [devcontainers](https://code.visualstudio.com/docs/remote/containers), launch the container by clicking the devcontainer button or via the command palette.
 
 To setup devcontainers
 

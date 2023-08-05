@@ -1,10 +1,17 @@
 import { parseUrlPkg } from "@jspm/generator";
-import { cache, cacheMap, nodeImportMapPath } from "./config";
+import {
+  cache,
+  cacheMap,
+  nodeImportMapPath,
+} from './config';
 import { IS_DEBUGGING } from "./constants";
-import { constructImportMap, constructPath, parseNodeModuleCachePath } from "./utils";
+import {
+  constructImportMap,
+  constructPath,
+  parseNodeModuleCachePath,
+} from "./utils";
 import { Context, NextResolve } from "./types";
 import { logger } from "./logger";
-import path from "path";
 
 const log = logger({ file: "loader" });
 
@@ -47,7 +54,6 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
     // construct importmap
     const importmap = constructImportMap(nodeImportMapPath);
     log.debug("resolve:importmap:", { importmap });
-    if (!importmap) throw new Error("Failed in constructing import map");
 
     // construct cache map path
     const cacheMapPath = cacheMap.get(pathToCache) || pathToCache;

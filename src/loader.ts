@@ -1,15 +1,7 @@
 import { parseUrlPkg } from "@jspm/generator";
-import {
-  cache,
-  cacheMap,
-  nodeImportMapPath,
-} from './config';
+import { cache, cacheMap, nodeImportMapPath } from "./config";
 import { IS_DEBUGGING } from "./constants";
-import {
-  constructImportMap,
-  constructPath,
-  parseNodeModuleCachePath,
-} from "./utils";
+import { constructImportMap, constructPath, parseNodeModuleCachePath } from "./utils";
 import { Context, NextResolve } from "./types";
 import { logger } from "./logger";
 

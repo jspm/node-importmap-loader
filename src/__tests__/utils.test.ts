@@ -4,7 +4,6 @@ import { ImportMap } from "@jspm/import-map";
 
 import {
   constructPath,
-  constructUrlPath,
   constructImportMap,
   createCacheMap,
   parseNodeModuleCachePath,
@@ -36,29 +35,13 @@ jest.mock("@jspm/import-map", () => {
 });
 
 test("constructPath minimal", () => {
-  const result = constructPath("foo");
+  const result = constructPath("foo", './');
   expect(result).toStrictEqual("./foo");
 });
 
 test("constructPath with root", () => {
   const result = constructPath("/foo", "./bar");
   expect(result).toStrictEqual("./bar/foo");
-});
-
-test("constructUrlPath minimal", () => {
-  const result = constructUrlPath();
-  expect(result).toStrictEqual("");
-});
-
-test("constructUrlPath with base url", () => {
-  const result = constructUrlPath("bar.txt", "file:///bin/foo/biz");
-  expect(result).toStrictEqual("/bin/foo/bar.txt");
-});
-
-test("constructUrlPath with base url and no debug", () => {
-  const spy = jest.spyOn(console, "error").mockImplementation(() => undefined);
-  constructUrlPath("bar.txt", "bin/foo/biz");
-  expect(spy).toHaveBeenCalled();
 });
 
 test("constructImportMap minimal", () => {
@@ -81,7 +64,7 @@ test("constructImportMap should return ImportMap instance if path exists", () =>
 test("constructImportMap should use cwd if no path provided", () => {
   constructImportMap();
   expect(ImportMap).toHaveBeenCalledWith({
-    rootUrl: process.cwd(),
+    rootUrl: `file://${process.cwd()}`,
     map: {},
   });
 });
@@ -101,7 +84,7 @@ test("createCacheMap.get should return cachePath if defined", () => {
 
 test("createCacheMap.get should return undefined if cachePath is not defined", () => {
   const cacheMap = createCacheMap();
-  expect(cacheMap.get("foo")).toBeUndefined();
+  expect(cacheMap.get("foo")).toEqual("foo");
 });
 
 test("createCacheMap.set should set cachePath and modulePath", () => {

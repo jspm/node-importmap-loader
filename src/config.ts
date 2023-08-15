@@ -1,5 +1,5 @@
 import { IS_DEBUGGING } from "src/constants";
-import { constructPath, constructUrlPath, createCacheMap } from "src/utils";
+import { constructPath, createCacheMap } from "src/utils";
 
 /**
  * ******************************************************
@@ -12,5 +12,5 @@ import { constructPath, constructUrlPath, createCacheMap } from "src/utils";
  */
 const root = process.cwd();
 export const cacheMap = createCacheMap(IS_DEBUGGING);
-export const cache = constructPath('.cache', root);
+export const cache = constructPath(".cache", root);
 export const nodeImportMapPath = constructPath("node.importmap", root);

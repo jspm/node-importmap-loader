@@ -1,6 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import fetch from "node-fetch";
 import { ImportMap } from "@jspm/import-map";
 import { CreateCacheMapFactory } from "src/types";
@@ -33,25 +32,6 @@ const cwd = process.cwd();
 export const constructPath = (path: string, root = cwd) => {
   const out = join(root, path);
   return out;
-}
-
-/**
- * constructUrlPath
- * @description a convenience function to construct a url path
- * @param {string} file
- * @param {string} url
- * @param {boolean} debug
- * @returns {string}
- */
-export const constructUrlPath = (file = '', url: string = cwd) => {
-  try {
-    const path = new URL(`file://${url}/${file}`);
-    const out = fileURLToPath(path.href);
-    return out;
-  } catch (err) {
-    log.error("constructUrlPath:error:", { err });
-    return "";
-  }
 };
 
 /**
@@ -118,7 +98,6 @@ export const parseNodeModuleCachePath = async (modulePath: string, cachePath: st
   try {
     if (existsSync(cachePath)) return cachePath;
     const resp = await fetch(modulePath);
-    console.log({ resp });
     if (!resp.ok) throw Error(`404: Module not found: ${modulePath}`);
     const nodeModuleCode = await resp.text();
     const dirPath = dirname(cachePath);

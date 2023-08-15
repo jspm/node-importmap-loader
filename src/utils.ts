@@ -30,20 +30,24 @@ const cwd = process.cwd();
  * @param {string} root
  * @returns {string}
  */
-export const constructPath = (dir: string, root = "./") => join(root, dir);
+export const constructPath = (path: string, root = cwd) => {
+  const out = join(root, path);
+  return out;
+}
 
 /**
  * constructUrlPath
  * @description a convenience function to construct a url path
- * @param {string} base
+ * @param {string} file
  * @param {string} url
  * @param {boolean} debug
  * @returns {string}
  */
-export const constructUrlPath = (base = ".", url: string = cwd) => {
+export const constructUrlPath = (file = '', url: string = cwd) => {
   try {
-    const path = new URL(base, url);
-    return fileURLToPath(path.href);
+    const path = new URL(`file://${url}/${file}`);
+    const out = fileURLToPath(path.href);
+    return out;
   } catch (err) {
     log.error("constructUrlPath:error:", { err });
     return "";
@@ -57,10 +61,11 @@ export const constructUrlPath = (base = ".", url: string = cwd) => {
  * @param {string} rootUrl
  * @returns {ImportMap|null}
  */
-export const constructImportMap = (path = "", rootUrl = cwd) => {
+export const constructImportMap = (path = "", root = cwd) => {
   const pathExists = existsSync(path);
   const json = readFileSync(path, { encoding: "utf8" });
   const map = pathExists && json ? JSON.parse(json) : {};
+  const rootUrl = `file://${root}`;
   return new ImportMap({
     rootUrl,
     map,
@@ -83,7 +88,7 @@ export const createCacheMap = (debug = false): CreateCacheMapFactory => {
     isDebugging,
     modulePath,
     get(cachePath: string) {
-      const path = this.instance.get(cachePath);
+      const path = this.instance.get(cachePath) || cachePath;
       if (!path) {
         log.error(NO_CACHE_MAP_DEFINED);
         return;
@@ -113,6 +118,7 @@ export const parseNodeModuleCachePath = async (modulePath: string, cachePath: st
   try {
     if (existsSync(cachePath)) return cachePath;
     const resp = await fetch(modulePath);
+    console.log({ resp });
     if (!resp.ok) throw Error(`404: Module not found: ${modulePath}`);
     const nodeModuleCode = await resp.text();
     const dirPath = dirname(cachePath);

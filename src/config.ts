@@ -10,7 +10,7 @@ import { constructPath, constructUrlPath, createCacheMap } from "src/utils";
  *
  * ******************************************************
  */
-const root = constructUrlPath();
+const root = process.cwd();
 export const cacheMap = createCacheMap(IS_DEBUGGING);
-export const cache = "";
+export const cache = constructPath('.cache', root);
 export const nodeImportMapPath = constructPath("node.importmap", root);

@@ -82,7 +82,7 @@ deps = ['test:unit', 'test:e2e']
 
 [[task]]
 name = 'test:e2e'
-run = 'node --loader ./dist/loader.js tests/e2e/test.js -i ../'
+run = 'node --loader ./dist/loader.js tests/e2e/test.js'
 deps = ['default', 'build']
 
 [[task]]

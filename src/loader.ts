@@ -48,7 +48,7 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
     log.debug("resolve:importmap:", { importmap });
 
     // construct cache map path
-    const cacheMapPath = cacheMap.get(pathToCache) || pathToCache;
+    const cacheMapPath = cacheMap.get(pathToCache);
     log.debug("resolve:cacheMapPath:", { cacheMapPath });
 
     // construct module path
@@ -68,6 +68,7 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
 
     // get node module information
     const moduleMetadata = await parseUrlPkg(modulePath);
+    // debugged to here
     log.debug("resolve:moduleMetaData:", { moduleMetadata });
     if (!moduleMetadata) {
       log.debug("Failed in parsing module meta data");

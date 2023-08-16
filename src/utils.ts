@@ -2,7 +2,7 @@ import { existsSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseUrlPkg } from "@jspm/generator";
 import { parseNodeModuleCachePath } from "src/parser";
-import { cache, importMap } from 'src/config';
+import { cache, importMap } from "src/config";
 import { IS_DEBUGGING } from "src/constants";
 import { logger } from "src/logger";
 
@@ -32,13 +32,13 @@ export const isNodeOrFileProtocol = (modulePath: string) => {
   const isNode = protocol === "node:";
   const isFile = protocol === "file:";
   return isNode || isFile;
-}
+};
 
 export const resolveModulePath = (specifier: string, cacheMapPath: string) => {
   const modulePath = importMap.resolve(specifier, cacheMapPath);
   log.debug("resolveModulePath:", { modulePath });
   return modulePath;
-}
+};
 
 export const resolveNodeModuleCachePath = async (modulePath: string) => {
   try {
@@ -51,9 +51,9 @@ export const resolveNodeModuleCachePath = async (modulePath: string) => {
     return nodeModuleCachePath;
   } catch (err) {
     log.error("resolveNodeModuleCachePath:", err);
-    return
+    return;
   }
-}
+};
 
 export const resolveParsedModulePath = async (modulePath: string, nodeModuleCachePath: string) => {
   try {
@@ -62,6 +62,6 @@ export const resolveParsedModulePath = async (modulePath: string, nodeModuleCach
     return parsedNodeModuleCachePath;
   } catch (err) {
     log.error("resolveParsedModulePath:", err);
-    return
+    return;
   }
-}
+};

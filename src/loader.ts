@@ -1,5 +1,10 @@
 import { cacheMap, nodeImportMapPath } from "src/config";
-import { isNodeOrFileProtocol, resolveNodeModuleCachePath, resolveModulePath, resolveParsedModulePath } from 'src/utils';
+import {
+  isNodeOrFileProtocol,
+  resolveNodeModuleCachePath,
+  resolveModulePath,
+  resolveParsedModulePath,
+} from "src/utils";
 import { Context, NextResolve } from "src/types";
 
 /**

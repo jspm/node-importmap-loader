@@ -1,5 +1,7 @@
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { ImportMap } from "@jspm/import-map";
 /**
  * ******************************************************
  * CONFIG
@@ -9,7 +11,10 @@ import { fileURLToPath } from "node:url";
  *
  * ******************************************************
  */
-export const root = fileURLToPath(`file://${process.cwd()}`);
+export const rootUrl = import.meta.url;
+export const root = fileURLToPath(new URL(".", rootUrl));
 export const cacheMap = new Map();
 export const nodeImportMapPath = join(root, "node.importmap");
 export const cache = join(root, ".cache");
+export const map = existsSync(nodeImportMapPath) ? JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" })) : {};
+export const importMap = new ImportMap({ rootUrl, map })

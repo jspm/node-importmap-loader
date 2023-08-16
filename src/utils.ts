@@ -1,6 +1,10 @@
-import { existsSync, mkdirSync, readFileSync } from "node:fs";
-import { dirname } from "node:path";
-import { ImportMap } from "@jspm/import-map";
+import { existsSync, mkdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { parseUrlPkg } from "@jspm/generator";
+import { parseNodeModuleCachePath } from "src/parser";
+import { cache, importMap } from 'src/config';
+import { IS_DEBUGGING } from "src/constants";
+import { logger } from "src/logger";
 
 /**
  * ******************************************************
@@ -13,11 +17,9 @@ import { ImportMap } from "@jspm/import-map";
  * ******************************************************
  */
 
-/**
- * ensureDirSync
- * @description a function to ensure the dis exists
- * @param dirPath
- */
+const log = logger({ file: "loader" });
+log.setLogger(IS_DEBUGGING);
+
 export const ensureDirSync = (dirPath: string) => {
   if (existsSync(dirPath)) return;
   const parentDir = dirname(dirPath);
@@ -25,19 +27,41 @@ export const ensureDirSync = (dirPath: string) => {
   mkdirSync(dirPath);
 };
 
-/**
- * constructImportMap
- * @description a convenience function to construct an import map
- * @param {string} path
- * @param {string} rootUrl
- * @returns {ImportMap|null}
- */
-export const constructImportMap = (path = "", rootUrl = import.meta.url) => {
-  const pathExists = existsSync(path);
-  const json = readFileSync(path, { encoding: "utf8" });
-  const map = pathExists && json ? JSON.parse(json) : {};
-  return new ImportMap({
-    rootUrl,
-    map,
-  });
-};
+export const isNodeOrFileProtocol = (modulePath: string) => {
+  const { protocol = "" } = new URL(modulePath);
+  const isNode = protocol === "node:";
+  const isFile = protocol === "file:";
+  return isNode || isFile;
+}
+
+export const resolveModulePath = (specifier: string, cacheMapPath: string) => {
+  const modulePath = importMap.resolve(specifier, cacheMapPath);
+  log.debug("resolveModulePath:", { modulePath });
+  return modulePath;
+}
+
+export const resolveNodeModuleCachePath = async (modulePath: string) => {
+  try {
+    const moduleMetadata = await parseUrlPkg(modulePath);
+    const name = moduleMetadata?.pkg?.name;
+    const version = moduleMetadata?.pkg?.version;
+    const moduleFile = modulePath.split("/").reverse()[0] || "";
+    const nodeModuleCachePath = join(cache, `${name}@${version}`, moduleFile);
+    log.debug("resolveNodeModuleCachePath:", { name, version, nodeModuleCachePath });
+    return nodeModuleCachePath;
+  } catch (err) {
+    log.error("resolveNodeModuleCachePath:", err);
+    return
+  }
+}
+
+export const resolveParsedModulePath = async (modulePath: string, nodeModuleCachePath: string) => {
+  try {
+    const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath);
+    log.debug("resolveParsedModulePath:", { nodeModuleCachePath, parsedNodeModuleCachePath });
+    return parsedNodeModuleCachePath;
+  } catch (err) {
+    log.error("resolveParsedModulePath:", err);
+    return
+  }
+}

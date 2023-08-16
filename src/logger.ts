@@ -10,10 +10,5 @@ export const logger = ({ file, isLogging = false }: LoggerOptions) => ({
     if (args) console.error(`jspm:[${file}]: ${msg}`, ...args);
     else console.error(`jspm:[${file}]: ${msg}`);
   },
-  info: (msg: string, ...args: unknown[]) => {
-    if (!isLogging) return;
-    if (args) console.info(`jspm:[${file}]: ${msg}`, ...args);
-    else console.info(`jspm:[${file}]: ${msg}`);
-  },
   setLogger: (isLogging = false) => logger({ file, isLogging }),
 });

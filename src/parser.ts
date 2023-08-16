@@ -1,9 +1,10 @@
 import { existsSync, writeFileSync } from "node:fs";
 import fetch from "node-fetch";
-import { ensureDirSync } from "src/utils";
+import { ensureFileSync } from "src/utils";
+import { IS_DEBUGGING } from "src/constants";
 import { logger } from "src/logger";
 
-const log = logger({ file: "utils" });
+const log = logger({ file: "parser", isLogging: IS_DEBUGGING });
 
 /**
  * parseNodeModuleCachePath
@@ -13,12 +14,13 @@ const log = logger({ file: "utils" });
  * @returns {string}
  */
 export const parseNodeModuleCachePath = async (modulePath: string, cachePath: string) => {
+  log.debug('parseNodeModuleCachePath', cachePath, modulePath)
+  if (existsSync(cachePath)) return cachePath;
   try {
-    if (existsSync(cachePath)) return cachePath;
     const resp = await fetch(modulePath);
     if (!resp.ok) throw Error(`404: Module not found: ${modulePath}`);
     const code = await resp.text();
-    ensureDirSync(cachePath);
+    ensureFileSync(cachePath);
     writeFileSync(cachePath, code);
     return cachePath;
   } catch (err) {

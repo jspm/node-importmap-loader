@@ -1,11 +1,11 @@
-import { cacheMap, nodeImportMapPath } from "src/config";
+import { cacheMap, nodeImportMapPath } from "./config";
 import {
-  isNodeOrFileProtocol,
+  checkIfNodeOrFileProtocol,
   resolveNodeModuleCachePath,
   resolveModulePath,
   resolveParsedModulePath,
-} from "src/utils";
-import { Context, NextResolve } from "src/types";
+} from "./utils";
+import { Context, NextResolve } from "./types";
 
 /**
  * ******************************************************
@@ -33,8 +33,10 @@ import { Context, NextResolve } from "src/types";
  */
 export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve) => {
   if (!parentURL || !nodeImportMapPath) return nextResolve(specifier);
-  const modulePath = resolveModulePath(specifier, cacheMap.get(parentURL) || parentURL);
-  if (isNodeOrFileProtocol(modulePath)) return nextResolve(specifier);
+  const cacheMapPath = cacheMap.get(parentURL) || parentURL;
+  const modulePath = resolveModulePath(specifier, cacheMapPath);
+  const isNodeOrFileProtocol = checkIfNodeOrFileProtocol(modulePath);
+  if (isNodeOrFileProtocol) return nextResolve(specifier);
   const nodeModuleCachePath = await resolveNodeModuleCachePath(modulePath);
   if (!nodeModuleCachePath) return nextResolve(specifier);
   cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);

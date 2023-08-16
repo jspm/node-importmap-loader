@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseUrlPkg } from "@jspm/generator";
 import { parseNodeModuleCachePath } from "src/parser";
@@ -17,8 +17,7 @@ import { logger } from "src/logger";
  * ******************************************************
  */
 
-const log = logger({ file: "loader" });
-log.setLogger(IS_DEBUGGING);
+const log = logger({ file: "loader", isLogging: IS_DEBUGGING });
 
 export const ensureDirSync = (dirPath: string) => {
   if (existsSync(dirPath)) return;
@@ -27,7 +26,17 @@ export const ensureDirSync = (dirPath: string) => {
   mkdirSync(dirPath);
 };
 
-export const isNodeOrFileProtocol = (modulePath: string) => {
+export const ensureFileSync = (path: string) => {
+  const dirPath = dirname(path);
+  if (!existsSync(dirPath)) ensureDirSync(dirPath);
+  try {
+    writeFileSync(path, '', { flag: 'wx' });
+  } catch {
+    log.error(`ensureDirSync: Failed in creating ${path}`)
+  }
+}
+
+export const checkIfNodeOrFileProtocol = (modulePath: string) => {
   const { protocol = "" } = new URL(modulePath);
   const isNode = protocol === "node:";
   const isFile = protocol === "file:";
@@ -47,7 +56,7 @@ export const resolveNodeModuleCachePath = async (modulePath: string) => {
     const version = moduleMetadata?.pkg?.version;
     const moduleFile = modulePath.split("/").reverse()[0] || "";
     const nodeModuleCachePath = join(cache, `${name}@${version}`, moduleFile);
-    log.debug("resolveNodeModuleCachePath:", { name, version, nodeModuleCachePath });
+    log.debug("resolveNodeModuleCachePath:", { moduleMetadata, name, version, nodeModuleCachePath });
     return nodeModuleCachePath;
   } catch (err) {
     log.error("resolveNodeModuleCachePath:", err);

@@ -7,7 +7,7 @@ const log = logger({ file: "utils" });
 
 /**
  * parseNodeModuleCachePath
- * @description a convenience function to parse the modules, this function is called by the loader automatically
+ * @description a convenience function to parse modules
  * @param {string} modulePath
  * @param {string} cachePath
  * @returns {string}

@@ -1,12 +1,11 @@
-import { join } from 'node:path';
+import { join } from "node:path";
 import { parseUrlPkg } from "@jspm/generator";
 import { cache, cacheMap, nodeImportMapPath } from "./config";
 import { constructImportMap } from "./utils";
-import { parseNodeModuleCachePath } from './parser';
+import { parseNodeModuleCachePath } from "./parser";
 import { IS_DEBUGGING } from "./constants";
 import { logger } from "./logger";
 import { Context, NextResolve } from "./types";
-
 
 /**
  * ******************************************************
@@ -23,7 +22,7 @@ import { Context, NextResolve } from "./types";
  * * https://nodejs.org/api/esm.html#esm_experimental_loaders
  * * https://github.com/nodejs/loaders-test
  * ******************************************************
-*/
+ */
 
 const log = logger({ file: "loader" });
 log.setLogger(IS_DEBUGGING);
@@ -64,8 +63,10 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
     if (!moduleMetadata) return nextResolve(specifier);
 
     // construct node module cache path
-    const { pkg: { name, version } } = moduleMetadata;
-    const moduleFile = modulePath.split("/").reverse()[0] || '';
+    const {
+      pkg: { name, version },
+    } = moduleMetadata;
+    const moduleFile = modulePath.split("/").reverse()[0] || "";
     const nodeModuleCachePath = join(cache, `${name}@${version}`, moduleFile);
     cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);
     const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath);

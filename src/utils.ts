@@ -13,18 +13,17 @@ import { ImportMap } from "@jspm/import-map";
  * ******************************************************
  */
 
-
 /**
  * ensureDirSync
  * @description a function to ensure the dis exists
  * @param dirPath
-*/
+ */
 export const ensureDirSync = (dirPath: string) => {
   if (existsSync(dirPath)) return;
   const parentDir = dirname(dirPath);
   if (parentDir !== dirPath) ensureDirSync(parentDir);
   mkdirSync(dirPath);
-}
+};
 
 /**
  * constructImportMap

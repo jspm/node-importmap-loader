@@ -1,6 +1,6 @@
 import { existsSync, writeFileSync } from "node:fs";
 import fetch from "node-fetch";
-import { ensureDirSync } from 'src/utils';
+import { ensureDirSync } from "src/utils";
 import { logger } from "src/logger";
 
 const log = logger({ file: "utils" });

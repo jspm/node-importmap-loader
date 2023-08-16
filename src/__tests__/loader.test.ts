@@ -50,7 +50,6 @@ jest.mock("src/config", () => {
   }
 });
 
-const errorSpy = jest.spyOn(console, "error");
 const nextResolve = jest.fn();
 const specifier = "specifier";
 describe('loader', () => {

@@ -1,5 +1,5 @@
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 /**
  * ******************************************************
  * CONFIG
@@ -10,6 +10,6 @@ import { fileURLToPath } from 'node:url';
  * ******************************************************
  */
 export const root = fileURLToPath(`file://${process.cwd()}`);
-export const cacheMap = new Map()
+export const cacheMap = new Map();
 export const nodeImportMapPath = join(root, "node.importmap");
-export const cache = join(root, '.cache')
+export const cache = join(root, ".cache");

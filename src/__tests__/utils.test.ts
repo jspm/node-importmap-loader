@@ -1,9 +1,7 @@
 import * as fs from "node:fs";
-import * as path from "node:path";
 import { ensureDirSync } from 'src/utils';
 
 jest.mock("node:fs");
-jest.mock("node:path");
 
 test("ensureDirSync has dir", () => {
   const dir = "/path/to/dir";

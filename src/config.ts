@@ -1,6 +1,5 @@
-import { IS_DEBUGGING } from "src/constants";
-import { constructPath, createCacheMap } from "src/utils";
-
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 /**
  * ******************************************************
  * CONFIG
@@ -10,7 +9,7 @@ import { constructPath, createCacheMap } from "src/utils";
  *
  * ******************************************************
  */
-const root = process.cwd();
-export const cacheMap = createCacheMap(IS_DEBUGGING);
-export const cache = constructPath(".cache", root);
-export const nodeImportMapPath = constructPath("node.importmap", root);
+export const root = fileURLToPath(`file://${process.cwd()}`);
+export const cacheMap = new Map()
+export const nodeImportMapPath = join(root, "node.importmap");
+export const cache = join(root, '.cache')

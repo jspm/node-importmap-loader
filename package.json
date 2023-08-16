@@ -111,6 +111,7 @@
     "collectCoverageFrom": [
       "<rootDir>/src/loader.ts",
       "<rootDir>/src/logger.ts",
+      "<rootDir>/src/parser.ts",
       "<rootDir>/src/utils.ts"
     ]
   },

@@ -1,11 +1,12 @@
+import { join } from 'node:path';
 import { parseUrlPkg } from "@jspm/generator";
 import { cache, cacheMap, nodeImportMapPath } from "./config";
+import { constructImportMap } from "./utils";
+import { parseNodeModuleCachePath } from './parser';
 import { IS_DEBUGGING } from "./constants";
-import { constructImportMap, constructPath, parseNodeModuleCachePath } from "./utils";
-import { Context, NextResolve } from "./types";
 import { logger } from "./logger";
+import { Context, NextResolve } from "./types";
 
-const log = logger({ file: "loader" });
 
 /**
  * ******************************************************
@@ -21,10 +22,10 @@ const log = logger({ file: "loader" });
  * @sources :
  * * https://nodejs.org/api/esm.html#esm_experimental_loaders
  * * https://github.com/nodejs/loaders-test
- * TODO: should the working directory be assumed? should the cache path importmap path, and importmap filename be assumed?
  * ******************************************************
- */
+*/
 
+const log = logger({ file: "loader" });
 log.setLogger(IS_DEBUGGING);
 
 /**
@@ -37,53 +38,38 @@ log.setLogger(IS_DEBUGGING);
  */
 
 export const resolve = async (specifier: string, { parentURL }: Context, nextResolve: NextResolve) => {
+  if (!parentURL || !nodeImportMapPath) return nextResolve(specifier);
+
+  const importmap = constructImportMap(nodeImportMapPath);
+  log.debug("resolve:importmap:", { importmap });
+  const cacheMapPath = cacheMap.get(parentURL) || parentURL;
+  log.debug("resolve:cacheMapPath:", { cacheMapPath });
+
+  // construct module path
+  const modulePath = importmap.resolve(specifier, cacheMapPath);
+  log.debug("resolve:modulePath:", { modulePath });
+
+  // resolve URL
+  const { protocol = "" } = new URL(modulePath);
+  const isNode = protocol === "node:";
+  const isFile = protocol === "file:";
+  log.debug("resolve:protocol:", { isNode, isFile });
+  if (isNode || isFile) return nextResolve(specifier);
+
+  // get node module information
   try {
-    // define cache path
-    const pathToCache = cache || parentURL;
-    log.debug("resolve:pathToCache:", { pathToCache });
-    if (!pathToCache) throw new Error("Failed in resolving cache path");
-
-    // construct importmap
-    const importmap = constructImportMap(nodeImportMapPath);
-    log.debug("resolve:importmap:", { importmap });
-
-    // construct cache map path
-    const cacheMapPath = cacheMap.get(pathToCache);
-    log.debug("resolve:cacheMapPath:", { cacheMapPath });
-
-    // construct module path
-    const modulePath = importmap.resolve(specifier, cacheMapPath);
-    log.debug("resolve:modulePath:", { modulePath });
-    if (!modulePath) throw new Error("Failed in resolving module path");
-
-    // resolve URL
-    const { protocol = "" } = new URL(modulePath);
-    const isNode = protocol === "node:";
-    const isFile = protocol === "file:";
-    log.debug("resolve:protocol:", { protocol, isNode, isFile });
-    if (isNode || isFile) {
-      log.debug("Failed resolving a protocol");
-      return nextResolve(specifier);
-    }
-
-    // get node module information
     const moduleMetadata = await parseUrlPkg(modulePath);
     // debugged to here
     log.debug("resolve:moduleMetaData:", { moduleMetadata });
-    if (!moduleMetadata) {
-      log.debug("Failed in parsing module meta data");
-      return nextResolve(specifier);
-    }
+    if (!moduleMetadata) return nextResolve(specifier);
 
     // construct node module cache path
-    const {
-      pkg: { name, version },
-    } = moduleMetadata;
-    const nodeModuleCachePath = constructPath(`${name}@${version}`, pathToCache);
+    const { pkg: { name, version } } = moduleMetadata;
+    const moduleFile = modulePath.split("/").reverse()[0] || '';
+    const nodeModuleCachePath = join(cache, `${name}@${version}`, moduleFile);
     cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);
     const parsedNodeModuleCachePath = await parseNodeModuleCachePath(modulePath, nodeModuleCachePath);
     log.debug("resolve:nodeModuleCachePath:", { nodeModuleCachePath, parsedNodeModuleCachePath });
-    if (!parsedNodeModuleCachePath) throw new Error("Failed in parsing node module cache path");
 
     // resolve node module cache path
     return nextResolve(parsedNodeModuleCachePath);

@@ -14,7 +14,7 @@ const log = logger({ file: "parser", isLogging: IS_DEBUGGING });
  * @returns {string}
  */
 export const parseNodeModuleCachePath = async (modulePath: string, cachePath: string) => {
-  log.debug('parseNodeModuleCachePath', cachePath, modulePath)
+  log.debug("parseNodeModuleCachePath", cachePath, modulePath);
   if (existsSync(cachePath)) return cachePath;
   try {
     const resp = await fetch(modulePath);

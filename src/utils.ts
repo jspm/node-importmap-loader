@@ -30,11 +30,11 @@ export const ensureFileSync = (path: string) => {
   const dirPath = dirname(path);
   if (!existsSync(dirPath)) ensureDirSync(dirPath);
   try {
-    writeFileSync(path, '', { flag: 'wx' });
+    writeFileSync(path, "", { flag: "wx" });
   } catch {
-    log.error(`ensureDirSync: Failed in creating ${path}`)
+    log.error(`ensureDirSync: Failed in creating ${path}`);
   }
-}
+};
 
 export const checkIfNodeOrFileProtocol = (modulePath: string) => {
   const { protocol = "" } = new URL(modulePath);

@@ -9,5 +9,5 @@ export const logger = ({ file, isLogging = false }: LoggerOptions) => ({
   error: (msg: string, ...args: unknown[]) => {
     if (args) console.error(`jspm:[${file}]: ${msg}`, ...args);
     else console.error(`jspm:[${file}]: ${msg}`);
-  }
+  },
 });

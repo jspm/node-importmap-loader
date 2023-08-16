@@ -16,7 +16,5 @@ export const root = fileURLToPath(`file://${process.cwd()}`);
 export const cacheMap = new Map();
 export const nodeImportMapPath = join(root, "node.importmap");
 export const cache = join(root, ".cache");
-const map = existsSync(nodeImportMapPath)
-  ? JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" }))
-  : {};
+const map = existsSync(nodeImportMapPath) ? JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" })) : {};
 export const importmap = new ImportMap({ rootUrl: import.meta.url, map });

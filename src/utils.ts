@@ -1,14 +1,14 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseUrlPkg } from "@jspm/generator";
-import { parseNodeModuleCachePath } from "src/parser";
-import { cache, importMap } from "src/config";
-import { IS_DEBUGGING } from "src/constants";
-import { logger } from "src/logger";
+import { parseNodeModuleCachePath } from "./parser";
+import { cache, importmap } from "./config";
+import { IS_DEBUGGING } from "./constants";
+import { logger } from "./logger";
 
 /**
  * ******************************************************
- * UTILS
+ * UTILS 📦
  * ------------------------------------------------------
  * @description a collection of utility functions
  * @summary a collection of utility functions
@@ -44,7 +44,7 @@ export const checkIfNodeOrFileProtocol = (modulePath: string) => {
 };
 
 export const resolveModulePath = (specifier: string, cacheMapPath: string) => {
-  const modulePath = importMap.resolve(specifier, cacheMapPath);
+  const modulePath = importmap.resolve(specifier, cacheMapPath);
   log.debug("resolveModulePath:", { modulePath });
   return modulePath;
 };
@@ -56,7 +56,7 @@ export const resolveNodeModuleCachePath = async (modulePath: string) => {
     const version = moduleMetadata?.pkg?.version;
     const moduleFile = modulePath.split("/").reverse()[0] || "";
     const nodeModuleCachePath = join(cache, `${name}@${version}`, moduleFile);
-    log.debug("resolveNodeModuleCachePath:", { moduleMetadata, name, version, nodeModuleCachePath });
+    log.debug("resolveNodeModuleCachePath:", { nodeModuleCachePath });
     return nodeModuleCachePath;
   } catch (err) {
     log.error("resolveNodeModuleCachePath:", err);

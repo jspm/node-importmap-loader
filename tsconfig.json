@@ -30,5 +30,5 @@
     "types": ["jest", "node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["tests/*.ts", "tests/e2e/*.js"]
+  "exclude": ["src/__tests__/*.ts", "tests/e2e/*.js"]
 }

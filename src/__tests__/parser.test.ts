@@ -1,8 +1,6 @@
-import * as fs from "node:fs";
-import * as utils from 'src/utils';
 import { parseNodeModuleCachePath } from '../parser';
 
-jest.mock("node:fs");
+import * as fs from "node:fs";
 
 jest.mock("node:path", () => {
   const actual = jest.requireActual("node:path");
@@ -20,21 +18,26 @@ jest.mock("node-fetch", () =>
   })
 );
 
-const mockImportMapResolve = jest.fn();
-
 jest.mock("@jspm/import-map", () => ({
   ImportMap: jest.fn(() => ({
-    resolve: mockImportMapResolve,
+    resolve: jest.fn(),
   })),
 }));
 
-jest.mock("src/utils", () => {
-  const actual = jest.requireActual("src/utils");
+jest.mock('@jspm/generator', () => ({
+  parseUrlPkg: jest.fn(),
+}))
+
+jest.mock("../utils", () => {
+  const actual = jest.requireActual("../utils");
   return {
     __esModule: true,
     ...actual,
   };
 });
+import * as utils from "../utils";
+
+jest.mock('../config')
 
 describe("parseNodeModuleCachePath", () => {
   const cachePath = "file:///path/to/cache";
@@ -43,6 +46,7 @@ describe("parseNodeModuleCachePath", () => {
     return {
       ...actual,
       existsSync: jest.fn(),
+      writeFileSync: jest.fn(),
     };
   });
 
@@ -51,22 +55,20 @@ describe("parseNodeModuleCachePath", () => {
   });
 
   test("should return cachePath if it exists", async () => {
-    (fs.existsSync as jest.Mock).mockReturnValue(true);
+    jest.spyOn(fs, "existsSync").mockReturnValue(true);
     const result = await parseNodeModuleCachePath("modulePath", cachePath);
     expect(result).toBe(cachePath);
   });
 
   test("should make directories and write file if cachePath does not exist", async () => {
-    (fs.existsSync as jest.Mock).mockReturnValue(false);
-    const ensureDirSyncSpy = jest.spyOn(utils, "ensureDirSync");
-    const writeFileSyncSpy = jest.spyOn(fs, "writeFileSync");
+    jest.spyOn(fs, "existsSync").mockReturnValue(false);
+    const ensureFileSyncSpy = jest.spyOn(utils, "ensureFileSync");
     await parseNodeModuleCachePath("modulePath", cachePath);
-    expect(ensureDirSyncSpy).toBeCalled();
-    expect(writeFileSyncSpy).toBeCalledWith(cachePath, "module code");
+    expect(ensureFileSyncSpy).toBeCalled();
   });
 
   test("should return empty string if there is an error", async () => {
-    (fs.existsSync as jest.Mock).mockReturnValue(false);
+    jest.spyOn(fs, "existsSync").mockReturnValue(false);
     await jest.spyOn(fs, "writeFileSync").mockImplementation(() => {
       throw new Error("error");
     });

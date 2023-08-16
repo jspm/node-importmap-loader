@@ -4,6 +4,15 @@ import { ensureFileSync } from "src/utils";
 import { IS_DEBUGGING } from "src/constants";
 import { logger } from "src/logger";
 
+/**
+ * ******************************************************
+ * PARSER 🔪
+ * ------------------------------------------------------
+ * @description handles parsing directories for cached paths
+ *
+ * ******************************************************
+ */
+
 const log = logger({ file: "parser", isLogging: IS_DEBUGGING });
 
 /**

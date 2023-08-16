@@ -91,7 +91,8 @@
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!node:http)",
-      "node_modules/(?!@jspm/import-map)"
+      "node_modules/(?!@jspm/import-map)",
+      "node_modules/(?!@jspm/generator)"
     ],
     "transform": {
       "^.+\\.(ts)$": "@swc/jest"

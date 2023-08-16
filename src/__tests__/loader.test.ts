@@ -47,11 +47,6 @@ describe('loader', () => {
   })
 
   test("resolved with basic config", async () => {
-    // const nodeImportMapPath = 'test/node.importmap';
-    // (jest.mocked(config).nodeImportMapPath as any) = nodeImportMapPath;
-    // (jest.mocked(config).cacheMap as any) = (new Map() as any).mockImplementation(() => ({
-    //   get: jest.fn().mockReturnValue(undefined),
-    // }));
     const checkIfNodeOrFileProtocolSpy = jest.spyOn(utils, 'checkIfNodeOrFileProtocol').mockReturnValue(true);
     const context = { parentURL: "parentURL" };
     await resolve(specifier, context, nextResolve);

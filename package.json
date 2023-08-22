@@ -12,6 +12,9 @@
   "bin": {
     "load-node-importmap": "node --loader dist/loader.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "contributors": [
     {
       "name": "Jeff Wainwright",

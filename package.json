@@ -9,7 +9,13 @@
   "exports": {
     ".": "dist/loader.js"
   },
-  "bin": "node --loader dist/loader.js",
+  "bin": {
+    "load-node-importmap": "node --loader dist/loader.js"
+  },
+  "scripts": {
+    "test": "time chomp test:e2e",
+    "dir-size": "chomp dir-size"
+  },
   "dependencies": {
     "@jspm/generator": "^1.1.9",
     "@jspm/import-map": "^1.0.7",

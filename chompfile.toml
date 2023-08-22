@@ -100,3 +100,7 @@ run = 'tsc --noEmit'
 [[task]]
 name = 'upgrade'
 run = 'npm update --latest'
+
+[[task]]
+name = 'dir-size'
+run = 'du -hs .cache'

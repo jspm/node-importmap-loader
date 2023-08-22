@@ -24,8 +24,11 @@
     "sourceMap": false,
     "strict": true,
     "target": "esnext",
-    "types": ["node"]
+    "paths": {
+      "src/*": ["src/*"]
+    },
+    "types": ["jest", "node"]
   },
-  "include": ["src"],
-  "exclude": ["tests/*.ts", "tests/e2e/*.js"],
+  "include": ["src/**/*"],
+  "exclude": ["src/__tests__/*.ts", "tests/e2e/*.js"]
 }

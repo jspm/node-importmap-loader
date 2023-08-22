@@ -1,14 +1,27 @@
-# Node ImportMap HTTP Loader
+# WIP: @jspm/node-importmap-loader
 
-Experimental node loader built on top of jspm utils to resolve deps from remote in nodejs
+##### Don't bother installing dependencies you don't need to! 🏇🏻💨
+
+With **JSPM _node-importmap-loader_**, installing dependencies is a thing of the past! You can reference and execute them directly! Maximize productivity ⚡️, decrease security risk 🚔, and probably do other awesome things too! Use **JSPM _node-importmap-loader_** today!
+
+##### I'm skeptical, is this for real?
+
+Sort, yes and no—but it's close! This project's focus is to enable you to use import maps with Node if you have familiarity in the space. Meanwhile, we'll be working dev ex to make using this as seemless as possible.
+
+##### How does this work?
+
+JSPM uses [Node's experimental loader methodology](https://nodejs.org/api/esm.html#esm_import_map_loader) with JSPM's import map technology to allow _you_ 🫵 to import dependencies directly from a cdn source without needing to install them!
+
+##### 📣 More how-tos, documentation coming soon!
 
 ---
+
 ## Usage
 
 When executing
 
 ```sh
-node --loader ./loader.js test.js
+node --loader ./dist/loader.js test.js
 ```
 
 The following will be output
@@ -62,7 +75,7 @@ du -sh .cache
 
 ## Local Development
 
-Try it yourself
+Try it yourself!
 
 Clone
 
@@ -70,7 +83,7 @@ Clone
 git clone git@github.com:jspm/node-importmap-http-loader.git
 ```
 
-Then via [devcontainers](https://code.visualstudio.com/docs/remote/containers), launch the container by clicking the devcontainer button or via the command palette.
+Then, via [devcontainers](https://code.visualstudio.com/docs/remote/containers), launch the container by clicking the devcontainer button or via the command palette.
 
 To setup devcontainers
 
@@ -84,5 +97,5 @@ Unrecommended and supported for issues, etc:
 
 ```sh
 git clone git@github.com:jspm/node-importmap-http-loader.git
-nvm i && npm i
+n install auto && npm install
 ```

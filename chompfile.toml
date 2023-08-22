@@ -4,8 +4,8 @@ default-task = 'build'
 
 [[task]]
 name = 'build'
-run = 'tsup src/loader.ts --format esm,cjs --dts'
-dep = 'src/loader.ts'
+run = 'tsup src/loader.ts --format esm --dts'
+dep = 'src/#.ts'
 target = 'dist/loader.js'
 
 [[task]]
@@ -16,34 +16,37 @@ target = 'package-lock.json'
 
 [[task]]
 name = 'clean'
-run = 'rimraf dist'
+run = 'rm -rf dist'
 
 [[task]]
 name = 'commit'
 run = 'git-cz'
 
 [[task]]
-name = 'commit-msg'
-run = 'commitlint --edit $1'
+name = 'default'
+run = 'npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1'
 
 [[task]]
-name = 'default'
-run = 'npm install --no-save react-dom@17.0.2 @teleporthq/teleport-project-generator-react@0.25.4 @teleporthq/teleport-project-generator-preact@0.20.0 chalk express morgan react-router@5.2.1 react-router-dom@5.2.1 && node tests/e2e/test.js'
+name = 'format'
+run = 'prettier --write **/*.{ts,json,md}'
 
 [[task]]
 name = 'lint'
 run = 'eslint src --ext .ts'
-deps = ['src/#.ts', 'tests/loader.test.ts']
+deps = ['src/#.ts']
 
 [[task]]
-name = 'lint-fix'
-deps = ['src/#.ts', 'tests/loader.test.ts']
+name = 'lint:fix'
 run = 'eslint src --ext .ts --fix'
+deps = ['src/#.ts']
+
+[[task]]
+name = 'post-merge'
+deps = ['npm:install', 'build']
 
 [[task]]
 name = 'pre-commit'
-run = 'lint-staged'
-deps = ['src/#.ts', 'tests/loader.test.ts']
+deps = ['typecheck', 'test:changed', 'lint:fix', 'format']
 
 [[task]]
 name = 'prepare'
@@ -51,7 +54,7 @@ run = 'husky install'
 
 [[task]]
 name = 'prepublishOnly'
-deps = [':test', ':build']
+deps = ['test', 'build']
 
 [[task]]
 name = 'release'
@@ -59,7 +62,7 @@ run = 'release-it'
 
 [[task]]
 name = 'server'
-deps = [':server:build', ':server:start']
+deps = ['server:build', 'server:start']
 
 [[task]]
 name = 'server:build'
@@ -75,19 +78,29 @@ echo "Server started."
 
 [[task]]
 name = 'test'
-deps = [':test:unit', ':test:e2e']
+deps = ['test:unit', 'test:e2e']
 
 [[task]]
 name = 'test:e2e'
-serial = true
-deps = [':default', ':build']
 run = 'node --loader ./dist/loader.js tests/e2e/test.js'
+deps = ['default', 'build']
 
 [[task]]
 name = 'test:unit'
-run = 'vitest run'
+run = 'jest'
+
+[[task]]
+name = 'test:changed'
+run = 'jest --bail --changesince=main'
 
 [[task]]
 name = 'typecheck'
 run = 'tsc --noEmit'
-deps = ['src/#.ts']
+
+[[task]]
+name = 'upgrade'
+run = 'npm update --latest'
+
+[[task]]
+name = 'dir-size'
+run = 'du -hs .cache'

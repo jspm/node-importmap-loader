@@ -1,6 +1,6 @@
 {
   "name": "@jspm/node-importmap-loader",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "JSPM's node importmap loader ⚡️",
   "author": "Jaya Krishna Namburu <namburu1995@gmail.com>",
   "type": "module",
@@ -12,6 +12,18 @@
   "bin": {
     "load-node-importmap": "node --loader dist/loader.js"
   },
+  "contributors": [
+    {
+      "name": "Jeff Wainwright",
+      "email": "yowainwright@gmail.com",
+      "url": "https://jeffry.in"
+    },
+    {
+      "name": "Jaya Krishna Namburu",
+      "email": "namburu1995@gmail.com",
+      "url": "https://github.com/JayaKrishnaNamburu"
+    }
+  ],
   "scripts": {
     "test": "time chomp test:e2e",
     "dir-size": "chomp dir-size"

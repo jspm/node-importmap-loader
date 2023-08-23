@@ -7,7 +7,9 @@
 
 #### Don't bother installing dependencies you don't need to! 🏇🏻💨
 
-With `@jspm/node-importmap-loader`, installing node modules is a thing of the past! You can reference and execute them directly to maximize productivity ⚡️, decrease security risk 🚔, and probably otherawesome things too!
+With `@jspm/node-importmap-loader`, installing node modules is a thing of the past!
+You can reference and execute them directly to maximize productivity ⚡️,
+decrease security risk 🚔, and probably other awesome things too!
 
 Use **JSPM _node-importmap-loader_** today!
 
@@ -17,11 +19,13 @@ Use **JSPM _node-importmap-loader_** today!
 
 #### I'm skeptical. Is this for real?
 
-Sort of **yes _and_ no**—it's close! This project's focus is to enable you to use [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) with Node if you have familiarity both technologies and [EcmaScript Modules (ESM)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules).
+Sort of **yes _and_ no**—it's close! This project's focus is to enable you to use [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) with Node
+if you have familiarity both technologies and [EcmaScript Modules (ESM)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules).
 
 #### How does this work?
 
-JSPM uses [Node's experimental loader](https://nodejs.org/api/esm.html#esm_import_map_loader) and JSPM import maps enabling _you_ 🫵 to import dependencies directly from a cdn source _without needing to install them_!
+JSPM uses [Node's experimental loader](https://nodejs.org/api/esm.html#esm_import_map_loader) and JSPM import maps enabling _you_ 🫵 to
+import dependencies directly from a cdn source _without needing to install them_!
 
 ---
 
@@ -89,6 +93,7 @@ testing
 #### This output represents a npm packages ready to be used without locally installing them!
 
 ---
+
 ## Comparisions
 
 Additionally, `@jspm/node-importmap-loader` can produce significant size benefits

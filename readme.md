@@ -4,11 +4,16 @@
 [![npm version](https://badge.fury.io/js/node-importmap-http-loader.svg)](https://badge.fury.io/js/node-importmap-http-loader)
 ![ci](https://github.com/yowainwright/node-importmap-http-loader/actions/workflows/ci.yml/badge.svg)
 [![Github](https://badgen.net/badge/icon/github?icon=github&label&color=black)](https://github.com/yowainwright/node-importmap-http-loader)
+
 #### Don't bother installing dependencies you don't need to! 🏇🏻💨
 
-With **@JSPM/_node-importmap-loader_**, installing node modules is a thing of the past! You can reference and execute them directly to maximize productivity ⚡️, decrease security risk 🚔, and probably otherawesome things too! Use **JSPM _node-importmap-loader_** today!
+With `@jspm/node-importmap-loader`, installing node modules is a thing of the past! You can reference and execute them directly to maximize productivity ⚡️, decrease security risk 🚔, and probably otherawesome things too!
+
+Use **JSPM _node-importmap-loader_** today!
 
 ---
+
+## Q&A
 
 #### I'm skeptical. Is this for real?
 
@@ -42,13 +47,13 @@ load-node-importmap <file-to-execute>
 
 ## For Example
 
-When executing
+When executing the following script in this repo
 
 ```bash
 node --loader ./dist/loader.js test.js
 ```
 
-In this repo the following will be output
+The following data will be output
 
 ```bash
  loader git:(main) node --loader ./loader.js test.js
@@ -81,9 +86,12 @@ testing
 }
 ```
 
-This output represents a product that is ready to be used without locally installing dependencies!
+#### This output represents a npm packages ready to be used without locally installing them!
 
-Additionally, this produces significant size benefits
+---
+## Comparisions
+
+Additionally, `@jspm/node-importmap-loader` can produce significant size benefits
 
 #### With regular npm install
 
@@ -92,14 +100,14 @@ du -hs node_modules
 50M    node_modules
 ```
 
-#### With `@jspm/node-importmap-loader``
+#### With `@jspm/node-importmap-loader`
 
 ```sh
 du -sh .cache
 3.6M    .cache
 ```
 
-And takes almost the same time to execute scripts!
+#### And it takes almost the same time to execute scripts!
 
 ---
 

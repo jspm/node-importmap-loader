@@ -7,25 +7,8 @@
 
 #### Don't bother installing dependencies you don't need to! 🏇🏻💨
 
-With `@jspm/node-importmap-loader`, installing node modules is a thing of the past!
-You can reference and execute them directly to maximize productivity ⚡️,
-decrease security risk 🚔, and probably other awesome things too!
-
-Use **JSPM _node-importmap-loader_** today!
-
----
-
-## Q&A
-
-#### I'm skeptical. Is this for real?
-
-Sort of **yes _and_ no**—it's close! This project's focus is to enable you to use [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) with Node
-if you have familiarity both technologies and [EcmaScript Modules (ESM)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules).
-
-#### How does this work?
-
-JSPM uses [Node's experimental loader](https://nodejs.org/api/esm.html#esm_import_map_loader) and JSPM import maps enabling _you_ 🫵 to
-import dependencies directly from a cdn source _without needing to install them_!
+With `@jspm/node-importmap-loader`, you can reference and execute dependencies directly to maximize productivity ⚡️,
+decrease security risk 🚔!
 
 ---
 
@@ -47,50 +30,7 @@ With a `node.importmap` defined in your working directory, run
 load-node-importmap <file-to-execute>
 ```
 
----
-
-## For Example
-
-When executing the following script in this repo
-
-```bash
-node --loader ./dist/loader.js test.js
-```
-
-The following data will be output
-
-```bash
- loader git:(main) node --loader ./loader.js test.js
-(node:12944) ExperimentalWarning: --experimental-loader is an experimental feature. This feature could change at any time
-(Use `node --trace-warnings ...` to show where the warning was created)
-testing
-{
-  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: {
-    usingClientEntryPoint: false,
-    Events: [
-      [Function: getInstanceFromNode],
-      [Function: getNodeFromInstance],
-      [Function: getFiberCurrentPropsFromNode],
-      [Function: enqueueStateRestore],
-      [Function: restoreStateIfNeeded],
-      [Function: batchedUpdates$1]
-    ]
-  },
-  createPortal: [Function: createPortal$1],
-  createRoot: [Function: createRoot$1],
-  findDOMNode: [Function: findDOMNode],
-  flushSync: [Function: flushSync$1],
-  hydrate: [Function: hydrate],
-  hydrateRoot: [Function: hydrateRoot$1],
-  render: [Function: render],
-  unmountComponentAtNode: [Function: unmountComponentAtNode],
-  unstable_batchedUpdates: [Function: batchedUpdates$1],
-  unstable_renderSubtreeIntoContainer: [Function: renderSubtreeIntoContainer],
-  version: '18.2.0'
-}
-```
-
-#### This output represents a npm packages ready to be used without locally installing them!
+#### Examples and demos coming soon ⏰!
 
 ---
 

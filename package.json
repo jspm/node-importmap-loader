@@ -2,7 +2,6 @@
   "name": "@jspm/node-importmap-loader",
   "version": "0.1.0",
   "description": "JSPM's node importmap loader ⚡️",
-  "author": "Jaya Krishna Namburu <namburu1995@gmail.com>",
   "type": "module",
   "main": "dist/loader.js",
   "types": "dist/loader.d.ts",
@@ -14,6 +13,12 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "author": "Jaya Krishna Namburu <namburu1995@gmail.com>",
+  "homepage": "https://jspm.org/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yowainwright/shave.git"
   },
   "contributors": [
     {

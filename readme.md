@@ -1,9 +1,9 @@
 # @jspm/node-importmap-loader
 
 ![Typed with TypeScript](https://flat.badgen.net/badge/icon/Typed?icon=typescript&label&labelColor=blue&color=555555)
-[![npm version](https://badge.fury.io/js/node-importmap-http-loader.svg)](https://badge.fury.io/js/node-importmap-http-loader)
-![ci](https://github.com/yowainwright/node-importmap-http-loader/actions/workflows/ci.yml/badge.svg)
-[![Github](https://badgen.net/badge/icon/github?icon=github&label&color=black)](https://github.com/yowainwright/node-importmap-http-loader)
+[![npm version](https://badge.fury.io/js/@jspm%2Fnode-importmap-loader.svg)](https://badge.fury.io/js/@jspm%2Fnode-importmap-loader)
+![ci](https://github.com/jspm/node-importmap-http-loader/actions/workflows/ci.yml/badge.svg)
+[![Github](https://badgen.net/badge/icon/github?icon=github&label&color=black)](https://github.com/jspm/node-importmap-http-loader)
 
 #### Don't bother installing dependencies you don't need to! 🏇🏻💨
 

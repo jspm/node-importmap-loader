@@ -1,5 +1,4 @@
 import { existsSync, writeFileSync } from "node:fs";
-import fetch from "node-fetch";
 import { ensureFileSync } from "src/utils";
 import { IS_DEBUGGING } from "src/constants";
 import { logger } from "src/logger";

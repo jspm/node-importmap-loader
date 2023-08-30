@@ -51,7 +51,6 @@ export const resolveModulePath = (specifier: string, cacheMapPath: string) => {
 export const resolveNodeModuleCachePath = async (modulePath: string) => {
   try {
     const { name, version, file = '' } = getPackageNameVersionFromUrl(modulePath);
-    if ([name, version, file].some(item => !item)) throw Error("Not all module meta data was parsed");
     const nodeModuleCachePath = join(cache, `${name}@${version}`, file);
     log.debug("resolveNodeModuleCachePath:", { nodeModuleCachePath });
     return nodeModuleCachePath;

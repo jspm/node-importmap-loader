@@ -4,7 +4,9 @@ import {
   ensureFileSync,
   resolveModulePath,
   resolveNodeModuleCachePath,
-  resolveParsedModulePath
+  resolveParsedModulePath,
+  getLastPart,
+  getVersion,
 } from '../utils';
 
 jest.mock('node:fs');
@@ -22,13 +24,12 @@ jest.mock('@jspm/generator', () => ({
   parseUrlPkg: jest.fn(),
 }))
 
-import * as generator from '@jspm/generator';
-
 jest.mock('../config')
 import * as config from '../config';
 
 jest.mock('../parser', () => ({
   parseNodeModuleCachePath: jest.fn(),
+  getPackageNameVersionFromUrl: jest.fn(),
 }))
 import * as parser from '../parser';
 
@@ -96,17 +97,16 @@ test('resolveModulePath', () => {
 })
 
 test('resolveModulePath with modulePath', async () => {
-  const parseUrlPkgSpy = await jest.spyOn(generator, 'parseUrlPkg').mockResolvedValue({
-    pkg: {
-      name: 'foo',
-      version: '1.0.0',
-    }
+  const getPackageNameVersionFromUrlSpy = jest.spyOn(parser, 'getPackageNameVersionFromUrl').mockReturnValue({
+    fie: 'bar/index.js',
+    name: 'foo',
+    version: '1.0.0',
   } as any);
   (jest.mocked(config).cache as unknown) = 'test/.cache'
   const modulePath = 'file:///bar/index.js';
   const joinSpy = jest.spyOn(path, 'join').mockReturnValue('test/.cache/foo@1.0.0/bar/index.js');
   const result = await resolveNodeModuleCachePath(modulePath);
-  expect(parseUrlPkgSpy).toBeCalledWith(modulePath);
+  expect(getPackageNameVersionFromUrlSpy).toBeCalledWith(modulePath);
   expect(joinSpy).toBeCalled();
   expect(result).toBe('test/.cache/foo@1.0.0/bar/index.js');
 });
@@ -117,3 +117,15 @@ test('resolveParsedModulePath', async () => {
   expect(parseNodeModuleCachePathSpy).toBeCalled();
   expect(result).toBe('file:///foo/bar');
 })
+
+
+test('getVersion', () => {
+  const urlParts = ['1.10.0/index.js']
+  const result = getVersion(urlParts)(0)
+  expect(result).toStrictEqual('1.10.0')
+});
+
+test('getLastPart', () => {
+  const result = getLastPart('1.10.0/index.js', '/')
+  expect(result).toStrictEqual('index.js')
+});

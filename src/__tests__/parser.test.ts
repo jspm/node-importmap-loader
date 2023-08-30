@@ -1,4 +1,4 @@
-import { parseNodeModuleCachePath } from '../parser';
+import { parseNodeModuleCachePath, getPackageNameVersionFromUrl } from '../parser';
 
 import * as fs from "node:fs";
 
@@ -16,10 +16,6 @@ jest.mock("@jspm/import-map", () => ({
     resolve: jest.fn(),
   })),
 }));
-
-jest.mock('@jspm/generator', () => ({
-  parseUrlPkg: jest.fn(),
-}))
 
 jest.mock("../utils", () => {
   const actual = jest.requireActual("../utils");
@@ -69,5 +65,14 @@ describe("parseNodeModuleCachePath", () => {
     const result = await parseNodeModuleCachePath("modulePath", cachePath);
     expect(result).toBe("file:///path/to/cache");
     expect(errorSpy).toHaveBeenCalled();
+  });
+});
+
+test('getPackageNameVersionFromUrl', () => {
+  const result = getPackageNameVersionFromUrl('https://ga.jspm.io/npm:morgan@1.10.0/index.js')
+  expect(result).toStrictEqual({
+    file: 'index.js',
+    name: 'morgan',
+    version: '1.10.0',
   });
 });

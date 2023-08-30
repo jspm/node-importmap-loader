@@ -1,15 +1,3 @@
-jest.mock("node-fetch", () =>
-  jest.fn().mockResolvedValue({
-    ok: true,
-    text: jest.fn().mockResolvedValue("module code"),
-  })
-);
-
-jest.mock("@jspm/generator", () => ({
-  parseUrlPkg: jest.fn(),
-}));
-
-
 jest.mock("@jspm/import-map", () => ({
   ImportMap: jest.fn(() => ({
     resolve: jest.fn(),

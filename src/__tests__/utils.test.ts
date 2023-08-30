@@ -20,10 +20,6 @@ jest.mock("@jspm/import-map", () => ({
   })),
 }));
 
-jest.mock('@jspm/generator', () => ({
-  parseUrlPkg: jest.fn(),
-}))
-
 jest.mock('../config')
 import * as config from '../config';
 

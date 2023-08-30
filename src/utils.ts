@@ -1,7 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { parseUrlPkg } from "@jspm/generator";
-import { parseNodeModuleCachePath } from "./parser";
+import { parseNodeModuleCachePath, getPackageNameVersionFromUrl } from "./parser";
 import { cache, importmap } from "./config";
 import { IS_DEBUGGING } from "./constants";
 import { logger } from "./logger";
@@ -51,11 +50,9 @@ export const resolveModulePath = (specifier: string, cacheMapPath: string) => {
 
 export const resolveNodeModuleCachePath = async (modulePath: string) => {
   try {
-    const moduleMetadata = await parseUrlPkg(modulePath);
-    const name = moduleMetadata?.pkg?.name;
-    const version = moduleMetadata?.pkg?.version;
-    const moduleFile = modulePath.split("/").reverse()[0] || "";
-    const nodeModuleCachePath = join(cache, `${name}@${version}`, moduleFile);
+    const { name, version, file = '' } = getPackageNameVersionFromUrl(modulePath);
+    if ([name, version, file].some(item => !item)) throw Error("Not all module meta data was parsed");
+    const nodeModuleCachePath = join(cache, `${name}@${version}`, file);
     log.debug("resolveNodeModuleCachePath:", { nodeModuleCachePath });
     return nodeModuleCachePath;
   } catch (err) {
@@ -74,3 +71,7 @@ export const resolveParsedModulePath = async (modulePath: string, nodeModuleCach
     return;
   }
 };
+
+export const getVersion = (urlParts: string[]) => (index: number) => urlParts?.[index]?.split('/')?.[0] || '';
+
+export const getLastPart = (part: string, char: string) => part?.length && char && part?.split(char)?.reverse()[0] || '';

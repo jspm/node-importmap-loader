@@ -37,9 +37,7 @@
     "dir-size": "chomp dir-size"
   },
   "dependencies": {
-    "@jspm/generator": "^1.1.10",
-    "@jspm/import-map": "^1.0.7",
-    "node-fetch": "^3.3.2"
+    "@jspm/import-map": "^1.0.7"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",

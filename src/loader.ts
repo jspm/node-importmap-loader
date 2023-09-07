@@ -35,12 +35,20 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
   if (!parentURL || !nodeImportMapPath) return nextResolve(specifier);
   const cacheMapPath = cacheMap.get(parentURL) || parentURL;
   const modulePath = resolveModulePath(specifier, cacheMapPath);
+
+  if (modulePath === null) {
+    return nextResolve(specifier);
+  }
+
   const isNodeOrFileProtocol = checkIfNodeOrFileProtocol(modulePath);
   if (isNodeOrFileProtocol) return nextResolve(specifier);
+
   const nodeModuleCachePath = await resolveNodeModuleCachePath(modulePath);
   if (!nodeModuleCachePath) return nextResolve(specifier);
+
   cacheMap.set(`file://${nodeModuleCachePath}`, modulePath);
   const parsedNodeModuleCachePath = await resolveParsedModulePath(modulePath, nodeModuleCachePath);
   if (!parsedNodeModuleCachePath) return nextResolve(specifier);
+
   return nextResolve(parsedNodeModuleCachePath);
 };

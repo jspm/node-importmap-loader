@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ImportMap } from "@jspm/import-map";
 import { argv } from "node:process";
+import { Options } from "./types";
 
 /**
  * ******************************************************
@@ -21,32 +22,21 @@ export const cache = join(root, ".cache");
 const map = existsSync(nodeImportMapPath) ? JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" })) : {};
 export const importmap = new ImportMap({ rootUrl: import.meta.url, map });
 
-interface OptionDefinition {
-  type?: string;
-  alias?: string;
-  default?: any;
-}
-
-interface Options {
-  args: string[];
-  options: Record<string, OptionDefinition>;
-}
-
 function parseArgs({ args, options: optionDefinitions }: Options) {
-  const parsedArgs: Record<string, string | boolean> = {};
-
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i].replace(/^-+/, "");
-    const optionDefinition = optionDefinitions[arg];
-
-    if (optionDefinition) {
-      const value = args[i + 1];
-      parsedArgs[optionDefinition.alias || arg] = value !== undefined ? value : optionDefinition.default || true;
-      i++;
-    }
-  }
-
-  return { values: parsedArgs };
+  return {
+    values: args.reduce((parsedArgs: Record<string, string | boolean>, arg, index, arr) => {
+      if (arg.startsWith("-")) {
+        const optionName = arg.replace(/^-+/, "");
+        const optionDefinition = optionDefinitions[optionName];
+        if (optionDefinition) {
+          const value = arr[index + 1];
+          parsedArgs[optionDefinition.alias || optionName] =
+            value !== undefined ? value : optionDefinition.default || true;
+        }
+      }
+      return parsedArgs;
+    }, {}),
+  };
 }
 
 const { values } = parseArgs({

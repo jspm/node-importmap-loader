@@ -36,9 +36,7 @@ export const resolve = async (specifier: string, { parentURL }: Context, nextRes
   const cacheMapPath = cacheMap.get(parentURL) || parentURL;
   const modulePath = resolveModulePath(specifier, cacheMapPath);
 
-  if (modulePath === null) {
-    return nextResolve(specifier);
-  }
+  if (!modulePath) return nextResolve(specifier);
 
   const isNodeOrFileProtocol = checkIfNodeOrFileProtocol(modulePath);
   if (isNodeOrFileProtocol) return nextResolve(specifier);

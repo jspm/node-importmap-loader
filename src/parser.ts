@@ -1,7 +1,7 @@
 import { existsSync, writeFileSync } from "node:fs";
 import { ensureFileSync } from "src/utils";
 import { logger } from "src/logger";
-import { isDebuggingEnabled } from "./config";
+import { isDebuggingEnabled as isLogging } from "./config";
 
 /**
  * ******************************************************
@@ -12,7 +12,7 @@ import { isDebuggingEnabled } from "./config";
  * ******************************************************
  */
 
-const log = logger({ file: "parser", isLogging: isDebuggingEnabled() });
+const log = logger({ file: "parser", isLogging });
 
 /**
  * parseNodeModuleCachePath

@@ -1,7 +1,7 @@
 import { existsSync, writeFileSync } from "node:fs";
 import { ensureFileSync, getLastPart, getVersion } from "src/utils";
-import { IS_DEBUGGING } from "src/constants";
 import { logger } from "src/logger";
+import { isDebuggingEnabled } from "./config";
 
 /**
  * ******************************************************
@@ -12,7 +12,7 @@ import { logger } from "src/logger";
  * ******************************************************
  */
 
-const log = logger({ file: "parser", isLogging: IS_DEBUGGING });
+const log = logger({ file: "parser", isLogging: isDebuggingEnabled() });
 
 export const getPackageNameVersionFromUrl = (url: string) => {
   try {

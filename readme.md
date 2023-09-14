@@ -5,7 +5,6 @@
 ![ci](https://github.com/jspm/node-importmap-http-loader/actions/workflows/ci.yml/badge.svg)
 [![Github](https://badgen.net/badge/icon/github?icon=github&label&color=black)](https://github.com/jspm/node-importmap-http-loader)
 
-
 #### Don't bother installing dependencies you don't need to! 🏇🏻💨
 
 With `@jspm/node-importmap-loader`, you can reference and execute dependencies directly to maximize productivity ⚡️,

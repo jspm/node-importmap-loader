@@ -1,8 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseNodeModuleCachePath, getPackageNameVersionFromUrl } from "./parser";
-import { cache, importmap } from "./config";
-import { IS_DEBUGGING } from "./constants";
+import { cache, importmap, isDebuggingEnabled } from "./config";
 import { logger } from "./logger";
 
 /**
@@ -16,7 +15,7 @@ import { logger } from "./logger";
  * ******************************************************
  */
 
-const log = logger({ file: "loader", isLogging: IS_DEBUGGING });
+const log = logger({ file: "loader", isLogging: isDebuggingEnabled() });
 
 export const ensureDirSync = (dirPath: string) => {
   if (existsSync(dirPath)) return;
@@ -42,10 +41,21 @@ export const checkIfNodeOrFileProtocol = (modulePath: string) => {
   return isNode || isFile;
 };
 
-export const resolveModulePath = (specifier: string, cacheMapPath: string) => {
-  const modulePath = importmap.resolve(specifier, cacheMapPath);
-  log.debug("resolveModulePath:", { modulePath });
-  return modulePath;
+export const resolveModulePath = (specifier: string, cacheMapPath: string): string | null => {
+  try {
+    const modulePath = importmap.resolve(specifier, cacheMapPath);
+    log.debug("resolveModulePath:", { modulePath });
+    return modulePath;
+  } catch {
+    /*
+      If a module is not found in the importmap, we should just let the loader to skip it.
+      - Users might have installed it using `npm`.
+      - It can be a node-js dependency. (e.g. `assert`). We detect builtins using `node:` protocol.
+        But it is still not widely adopted yet.
+    */
+    log.debug(`Failed in resolving ${specifier} in ${cacheMapPath}`);
+    return null;
+  }
 };
 
 export const resolveNodeModuleCachePath = async (modulePath: string) => {

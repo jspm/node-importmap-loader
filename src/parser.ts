@@ -16,15 +16,15 @@ const log = logger({ file: "parser", isLogging: isDebuggingEnabled() });
 
 export const getPackageNameVersionFromUrl = (url: string) => {
   try {
-    const file = getLastPart(url, '/');
-    const urlParts = url?.split('@');
+    const file = getLastPart(url, "/");
+    const urlParts = url?.split("@");
     const urlPartsCount = urlParts.length;
     if (urlPartsCount === 3) {
       const name = `@${urlParts[1]}`;
       const version = getVersion(urlParts)(2);
       return { file, name, version };
     }
-    const name = getLastPart(getLastPart(urlParts[0], '/'), ':');
+    const name = getLastPart(getLastPart(urlParts[0], "/"), ":");
     const version = getVersion(urlParts)(1);
     return { file, name, version };
   } catch (err) {

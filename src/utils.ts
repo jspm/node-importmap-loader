@@ -60,7 +60,7 @@ export const resolveModulePath = (specifier: string, cacheMapPath: string): stri
 
 export const resolveNodeModuleCachePath = async (modulePath: string) => {
   try {
-    const { name, version, file = '' } = getPackageNameVersionFromUrl(modulePath);
+    const { name, version, file = "" } = getPackageNameVersionFromUrl(modulePath);
     const nodeModuleCachePath = join(cache, `${name}@${version}`, file);
     log.debug("resolveNodeModuleCachePath:", { nodeModuleCachePath });
     return nodeModuleCachePath;
@@ -81,6 +81,7 @@ export const resolveParsedModulePath = async (modulePath: string, nodeModuleCach
   }
 };
 
-export const getVersion = (urlParts: string[]) => (index: number) => urlParts?.[index]?.split('/')?.[0] || '';
+export const getVersion = (urlParts: string[]) => (index: number) => urlParts?.[index]?.split("/")?.[0] || "";
 
-export const getLastPart = (part: string, char: string) => part?.length && char && part?.split(char)?.reverse()[0] || '';
+export const getLastPart = (part: string, char: string) =>
+  (part?.length && char && part?.split(char)?.reverse()[0]) || "";

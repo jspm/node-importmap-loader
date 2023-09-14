@@ -24,7 +24,7 @@ export const importmap = new ImportMap({ rootUrl: import.meta.url, map });
 
 export const options = parseArgs({
   args: argv.slice(2),
-  options: { "debugNodeImportmapLoader": { alias: "d", type: "boolean", default: false } },
+  options: { debugNodeImportmapLoader: { alias: "d", type: "boolean", default: false } },
 });
 
 export const isDebuggingEnabled = Boolean(options.debugNodeImportmapLoader);

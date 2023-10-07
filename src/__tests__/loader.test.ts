@@ -24,7 +24,6 @@ jest.mock("../utils", () => {
     ensureDirSync: jest.fn(),
   };
 });
-import * as utils from "../utils";
 
 jest.mock("../parser");
 

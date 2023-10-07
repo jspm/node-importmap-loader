@@ -31,6 +31,7 @@ jest.mock('../parser', () => ({
   parseNodeModuleCachePath: jest.fn(),
 }))
 import * as parser from '../parser';
+import { ExactModule } from '@jspm/generator/lib/install/package';
 
 test("ensureDirSync has dir", () => {
   const dir = "/path/to/dir";

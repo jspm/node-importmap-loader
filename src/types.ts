@@ -13,12 +13,12 @@ export type OptionDefinition = {
   type?: string;
   alias?: string;
   default?: unknown;
-}
+};
 
 export type Options = {
   args: string[];
   options: Record<string, OptionDefinition>;
-}
+};
 
 export type ParsedArgs = {
   [x: string]: string | boolean | OptionDefinition;

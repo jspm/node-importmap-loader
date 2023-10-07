@@ -101,7 +101,7 @@ test('resolveModulePath with modulePath', async () => {
       name: 'foo',
       version: '1.0.0',
     }
-  } as any);
+  } as ExactModule | Promise<ExactModule | null>);
   (jest.mocked(config).cache as unknown) = 'test/.cache'
   const modulePath = 'file:///bar/index.js';
   const joinSpy = jest.spyOn(path, 'join').mockReturnValue('test/.cache/foo@1.0.0/bar/index.js');

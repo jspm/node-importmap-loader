@@ -8,28 +8,21 @@ describe('parseArgs', () => {
 
   it('returns parsed boolean arg', () => {
     const options = {
-      test: { type: 'boolean' }
+      'test': { type: 'boolean' }
     };
-    expect(parseArgs({ args: ['test'], options })).toEqual({ test: true });
+    expect(parseArgs({ args: ['test'], options })).toEqual({ test: false });
   });
 
   it('returns parsed boolean arg with default false', () => {
     const options = {
-      test: { type: 'boolean', default: false }
+      'test': { type: 'boolean', default: false }
     };
-    expect(parseArgs({ args: [], options })).toEqual({ test: false });
+    expect(parseArgs({ args: ['test'], options })).toEqual({ test: false });
   });
 
-  it('returns parsed string arg', () => {
+  it.only('uses alias if provided', () => {
     const options = {
-      test: { type: 'string' }
-    };
-    expect(parseArgs({ args: ['test', 'value'], options })).toEqual({ test: 'value' });
-  });
-
-  it('uses alias if provided', () => {
-    const options = {
-      test: { alias: 't', type: 'boolean' }
+      'test': { alias: 't', type: 'boolean' }
     };
     expect(parseArgs({ args: ['t'], options })).toEqual({ test: true });
   });

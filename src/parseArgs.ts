@@ -1,13 +1,16 @@
-import { Options } from "./types";
+import { Options, ParsedArgs } from "./types";
 
 export const parseArgs = ({ args, options }: Options) =>
-  args.reduce((parsedArgs: Record<string, string | boolean>, arg: string, index: number) => {
-    const option = options[arg];
-    if (!option) return parsedArgs;
-    const value = args[index + 1];
-    const updatedOption = option?.alias || option;
+  args.reduce((acc: ParsedArgs = {}, arg: string, index: number) => {
+    const property = Object.keys(options).find(option => option === arg || options[option]?.alias === arg);
+    if (!property) return acc;
+    const propertyOptions = options[property];
+    const defaultBooleanValue = propertyOptions?.type === 'boolean' ? true : false;
+    const defaultValue = propertyOptions?.default || defaultBooleanValue;
+    const initialValue = args[index + 1];
+    const value = initialValue ? initialValue : defaultValue
     return {
-      ...parsedArgs,
-      [updatedOption as unknown as string]: value ? value : option.default || false,
+      ...acc,
+      [property]: value,
     };
   }, {});

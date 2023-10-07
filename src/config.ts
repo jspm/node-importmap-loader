@@ -15,7 +15,8 @@ import { argv } from "node:process";
  *
  * ******************************************************
  */
-export const root = fileURLToPath(`file://${process.cwd()}`);
+const wd = process.cwd()
+export const root = fileURLToPath(`file://${wd}`);
 export const cacheMap = new Map();
 export const nodeImportMapPath = join(root, "node.importmap");
 export const cache = join(root, ".cache");

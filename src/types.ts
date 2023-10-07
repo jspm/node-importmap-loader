@@ -9,13 +9,17 @@ export type LoggerOptions = {
   isLogging?: boolean;
 };
 
-export interface OptionDefinition {
+export type OptionDefinition = {
   type?: string;
   alias?: string;
-  default?: any;
+  default?: unknown;
 }
 
-export interface Options {
+export type Options = {
   args: string[];
   options: Record<string, OptionDefinition>;
 }
+
+export type ParsedArgs = {
+  [x: string]: string | boolean | OptionDefinition;
+};

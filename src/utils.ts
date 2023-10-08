@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseUrlPkg } from "@jspm/generator";
 import { parseNodeModuleCachePath } from "./parser";
-import { cache, importmap, isDebuggingEnabled } from "./config";
+import { cache, importmap, isDebuggingEnabled as isLogging } from "./config";
 import { logger } from "./logger";
 
 /**
@@ -16,7 +16,7 @@ import { logger } from "./logger";
  * ******************************************************
  */
 
-const log = logger({ file: "loader", isLogging: isDebuggingEnabled() });
+const log = logger({ file: "loader", isLogging });
 
 export const ensureDirSync = (dirPath: string) => {
   if (existsSync(dirPath)) return;

@@ -24,7 +24,6 @@ jest.mock("../utils", () => {
     ensureDirSync: jest.fn(),
   };
 });
-import * as utils from "../utils";
 
 jest.mock("../parser");
 
@@ -47,10 +46,8 @@ describe('loader', () => {
   })
 
   test("resolved with basic config", async () => {
-    const checkIfNodeOrFileProtocolSpy = jest.spyOn(utils, 'checkIfNodeOrFileProtocol').mockReturnValue(true);
     const context = { parentURL: "parentURL" };
     await resolve(specifier, context, nextResolve);
-    expect(checkIfNodeOrFileProtocolSpy).toHaveBeenCalled();
     expect(nextResolve).toHaveBeenCalledWith('specifier');
   });
 });

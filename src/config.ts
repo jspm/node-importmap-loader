@@ -28,4 +28,4 @@ export const options = parseArgs({
   options: { debugNodeImportmapLoader: { alias: "d", type: "boolean", default: false } },
 });
 
-export const isDebuggingEnabled = Boolean(options.debugNodeImportmapLoader);
+export const isDebuggingEnabled = Boolean(options?.debugNodeImportmapLoader);

@@ -21,15 +21,6 @@ jest.mock('@jspm/generator', () => ({
   parseUrlPkg: jest.fn(),
 }))
 
-jest.mock("../utils", () => {
-  const actual = jest.requireActual("../utils");
-  return {
-    __esModule: true,
-    ...actual,
-  };
-});
-import * as utils from "../utils";
-
 jest.mock('../config')
 
 describe("parseNodeModuleCachePath", () => {

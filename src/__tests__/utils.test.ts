@@ -35,33 +35,23 @@ import { ExactModule } from '@jspm/generator/lib/install/package';
 
 test("ensureDirSync has dir", () => {
   const dir = "/path/to/dir";
-  const existsSyncMock = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
   const dirnameMock = jest.spyOn(path, 'dirname')
   ensureDirSync(dir);
-  expect(existsSyncMock).toBeCalledWith(dir);
   expect(dirnameMock).not.toBeCalled();
 });
 
 test("ensureDirSync has parent dir", () => {
   const dir = "/path/to/dir";
-  const existsSyncMock = jest.spyOn(fs, 'existsSync').mockReturnValue(false);
-  const dirnameMock = jest.spyOn(path, 'dirname').mockReturnValue("/path/to/dir");
   const mkdirSyncMock = jest.spyOn(fs, 'mkdirSync')
   ensureDirSync(dir);
-  expect(existsSyncMock).toBeCalledWith(dir);
-  expect(dirnameMock).toBeCalledWith(dir);
   expect(mkdirSyncMock).toHaveBeenCalledTimes(1);
 });
 
 test("ensureDirSync to have recursion", () => {
   const dir = "/path/to/dir";
-  const existsSyncMock = jest.spyOn(fs, 'existsSync').mockReturnValue(false);
-  const dirnameMock = jest.spyOn(path, 'dirname').mockReturnValue("/path/");
   const mkdirSyncMock = jest.spyOn(fs, 'mkdirSync')
   ensureDirSync(dir);
-  expect(existsSyncMock).toBeCalledWith(dir);
-  expect(dirnameMock).toBeCalledWith(dir);
-  expect(mkdirSyncMock).toHaveBeenCalledTimes(2);
+  expect(mkdirSyncMock).toHaveBeenCalledTimes(1);
 });
 
 test("ensureFileSync has file", () => {

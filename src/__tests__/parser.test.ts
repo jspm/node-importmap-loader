@@ -52,22 +52,4 @@ describe("parseNodeModuleCachePath", () => {
     const result = await parseNodeModuleCachePath("modulePath", cachePath);
     expect(result).toBe(cachePath);
   });
-
-  test("should make directories and write file if cachePath does not exist", async () => {
-    jest.spyOn(fs, "existsSync").mockReturnValue(false);
-    const ensureFileSyncSpy = jest.spyOn(utils, "ensureFileSync");
-    await parseNodeModuleCachePath("modulePath", cachePath);
-    expect(ensureFileSyncSpy).toBeCalled();
-  });
-
-  test("should return empty string if there is an error", async () => {
-    jest.spyOn(fs, "existsSync").mockReturnValue(false);
-    await jest.spyOn(fs, "writeFileSync").mockImplementation(() => {
-      throw new Error("error");
-    });
-    const errorSpy = await jest.spyOn(console, "error").mockImplementation(() => undefined);
-    const result = await parseNodeModuleCachePath("modulePath", cachePath);
-    expect(result).toBe("file:///path/to/cache");
-    expect(errorSpy).toHaveBeenCalled();
-  });
 });

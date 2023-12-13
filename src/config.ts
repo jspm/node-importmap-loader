@@ -20,7 +20,7 @@ export const root = fileURLToPath(`file://${wd}`);
 export const cacheMap = new Map();
 export const nodeImportMapPath = join(root, "node.importmap");
 export const cache = join(root, ".cache");
-const hasCacheFoler = existsSync(cache)
+const hasCacheFoler = existsSync(cache);
 if (!hasCacheFoler) mkdirSync(cache);
 const map = existsSync(nodeImportMapPath) ? JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" })) : {};
 export const importmap = new ImportMap({ rootUrl: import.meta.url, map });

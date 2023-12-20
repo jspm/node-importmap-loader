@@ -19,16 +19,18 @@ import { logger } from "./logger";
 const log = logger({ file: "loader", isLogging });
 
 export const ensureDirSync = (dirPath: string) => {
-  if (existsSync(dirPath)) return;
-  const parentDir = dirname(dirPath);
-  if (parentDir !== dirPath) ensureDirSync(parentDir);
-  mkdirSync(dirPath);
+  try {
+    mkdirSync(dirPath, { recursive: true });
+  } catch (err) {
+    log.error(`ensureDirSync: Failed in creating ${dirPath}`, { error: err });
+    throw err;
+  }
 };
 
 export const ensureFileSync = (path: string) => {
-  const dirPath = dirname(path);
-  if (!existsSync(dirPath)) ensureDirSync(dirPath);
   try {
+    const dirPath = dirname(path);
+    if (!existsSync(dirPath)) ensureDirSync(dirPath);
     writeFileSync(path, "", { flag: "wx" });
   } catch {
     log.error(`ensureDirSync: Failed in creating ${path}`);

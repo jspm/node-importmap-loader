@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ImportMap } from "@jspm/import-map";
@@ -20,6 +20,8 @@ export const root = fileURLToPath(`file://${wd}`);
 export const cacheMap = new Map();
 export const nodeImportMapPath = join(root, "node.importmap");
 export const cache = join(root, ".cache");
+const hasCacheFoler = existsSync(cache);
+if (!hasCacheFoler) mkdirSync(cache);
 const map = existsSync(nodeImportMapPath) ? JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" })) : {};
 export const importmap = new ImportMap({ rootUrl: import.meta.url, map });
 

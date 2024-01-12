@@ -6,7 +6,7 @@
   "main": "dist/loader.js",
   "types": "dist/loader.d.ts",
   "exports": {
-    ".": "dist/loader.js"
+    ".": "./dist/loader.js"
   },
   "bin": {
     "load-node-importmap": "node --loader dist/loader.js"

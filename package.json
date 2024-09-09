@@ -37,8 +37,8 @@
     "dir-size": "chomp dir-size"
   },
   "dependencies": {
-    "@jspm/generator": "^2.0.0",
-    "@jspm/import-map": "^1.0.7",
+    "@jspm/generator": "^2.3.0",
+    "@jspm/import-map": "^1.1.0",
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {

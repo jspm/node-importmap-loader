@@ -1,6 +1,6 @@
 {
   "name": "@jspm/node-importmap-loader",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "JSPM's node importmap loader ⚡️",
   "type": "module",
   "main": "dist/loader.js",

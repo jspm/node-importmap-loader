@@ -1,6 +1,6 @@
 {
   "name": "@jspm/node-importmap-loader",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "JSPM's node importmap loader ⚡️",
   "type": "module",
   "main": "dist/loader.js",
@@ -37,7 +37,7 @@
     "dir-size": "chomp dir-size"
   },
   "dependencies": {
-    "@jspm/generator": "^2.3.0",
+    "@jspm/generator": "^2.5.1",
     "@jspm/import-map": "^1.1.0",
     "node-fetch": "^3.3.2"
   },

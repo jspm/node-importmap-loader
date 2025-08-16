@@ -27,8 +27,8 @@
     "paths": {
       "src/*": ["src/*"]
     },
-    "types": ["jest", "node"]
+    "types": ["node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["src/__tests__/*.ts", "tests/e2e/*.js"]
+  "exclude": ["tests/**/*"]
 }

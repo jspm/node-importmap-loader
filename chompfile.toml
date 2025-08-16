@@ -87,11 +87,11 @@ deps = ['default', 'build']
 
 [[task]]
 name = 'test:unit'
-run = 'jest'
+run = 'tsx --test tests/*.test.ts'
 
 [[task]]
 name = 'test:changed'
-run = 'jest --bail --changesince=main'
+run = 'tsx --test tests/*.test.ts'
 
 [[task]]
 name = 'typecheck'

@@ -1,0 +1,16 @@
+{
+  "name": "eslint-importmap-docker-demo",
+  "version": "1.0.0",
+  "description": "Docker demo showing ESLint usage via importmap",
+  "type": "module",
+  "scripts": {
+    "setup": "npx @jspm/generator install eslint chalk --map ./node.importmap --env=node",
+    "lint": "node --loader @jspm/node-importmap-loader index.js",
+    "docker:build": "docker build -t eslint-importmap-demo .",
+    "docker:run": "docker run --rm eslint-importmap-demo",
+    "docker:shell": "docker run --rm -it eslint-importmap-demo sh"
+  },
+  "dependencies": {
+    "@jspm/node-importmap-loader": "^0.2.3"
+  }
+}

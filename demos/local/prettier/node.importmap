@@ -1,0 +1,16 @@
+{
+  "imports": {
+    "prettier": "https://ga.jspm.io/npm:prettier@3.0.1/index.cjs",
+    "chalk": "https://ga.jspm.io/npm:chalk@5.2.0/source/index.js"
+  },
+  "scopes": {
+    "https://ga.jspm.io/": {
+      "#ansi-styles": "https://ga.jspm.io/npm:chalk@5.2.0/source/vendor/ansi-styles/index.js",
+      "#supports-color": "https://ga.jspm.io/npm:chalk@5.2.0/source/vendor/supports-color/index.js",
+      "node:os": "node:os",
+      "node:process": "node:process",
+      "node:tty": "node:tty",
+      "process": "node:process"
+    }
+  }
+}

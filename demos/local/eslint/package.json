@@ -1,0 +1,16 @@
+{
+  "name": "eslint-importmap-demo",
+  "version": "1.0.0",
+  "description": "Demo showing ESLint usage via importmap instead of devDependencies",
+  "type": "module",
+  "scripts": {
+    "setup": "npx @jspm/generator install eslint chalk --map ./node.importmap --env=node",
+    "lint": "node --loader @jspm/node-importmap-loader index.js",
+    "size:traditional": "npm install --save-dev eslint @eslint/js && du -sh node_modules && npm uninstall eslint @eslint/js",
+    "size:importmap": "du -sh node_modules 2>/dev/null || echo 'No node_modules - using importmap!'",
+    "compare": "npm run size:importmap && npm run size:traditional"
+  },
+  "dependencies": {
+    "@jspm/node-importmap-loader": "^0.2.3"
+  }
+}

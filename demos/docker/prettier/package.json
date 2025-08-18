@@ -1,0 +1,16 @@
+{
+  "name": "prettier-importmap-docker-demo",
+  "version": "1.0.0",
+  "description": "Docker demo showing Prettier usage via importmap",
+  "type": "module",
+  "scripts": {
+    "setup": "npx @jspm/generator install prettier chalk --map ./node.importmap --env=node",
+    "format": "node --loader @jspm/node-importmap-loader index.js",
+    "docker:build": "docker build -t prettier-importmap-demo .",
+    "docker:run": "docker run --rm prettier-importmap-demo",
+    "docker:shell": "docker run --rm -it prettier-importmap-demo sh"
+  },
+  "dependencies": {
+    "@jspm/node-importmap-loader": "^0.2.3"
+  }
+}

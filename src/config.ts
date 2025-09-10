@@ -18,7 +18,15 @@ import { argv } from "node:process";
 const wd = process.cwd();
 export const root = fileURLToPath(`file://${wd}`);
 export const cacheMap = new Map();
-export const nodeImportMapPath = join(root, "node.importmap");
+
+const importmapJsonPath = join(root, "importmap.json");
+const legacyNodeImportmapPath = join(root, "node.importmap");
+export const nodeImportMapPath = existsSync(importmapJsonPath) 
+  ? importmapJsonPath 
+  : existsSync(legacyNodeImportmapPath) 
+    ? legacyNodeImportmapPath 
+    : importmapJsonPath;
+
 export const cache = join(root, ".cache");
 const hasCacheFoler = existsSync(cache);
 if (!hasCacheFoler) mkdirSync(cache);

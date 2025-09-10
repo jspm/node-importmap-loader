@@ -32,7 +32,7 @@ npm install @jspm/node-importmap-loader --save-dev
 
 #### 2. Execute
 
-With a `node.importmap` defined in your working directory, run
+With an `importmap.json` defined in your working directory, run
 
 ```bash
 load-node-importmap <file-to-execute>

@@ -11,7 +11,7 @@ import { Context, NextResolve } from "./types";
  * ******************************************************
  * LOADER 🚛
  * ------------------------------------------------------
- * @summary loads node modules via an *assumed root working directory with a cache and node.importmap*
+ * @summary loads node modules via an *assumed root working directory with a cache and importmap.json*
  * @notes
  * The node loader api is being redesigned.
  * JSPM will update to the new api when it is stable and

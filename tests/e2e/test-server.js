@@ -1,7 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import chalk from 'chalk'
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 
@@ -12,10 +12,16 @@ app.get("/", (_, response) => {
 });
 
 app.get("/map", (_, response) => {
-  const nodeImportMapPath = join(
-    fileURLToPath(new URL(".", import.meta.url)),
-    "node.importmap"
-  );
+  const basePath = fileURLToPath(new URL(".", import.meta.url));
+  const importmapJsonPath = join(basePath, "importmap.json");
+  const legacyNodeImportmapPath = join(basePath, "node.importmap");
+  
+  const nodeImportMapPath = existsSync(importmapJsonPath)
+    ? importmapJsonPath
+    : existsSync(legacyNodeImportmapPath)
+      ? legacyNodeImportmapPath
+      : importmapJsonPath;
+  
   response.json(
     JSON.parse(readFileSync(nodeImportMapPath, { encoding: "utf8" }))
   );

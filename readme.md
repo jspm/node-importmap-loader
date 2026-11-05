@@ -14,9 +14,9 @@ decrease security risk 🚔!
 
 ## Requirements
 
-#### Node 18+
+#### Node 22+
 
-`@jspm/node-importmap-loader` requires Node 18+ as it uses [experminental loaders](https://nodejs.org/api/esm.html#loadurl-context-nextload) and node native `fetch`.
+`@jspm/node-importmap-loader` supports Node 22+ and uses Node's [module loaders](https://nodejs.org/api/esm.html#loaders) and native `fetch`.
 
 ---
 
@@ -65,6 +65,10 @@ du -sh .cache
 ---
 
 ## Wow! Awesome! How do I Contribute?
+
+Development uses Node 26 (see `.nvmrc`) and requires [Chomp](https://github.com/guybedford/chomp) on your PATH. `chomp test` builds and runs the unit and end-to-end tests. `chomp typecheck` checks the source and TypeScript tests.
+
+The next release is planned for `0.3.0` because Node 22 is the new minimum.
 
 #### 1. Clone
 

@@ -21,10 +21,10 @@ export const cacheMap = new Map();
 
 const importmapJsonPath = join(root, "importmap.json");
 const legacyNodeImportmapPath = join(root, "node.importmap");
-export const nodeImportMapPath = existsSync(importmapJsonPath) 
-  ? importmapJsonPath 
-  : existsSync(legacyNodeImportmapPath) 
-    ? legacyNodeImportmapPath 
+export const nodeImportMapPath = existsSync(importmapJsonPath)
+  ? importmapJsonPath
+  : existsSync(legacyNodeImportmapPath)
+    ? legacyNodeImportmapPath
     : importmapJsonPath;
 
 export const cache = join(root, ".cache");

@@ -1,8 +1,6 @@
 {
   "editor.wordWrap": "on",
-  "eslint.format.enable": true,
-  "eslint.lintTask.enable": true,
-  "eslint.packageManager": "pnpm",
-  "eslint.run": "onSave",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
   "testing.automaticallyOpenPeekView": "never"
 }

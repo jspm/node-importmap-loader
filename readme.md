@@ -99,8 +99,6 @@ chomp setup
 
 `chomp setup` installs dependencies and generates local Git hooks, preserving existing hooks. If you previously ran `husky install`, run `git config --local --unset core.hooksPath` before setup. You can also run the hook installer directly with `npm run hooks:install`.
 
-The next release is planned for `0.3.0` because raising the minimum supported Node version to 22 is a breaking change.
-
 ---
 
 #### 📣 _More how-tos, documentation coming soon!_

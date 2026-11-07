@@ -4,7 +4,7 @@ default-task = 'build'
 
 [[task]]
 name = 'build'
-run = 'tsup src/loader.ts --format esm --dts'
+run = 'tsup src/loader.ts --format esm --target node22 --dts'
 dep = 'src/#.ts'
 target = 'dist/loader.js'
 
@@ -82,16 +82,16 @@ deps = ['test:unit', 'test:e2e']
 
 [[task]]
 name = 'test:e2e'
-run = 'node --loader ./dist/loader.js tests/e2e/test.js'
-deps = ['default', 'build']
+run = 'node --test tests/e2e/test.js'
+deps = ['build']
 
 [[task]]
 name = 'test:unit'
-run = 'tsx --test tests/*.test.ts'
+run = 'npm run test:unit'
 
 [[task]]
 name = 'test:changed'
-run = 'tsx --test tests/*.test.ts'
+run = 'npm run test:unit'
 
 [[task]]
 name = 'typecheck'

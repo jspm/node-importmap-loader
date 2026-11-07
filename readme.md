@@ -14,9 +14,11 @@ decrease security risk 🚔!
 
 ## Requirements
 
-#### Node 18+
+#### Node 22+
 
-`@jspm/node-importmap-loader` requires Node 18+ as it uses [experminental loaders](https://nodejs.org/api/esm.html#loadurl-context-nextload) and node native `fetch`.
+`@jspm/node-importmap-loader` supports Node 22+ and uses Node's [module loaders](https://nodejs.org/api/esm.html#loaders) and native `fetch`.
+
+Development uses Node 26 (see `.nvmrc`). Tests use `node:test` and Node's built-in mocks. `npm run test:unit` compiles the TypeScript tests with the existing `tsup` compiler before running `node --test`. `npm test` also runs the end-to-end tests.
 
 ---
 

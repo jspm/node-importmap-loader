@@ -20,6 +20,10 @@ decrease security risk 🚔!
 
 Development uses Node 26 (see `.nvmrc`). Tests use `node:test` and Node's built-in mocks. `npm run test:unit` compiles the TypeScript tests with the existing `tsup` compiler before running `node --test`. `npm test` also runs the end-to-end tests.
 
+Chomp remains the task runner. `npm run lint` uses Oxlint; `npm run format` uses Oxfmt, and `npm run format:check` checks formatting without writing files.
+
+`chomp prepare` runs `scripts/install-hooks.sh` to generate executable hooks in Git's hooks directory. It preserves existing hooks, skips CI, and leaves custom `core.hooksPath` settings unchanged. The commit-message hook checks Conventional Commit headers and a 120-character limit without commitlint. Pre-commit checks run through Chomp without rewriting files.
+
 ---
 
 ## Usage

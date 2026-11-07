@@ -37,10 +37,16 @@
   ],
   "scripts": {
     "test": "npm run test:unit && npm run test:e2e",
-    "dir-size": "chomp dir-size",
     "test:build": "tsup tests/*.test.ts --format esm --target node22 --out-dir dist/tests --clean --no-splitting",
     "test:unit": "npm run test:build && node --test dist/tests/*.test.js",
-    "test:e2e": "chomp test:e2e"
+    "test:e2e": "chomp test:e2e",
+    "dir-size": "chomp dir-size",
+    "lint": "oxlint --max-warnings 0 src tests scripts",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "hooks:install": "sh scripts/install-hooks.sh",
+    "commit:check": "node scripts/check-commit-message.js"
   },
   "dependencies": {
     "@jspm/generator": "^2.5.1",
@@ -48,84 +54,15 @@
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.7",
-    "@commitlint/config-conventional": "^17.6.7",
     "@swc/core": "^1.3.74",
     "@types/node": "^20.4.7",
     "@types/node-fetch": "^2.6.4",
-    "@typescript-eslint/eslint-plugin": "^6.2.1",
-    "@typescript-eslint/parser": "^6.2.1",
     "chomp": "^0.2.17",
-    "eslint": "^8.46.0",
-    "eslint-config-prettier": "^8.10.0",
-    "husky": "^8.0.3",
-    "prettier": "^3.0.1",
+    "oxfmt": "0.75.0",
+    "oxlint": "1.90.0",
     "tslib": "^2.6.1",
     "tsup": "^7.2.0",
     "typescript": "^5.1.6"
   },
-  "license": "MIT",
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
-    "rules": {
-      "subject-case": [
-        2,
-        "never",
-        [
-          "upper-case",
-          "pascal-case",
-          "start-case"
-        ]
-      ],
-      "header-max-length": [
-        2,
-        "always",
-        120
-      ],
-      "type-enum": [
-        2,
-        "always",
-        [
-          "chore",
-          "feat",
-          "fix",
-          "docs",
-          "refactor",
-          "revert",
-          "breaking"
-        ]
-      ]
-    }
-  },
-  "eslintConfig": {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "prettier"
-    ],
-    "rules": {
-      "prefer-destructuring": [
-        "error",
-        {
-          "AssignmentExpression": {
-            "array": false,
-            "object": false
-          }
-        }
-      ],
-      "@typescript-eslint/no-explicit-any": [
-        "warn"
-      ]
-    }
-  },
-  "prettier": {
-    "printWidth": 120
-  }
+  "license": "MIT"
 }

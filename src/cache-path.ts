@@ -13,7 +13,7 @@ function ensureFileSyncLocal(path: string): void {
       mkdirSync(dirPath, { recursive: true });
     }
     writeFileSync(path, "", { flag: "wx" });
-  } catch (err) {
+  } catch {
     log.error(`ensureFileSyncLocal: Failed in creating ${path}`);
   }
 }
@@ -39,4 +39,4 @@ export const parseNodeModuleCachePath = async (modulePath: string, cachePath: st
     log.error(`parseNodeModuleCachePath: Failed in parsing module ${err}`);
     return cachePath;
   }
-}; 
+};

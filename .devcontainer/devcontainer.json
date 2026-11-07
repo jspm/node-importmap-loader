@@ -8,11 +8,7 @@
     }
   },
   "settings": {},
-  "extensions": [
-    "rvest.vs-code-prettier-eslint",
-    "wix.vscode-import-cost",
-    "eamodio.gitlens"
-  ],
+  "extensions": ["oxc.oxc-vscode", "wix.vscode-import-cost", "eamodio.gitlens"],
   "postCreateCommand": "npm ci --ignore-scripts",
   "remoteUser": "node"
 }

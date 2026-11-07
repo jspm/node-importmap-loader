@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { dirname, join } from "node:path";
 import { parseUrlPkg } from "@jspm/generator";
 import { parseNodeModuleCachePath } from "./parser";
@@ -64,10 +65,10 @@ export const resolveModulePath = (specifier: string, cacheMapPath: string): stri
 export const resolveNodeModuleCachePath = async (modulePath: string) => {
   try {
     const moduleMetadata = await parseUrlPkg(modulePath);
-    const name = moduleMetadata?.pkg?.name;
-    const version = moduleMetadata?.pkg?.version;
+    const { name, version } = moduleMetadata?.pkg ?? {};
+    const moduleId = createHash("sha256").update(modulePath).digest("hex");
     const moduleFile = modulePath.split("/").reverse()[0] || "";
-    const nodeModuleCachePath = join(cache, `${name}@${version}`, moduleFile);
+    const nodeModuleCachePath = join(cache, `${name}@${version}`, moduleId, moduleFile);
     log.debug("resolveNodeModuleCachePath:", { nodeModuleCachePath });
     return nodeModuleCachePath;
   } catch (err) {

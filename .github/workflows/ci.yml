@@ -12,12 +12,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
-      - name: Install Node.js 26
-        uses: actions/setup-node@v3
+      - name: Install development Node.js
+        uses: actions/setup-node@v5
         with:
-          node-version: 26.x
+          node-version-file: .nvmrc
 
       - name: Setup Chomp
         uses: guybedford/chomp-action@v1
@@ -25,10 +25,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
-        run: npm ci --ignore-scripts
+        run: chomp setup
 
       - name: Build
         run: chomp build
+
+      - name: Type-check source and tests
+        run: chomp typecheck
 
       - name: Lint
         run: chomp lint
@@ -54,8 +57,8 @@ jobs:
       matrix:
         node-version: [22.x, 24.x, 26.x]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci --omit=dev --ignore-scripts

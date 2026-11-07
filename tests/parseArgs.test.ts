@@ -1,32 +1,30 @@
-import { describe, it } from 'node:test';
-import assert from 'node:assert';
-import { parseArgs } from '../src/parseArgs';
+import { describe, it } from "node:test";
+import assert from "node:assert";
+import { parseArgs } from "../src/parseArgs";
 
-describe('parseArgs', () => {
-
-  it('returns empty object if no args', () => {
+describe("parseArgs", () => {
+  it("returns empty object if no args", () => {
     assert.deepStrictEqual(parseArgs({ args: [], options: {} }), {});
   });
 
-  it('returns parsed boolean arg', () => {
+  it("returns parsed boolean arg", () => {
     const options = {
-      'test': { type: 'boolean' }
+      test: { type: "boolean" },
     };
-    assert.deepStrictEqual(parseArgs({ args: ['test'], options }), { test: true });
+    assert.deepStrictEqual(parseArgs({ args: ["test"], options }), { test: true });
   });
 
-  it('returns parsed boolean arg with default false', () => {
+  it("returns parsed boolean arg with default false", () => {
     const options = {
-      'test': { type: 'boolean', default: false }
+      test: { type: "boolean", default: false },
     };
-    assert.deepStrictEqual(parseArgs({ args: ['test'], options }), { test: true });
+    assert.deepStrictEqual(parseArgs({ args: ["test"], options }), { test: true });
   });
 
-  it('uses alias if provided', () => {
+  it("uses alias if provided", () => {
     const options = {
-      'test': { alias: 't', type: 'boolean' }
+      test: { alias: "t", type: "boolean" },
     };
-    assert.deepStrictEqual(parseArgs({ args: ['t'], options }), { test: true });
+    assert.deepStrictEqual(parseArgs({ args: ["t"], options }), { test: true });
   });
-
 });

@@ -2,13 +2,10 @@
   "name": "Node.js",
   "build": {
     "dockerfile": "dockerfile",
-    "args": {
-      "VARIANT": "26-bookworm",
-      "NODE_ENV": "docker-dev"
-    }
+    "args": { "VARIANT": "26-bookworm", "NODE_ENV": "docker-dev" }
   },
   "settings": {},
   "extensions": ["oxc.oxc-vscode", "wix.vscode-import-cost", "eamodio.gitlens"],
-  "postCreateCommand": "npm ci --ignore-scripts",
+  "postCreateCommand": "chomp setup",
   "remoteUser": "node"
 }

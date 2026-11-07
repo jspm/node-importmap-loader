@@ -18,7 +18,11 @@ decrease security risk 🚔!
 
 `@jspm/node-importmap-loader` supports Node 22+ and uses Node's [module loaders](https://nodejs.org/api/esm.html#loaders) and native `fetch`.
 
-Development uses Node 26 (see `.nvmrc`). Tests use `node:test` and Node's built-in mocks. `npm run test:unit` compiles the TypeScript tests with the existing `tsup` compiler before running `node --test`. `npm test` also runs the end-to-end tests.
+Development uses the Node 26 version pinned in `chompfile.toml`. With standalone [Chomp](https://github.com/guybedford/chomp) installed, run `chomp setup`. It downloads the official Node archive, verifies its SHA-256 checksum, and installs the development dependencies. Setup supports macOS and Linux on x64 and arm64 and requires `curl`, `tar`, and either `sha256sum` or `shasum`.
+
+Chomp tasks use the project-local Node installation through `.bin/`; the downloaded runtime stays in `.cache/dev-node/`. `chomp node:version` prints the selected version. Development CI and the devcontainer use the same setup task.
+
+Tests use `node:test` and Node's built-in mocks. `chomp test` compiles the TypeScript tests with the existing `tsup` compiler and runs the unit and end-to-end tests.
 
 Chomp remains the task runner. `npm run lint` uses Oxlint; `npm run format` uses Oxfmt, and `npm run format:check` checks formatting without writing files.
 
@@ -75,7 +79,7 @@ du -sh .cache
 #### 1. Clone
 
 ```sh
-git clone git@github.com:jspm/node-importmap-http-loader.git
+git clone git@github.com:jspm/node-importmap-loader.git
 ```
 
 #### 2. Devcontainer
@@ -90,13 +94,14 @@ Then, via [devcontainers](https://code.visualstudio.com/docs/remote/containers),
 
 ---
 
-#### Old school contributing setup
+#### Local development
 
-Unrecommended setup
+Install standalone Chomp, then:
 
 ```sh
-git clone git@github.com:jspm/node-importmap-http-loader.git
-n install auto && npm install
+git clone git@github.com:jspm/node-importmap-loader.git
+cd node-importmap-loader
+chomp setup
 ```
 
 ---

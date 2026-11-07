@@ -14,18 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install Node.js 26
-        uses: actions/setup-node@v3
-        with:
-          node-version: 26.x
-
       - name: Setup Chomp
         uses: guybedford/chomp-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
+      - name: Setup development runtime and dependencies
+        run: chomp setup
 
       - name: Build
         run: chomp build

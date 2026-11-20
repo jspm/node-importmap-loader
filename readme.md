@@ -66,18 +66,10 @@ du -sh .cache
 
 ## Wow! Awesome! How do I Contribute?
 
-Development uses Node 26 (see `.nvmrc`) and requires [Chomp](https://github.com/guybedford/chomp) on your PATH. `chomp test` builds and runs the unit and end-to-end tests. `chomp typecheck` checks the source and TypeScript tests.
-
-`chomp lint` runs Oxlint, and `chomp format:check` checks formatting with Oxfmt.
-
-`chomp prepare` generates local Git hooks and preserves existing hooks. If you previously ran `husky install`, run `git config --local --unset core.hooksPath` before installing hooks. You can also run `npm run hooks:install` directly.
-
-The next release is planned for `0.3.0` because Node 22 is the new minimum.
-
 #### 1. Clone
 
 ```sh
-git clone git@github.com:jspm/node-importmap-http-loader.git
+git clone git@github.com:jspm/node-importmap-loader.git
 ```
 
 #### 2. Devcontainer
@@ -92,14 +84,22 @@ Then, via [devcontainers](https://code.visualstudio.com/docs/remote/containers),
 
 ---
 
-#### Old school contributing setup
+#### Local development
 
-Unrecommended setup
+Install [nvm](https://github.com/nvm-sh/nvm) and standalone [Chomp](https://github.com/guybedford/chomp), then run:
 
 ```sh
-git clone git@github.com:jspm/node-importmap-http-loader.git
-n install auto && npm install
+git clone git@github.com:jspm/node-importmap-loader.git
+cd node-importmap-loader
+nvm install
+chomp setup
 ```
+
+`chomp test` builds and runs the unit and end-to-end tests. `chomp typecheck` checks the source and TypeScript tests. `chomp lint` runs Oxlint, and `chomp format:check` checks formatting with Oxfmt.
+
+`chomp setup` installs dependencies and generates local Git hooks, preserving existing hooks. If you previously ran `husky install`, run `git config --local --unset core.hooksPath` before setup. You can also run the hook installer directly with `npm run hooks:install`.
+
+The next release is planned for `0.3.0` because raising the minimum supported Node version to 22 is a breaking change.
 
 ---
 

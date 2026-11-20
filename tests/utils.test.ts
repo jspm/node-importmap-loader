@@ -69,12 +69,28 @@ describe("utils - module resolution", () => {
     });
     assert.equal(resolveModulePath("missing", "file:///project/index.js"), null);
   });
+});
 
+describe("utils - cache paths", () => {
   test("derives cache paths from module metadata", async () => {
     const result = await resolveNodeModuleCachePath("https://ga.jspm.io/npm:lodash@4.17.21/index.js");
-    assert.ok(result?.endsWith(join("lodash@4.17.21", "index.js")));
+    assert.ok(result?.includes("lodash@4.17.21/"));
+    assert.ok(result?.endsWith("/index.js"));
   });
 
+  test("keeps same-named files in different package directories distinct", async () => {
+    const library = "https://ga.jspm.io/npm:iconv-lite@0.4.24/lib/index.js";
+    const encodings = "https://ga.jspm.io/npm:iconv-lite@0.4.24/encodings/index.js";
+    const libraryPath = await resolveNodeModuleCachePath(library);
+    const encodingsPath = await resolveNodeModuleCachePath(encodings);
+    assert.ok(libraryPath);
+    assert.ok(encodingsPath);
+    assert.notEqual(libraryPath, encodingsPath);
+    assert.equal(await resolveNodeModuleCachePath(library), libraryPath);
+  });
+});
+
+describe("utils - module downloads", () => {
   test("downloads parsed modules into the requested cache path", async (t) => {
     const directory = await createTestDirectory(t);
     const file = join(directory, "module.js");
